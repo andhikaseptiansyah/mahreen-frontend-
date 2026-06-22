@@ -1,6 +1,6 @@
 # 🌐 Mahreen Website
 
-Website resmi **Mahreen Indonesia** yang dikembangkan oleh tim **Frontend Internship Batch 1**. Proyek ini dirancang dengan performa optimal, antarmuka yang responsif, dan struktur kode yang bersih.
+Website resmi **Mahreen Indonesia** yang dikembangkan oleh tim **Frontend Internship Batch 1**. Proyek ini dibangun menggunakan **React TypeScript**, **Vite**, dan dikelola menggunakan **Bun** untuk performa pengembangan yang super cepat.
 
 ---
 
@@ -8,7 +8,9 @@ Website resmi **Mahreen Indonesia** yang dikembangkan oleh tim **Frontend Intern
 
 Teknologi utama yang digunakan dalam pengembangan proyek ini:
 
-* **Framework/Bundler:** [React](https://react.dev/) + [Vite](https://vitejs.dev/)
+* **Runtime & Package Manager:** [Bun](https://bun.sh/)
+* **Framework & Bundler:** [React](https://react.dev/) + [Vite](https://vitejs.dev/)
+* **Language:** [TypeScript](https://www.typescriptlang.org/)
 * **Styling:** [Tailwind CSS](https://tailwindcss.com/)
 * **Version Control:** Git & GitHub
 
@@ -16,24 +18,35 @@ Teknologi utama yang digunakan dalam pengembangan proyek ini:
 
 ## 📂 Struktur Proyek
 
-Berikut adalah arsitektur direktori di dalam folder `src/` untuk menjaga kode tetap modular dan *scalable*:
+Berikut adalah arsitektur direktori terbaru di dalam folder `src/` untuk menjaga kode tetap modular, *type-safe*, dan mudah dikembangkan:
 
 ```text
 src/
-├── assets/        # File statis seperti gambar, logo, dan ikon
-├── components/    # Komponen UI global yang dapat digunakan kembali (reusable)
-├── layouts/       # Komponen tata letak halaman (e.g., Navbar, Footer wrapper)
-├── pages/         # Komponen halaman utama (e.g., Home, About, Contact)
-├── services/      # Konfigurasi API fetching dan integrasi layanan eksternal
-├── hooks/         # Custom React Hooks
-└── utils/         # Fungsi pembantu (helper functions) dan konstanta global
+├── assets/         # File statis seperti gambar, logo, dan ikon
+├── components/     # Komponen UI global yang reusable (e.g., Navbar, Footer)
+│   ├── Navbar/
+│   └── Footer/
+├── pages/          # Komponen halaman utama berbasis fitur
+│   └── Home/
+│       ├── Home.tsx
+│       └── sections/ # Sub-komponen khusus untuk halaman Home
+│           ├── Hero.tsx
+│           ├── About.tsx
+│           ├── Services.tsx
+│           └── Contact.tsx
+├── layouts/        # Komponen tata letak halaman (Layout Wrapper)
+├── routes/         # Konfigurasi routing aplikasi
+├── types/          # Definisi interface dan tipe data TypeScript global
+├── utils/          # Fungsi pembantu (helper functions) & konstanta global
+├── App.tsx         # Komponen root aplikasi
+└── main.tsx        # Entry point aplikasi untuk rendering ke DOM
 ```
 
 ---
 
 ## 🛠️ Memulai Pengembangan (Getting Started)
 
-Ikuti langkah-langkah berikut untuk menjalankan proyek di lingkungan lokal Anda:
+Pastikan Anda sudah menginstal **Bun** di komputer Anda. Jika belum, jalankan `curl -fsSL https://bun.sh/install | bash` (Mac/Linux) atau cek dokumentasi resmi Bun.
 
 ### 1. Klon Repositori
 ```bash
@@ -42,19 +55,20 @@ cd mahreen-website
 ```
 
 ### 2. Instal Dependensi
+Gunakan Bun untuk proses instalasi yang lebih cepat:
 ```bash
-npm install
+bun install
 ```
 
 ### 3. Jalankan Server Pengembangan
 ```bash
-npm run dev
+bun dev
 ```
-Setelah berhasil, buka `http://localhost:5173` di browser Anda.
+Setelah berhasil, buka tautan lokal (biasanya `http://localhost:5173`) di browser Anda.
 
 ### 4. Build untuk Produksi
 ```bash
-npm run build
+bun build-project # Atau jalankan skrip build sesuai package.json Anda (e.g., bun run build)
 ```
 
 ---
