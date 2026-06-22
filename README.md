@@ -55,6 +55,8 @@ src/
 ├── layouts/        # Pembungkus tata letak halaman (Layout Wrapper)
 ├── routes/         # Konfigurasi dan manajemen routing aplikasi
 ├── types/          # Definisi interface dan tipe data TypeScript global
+├── hooks/
+├── services/ 
 ├── utils/          # Fungsi pembantu (helper) & konstanta global
 ├── App.tsx         # Root component aplikasi
 └── main.tsx        # Entry point aplikasi untuk rendering DOM
