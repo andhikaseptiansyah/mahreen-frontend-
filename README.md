@@ -52,6 +52,14 @@ src/
 │           ├── About.tsx
 │           ├── Services.tsx
 │           └── Contact.tsx
+│   └── About/
+│       ├── About.tsx
+│   └── Programs/
+│       ├── Programs.tsx
+│   └── Contact/
+│       ├── Contact.tsx
+│   └── Dashboard/
+│       ├── Dashboard.tsx 
 ├── layouts/        # Pembungkus tata letak halaman (Layout Wrapper)
 ├── routes/         # Konfigurasi dan manajemen routing aplikasi
 ├── types/          # Definisi interface dan tipe data TypeScript global
