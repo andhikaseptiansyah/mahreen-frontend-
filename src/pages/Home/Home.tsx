@@ -1,5 +1,6 @@
 import backgroundHome from "../../assets/baground-home.png";
 import Partnership from "./sections/Partnership";
+import Purpose from "./sections/Purpose";
 
 const statistics = [
   {
@@ -37,8 +38,9 @@ const homeStyles = `
     width: 100vw;
     transform: translateX(-50%);
     
-    height: calc(100vh - 89px);
-    height: calc(100svh - 89px);
+    height: 100vh;
+    height: 100svh;
+    min-height: 760px;
     margin: 0;
     padding: 0;
     overflow: hidden;
@@ -59,8 +61,8 @@ const homeStyles = `
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    padding: 20px 20px 0;
+    justify-content: flex-start;
+    padding: 118px 20px 0;
     
     background-image:
       linear-gradient(
@@ -72,7 +74,7 @@ const homeStyles = `
       ),
       url("${backgroundHome}");
     background-size: cover;
-    background-position: center;
+    background-position: center top;
     background-repeat: no-repeat;
     isolation: isolate;
   }
@@ -180,12 +182,10 @@ const homeStyles = `
   .home-hero__statistics {
     width: 100%;
     max-width: 1100px;
-    margin: auto auto 0;
-    
+    margin: 46px auto 74px;
     border-top: 1px solid rgba(255, 255, 255, 0.08); 
     padding-top: 24px;
-    padding-bottom: 24px;
-
+    padding-bottom: 0;
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     gap: 15px;
@@ -221,13 +221,30 @@ const homeStyles = `
   }
 
   @media (max-width: 950px) {
+    .home-page {
+      min-height: 820px;
+    }
+
+    .home-hero {
+      padding-top: 102px;
+    }
+
     .home-hero__statistics {
+      margin: 42px auto 64px;
       grid-template-columns: repeat(3, 1fr);
       row-gap: 16px;
     }
   }
 
   @media (max-width: 560px) {
+    .home-page {
+      min-height: 860px;
+    }
+
+    .home-hero {
+      padding: 92px 16px 0;
+    }
+
     .home-hero__actions {
       flex-direction: column;
       width: 100%;
@@ -240,6 +257,7 @@ const homeStyles = `
     }
 
     .home-hero__statistics {
+      margin: 36px auto 54px;
       grid-template-columns: repeat(2, 1fr);
     }
 
@@ -318,6 +336,7 @@ const Home = () => {
       </main>
 
       <Partnership />
+      <Purpose />
     </>
   );
 };
