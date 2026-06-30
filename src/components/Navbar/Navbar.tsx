@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import mahreenLogo from "../../assets/mahreen-logo.png";
+import mahreenLogo from "../../assets/Navbar/mahreen-logo.png";
 
 const brandItems = [
   { label: "Brand 1", href: "#brand-1" },
@@ -60,12 +60,12 @@ const navbarStyles = `
 
   .navbar__left {
     justify-content: flex-start;
-    gap: 36px;
+    gap: 24px; /* Gap sedikit dikurangi karena sekarang ada padding di link */
   }
 
   .navbar__right {
     justify-content: flex-end;
-    gap: 28px;
+    gap: 16px; /* Gap sedikit dikurangi untuk mengkompensasi padding baru */
   }
 
   .navbar__link {
@@ -74,6 +74,10 @@ const navbarStyles = `
     align-items: center;
     justify-content: center;
     white-space: nowrap;
+
+    /* --- Penambahan padding & radius untuk efek hover background --- */
+    padding: 8px 14px;
+    border-radius: 8px;
 
     color: rgba(255, 255, 255, 0.72);
     font-family: Arial, Helvetica, sans-serif;
@@ -85,11 +89,13 @@ const navbarStyles = `
 
     transition:
       color 180ms ease,
+      background-color 180ms ease, /* Animasi untuk background */
       opacity 180ms ease;
   }
 
   .navbar__link:hover {
     color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.1); /* Background transparan elegan */
   }
 
   .navbar__brands {
@@ -98,11 +104,24 @@ const navbarStyles = `
 
   .navbar__brands-button {
     gap: 7px;
-    padding: 0;
+    /* padding: 0; dihapus agar menggunakan padding dari .navbar__link */
     border: 0;
     outline: 0;
     background: transparent;
     cursor: pointer;
+    
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 1.7px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .navbar__brands-button:hover {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.1); /* Menyamakan efek hover */
   }
 
   .navbar__chevron {
@@ -117,8 +136,8 @@ const navbarStyles = `
 
   .navbar__dropdown {
     position: absolute;
-    top: calc(100% + 23px);
-    left: -14px;
+    top: calc(100% + 15px); /* Disesuaikan sedikit posisinya */
+    left: -2px; /* Disesuaikan karena ada padding baru */
 
     width: 174px;
     padding: 7px;
@@ -180,18 +199,17 @@ const navbarStyles = `
     line-height: 0;
   }
 
-  /* --- PERUBAHAN UKURAN LOGO DESKTOP --- */
   .navbar__logo {
     display: block;
-    width: 200px; /* Jauh lebih besar dari 112px */
-    height: 80px; /* Jauh lebih besar dari 46px */
+    width: 200px; 
+    height: 80px; 
     object-fit: contain;
   }
 
   .navbar__button {
     width: 105px;
     height: 36px;
-    padding: 0;
+    padding: 0; /* Mengembalikan padding 0 khusus untuk button sign in & kontak */
     border-radius: 999px;
 
     display: inline-flex;
@@ -255,15 +273,16 @@ const navbarStyles = `
     }
 
     .navbar__left {
-      gap: 24px;
+      gap: 16px;
     }
 
     .navbar__right {
-      gap: 18px;
+      gap: 12px;
     }
 
     .navbar__link,
-    .navbar__button {
+    .navbar__button,
+    .navbar__brands-button {
       font-size: 9px;
       letter-spacing: 1.35px;
     }
@@ -290,9 +309,8 @@ const navbarStyles = `
       grid-column: 2;
     }
 
-    /* --- PERUBAHAN UKURAN LOGO TABLET --- */
     .navbar__logo {
-      width: 150px; /* Diperbesar untuk tablet */
+      width: 150px; 
       height: 60px;
     }
 
@@ -392,11 +410,13 @@ const navbarStyles = `
       line-height: 1.2;
       letter-spacing: 1.35px;
       text-transform: uppercase;
+      border-radius: 0; /* Reset border radius di mobile */
     }
 
     .navbar__mobile-menu > a:hover,
     .navbar__mobile-menu > button:hover {
       color: #ffffff;
+      background-color: transparent; /* Reset background hover di mobile */
     }
 
     .navbar__mobile-brands {
@@ -425,6 +445,11 @@ const navbarStyles = `
       font-weight: 600;
       letter-spacing: 1.2px;
       text-transform: uppercase;
+      border-radius: 6px;
+    }
+    
+    .navbar__mobile-brands-inner a:hover {
+      background-color: rgba(255, 255, 255, 0.08); /* Highlight dropdown mobile */
     }
 
     .navbar__mobile-actions {
@@ -438,6 +463,7 @@ const navbarStyles = `
       width: 100%;
       height: 40px;
       transform: none;
+      border-radius: 999px; /* Kembalikan radius untuk tombol khusus ini */
     }
     
     .navbar__mobile-actions .navbar__button:hover {
@@ -452,9 +478,8 @@ const navbarStyles = `
       padding: 0 16px;
     }
 
-    /* --- PERUBAHAN UKURAN LOGO MOBILE --- */
     .navbar__logo {
-      width: 130px; /* Diperbesar untuk HP */
+      width: 130px; 
       height: 52px;
     }
 

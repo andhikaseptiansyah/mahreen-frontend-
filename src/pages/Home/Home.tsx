@@ -1,6 +1,7 @@
-import backgroundHome from "../../assets/baground-home.png";
+import backgroundHome from "../../assets/Hero-section/baground-home.png";
 import Partnership from "./sections/Partnership";
 import Purpose from "./sections/Purpose";
+import Ekosistem from "./sections/Ekosistem"; 
 
 const statistics = [
   {
@@ -154,7 +155,14 @@ const homeStyles = `
     font-weight: 500;
     text-decoration: none;
     cursor: pointer;
-    transition: all 0.3s ease;
+    /* Transisi diperhalus dengan cubic-bezier */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Efek ditekan untuk semua tombol */
+  .home-hero__button:active {
+    transform: translateY(0) scale(0.98) !important;
+    box-shadow: none !important;
   }
 
   .home-hero__button--primary {
@@ -163,9 +171,12 @@ const homeStyles = `
     border: 1px solid #dfbe7a;
   }
 
+  /* Hover tombol utama (emas) */
   .home-hero__button--primary:hover {
     background: #eed295;
     border-color: #eed295;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(223, 190, 122, 0.3);
   }
 
   .home-hero__button--outline {
@@ -174,9 +185,12 @@ const homeStyles = `
     border: 1px solid rgba(255, 255, 255, 0.3);
   }
 
+  /* Hover tombol outline */
   .home-hero__button--outline:hover {
     background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.6);
+    border-color: #ffffff;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
   }
 
   .home-hero__statistics {
@@ -337,6 +351,7 @@ const Home = () => {
 
       <Partnership />
       <Purpose />
+      <Ekosistem /> 
     </>
   );
 };

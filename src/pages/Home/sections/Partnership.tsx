@@ -1,12 +1,12 @@
 // src/pages/Home/sections/Partnership.tsx
 
-import logoBerkarya from "../../../assets/Icon-berkarya.png";
-import logoITB from "../../../assets/ITB.png";
-import logoUI from "../../../assets/UI.png";
-import logoPNP from "../../../assets/PNP.png";
-import logoMaChung from "../../../assets/Ma Chung.png";
-import logoPresUniv from "../../../assets/PU.png";
-import logoUTB from "../../../assets/UTB.png";
+import logoBerkarya from "../../../assets/Partnership/Icon-berkarya.png";
+import logoITB from "../../../assets/Partnership/ITB.png";
+import logoUI from "../../../assets/Partnership/UI.png";
+import logoPNP from "../../../assets/Partnership/PNP.png";
+import logoMaChung from "../../../assets/Partnership/Ma Chung.png";
+import logoPresUniv from "../../../assets/Partnership/PU.png";
+import logoUTB from "../../../assets/Partnership/UTB.png";
 
 const partners = [
   { id: 1, name: "Berkarya", logo: logoBerkarya },
@@ -31,20 +31,20 @@ const partnershipStyles = `
   }
 
   .partnership-section__title {
-    margin: 0 0 26px 0;
+    margin: 0 0 32px 0;
     color: rgba(255, 255, 255, 0.32);
     font-family: "Inter", Arial, sans-serif;
-    font-size: 8px;
+    font-size: 11px; /* Diperbesar dari 8px */
     font-weight: 500;
     line-height: 1;
-    letter-spacing: 2px;
+    letter-spacing: 2.5px; /* Disesuaikan agar tetap elegan */
     text-transform: uppercase;
     text-align: center;
   }
 
   .partnership-section__logos {
     width: 100%;
-    max-width: 820px;
+    max-width: 1100px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -55,12 +55,12 @@ const partnershipStyles = `
     display: flex;
     justify-content: center;
     align-items: center;
-    min-width: 52px;
+    min-width: 60px;
   }
 
   .partnership-section__logo-img {
-    height: 54px;
-    max-width: 118px;
+    height: 74px; 
+    max-width: 150px; 
     object-fit: contain;
     opacity: 0.82;
     filter: grayscale(1);
@@ -76,32 +76,43 @@ const partnershipStyles = `
     transform: translateY(-2px) scale(1.04);
   }
 
+  @media (max-width: 1100px) {
+    .partnership-section__logos {
+      max-width: 900px;
+    }
+    
+    .partnership-section__logo-img {
+      height: 64px;
+      max-width: 130px;
+    }
+  }
+
   @media (max-width: 950px) {
     .partnership-section {
       padding: 26px 18px 34px;
     }
 
     .partnership-section__logos {
-      max-width: 680px;
+      max-width: 780px;
       gap: clamp(24px, 4vw, 46px);
     }
 
     .partnership-section__logo-img {
-      height: 46px;
-      max-width: 100px;
+      height: 56px;
+      max-width: 115px;
     }
   }
 
   @media (max-width: 680px) {
     .partnership-section__logos {
       flex-wrap: wrap;
-      row-gap: 26px;
-      column-gap: 38px;
+      row-gap: 32px;
+      column-gap: 42px;
     }
 
     .partnership-section__logo-img {
-      height: 42px;
-      max-width: 92px;
+      height: 50px;
+      max-width: 100px;
     }
   }
 
@@ -112,18 +123,18 @@ const partnershipStyles = `
 
     .partnership-section__title {
       margin-bottom: 24px;
-      font-size: 7px;
-      letter-spacing: 1.6px;
+      font-size: 9px; /* Diperbesar dari 7px untuk HP */
+      letter-spacing: 2px;
     }
 
     .partnership-section__logos {
       column-gap: 30px;
-      row-gap: 24px;
+      row-gap: 28px;
     }
 
     .partnership-section__logo-img {
-      height: 36px;
-      max-width: 82px;
+      height: 44px;
+      max-width: 90px;
     }
   }
 `;
