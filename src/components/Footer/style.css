@@ -1,0 +1,375 @@
+/* =========================================================
+   Footer — Mahreen Indonesia
+   Pixel reference: 1272px canvas (content 1176px @ 48px gutters)
+   ========================================================= */
+
+.footer {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  background: #080808;
+  border-top: 0.6667px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+/* Ambient blurred glow, centered behind the CTA heading */
+.footer__glow {
+  position: absolute;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 300px;
+  max-width: 90vw;
+  background: rgba(197, 168, 128, 0.05);
+  filter: blur(120px);
+  border-radius: 9999px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.footer__inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1272px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+/* -----------------------------------------
+   CTA / Hero block
+----------------------------------------- */
+.footer-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 80.42px;
+}
+
+.footer-cta__heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 1093px;
+  padding-bottom: 24px;
+}
+
+.footer-cta__title {
+  margin: 0;
+  width: 100%;
+  font-family: "Playfair Display", serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 60px;
+  line-height: 60px;
+  text-align: center;
+  color: #ffffff;
+}
+
+.footer-cta__paragraph-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 768px;
+  padding-bottom: 48px;
+}
+
+.footer-cta__paragraph {
+  margin: 0;
+  width: 100%;
+  font-family: "DM Sans", sans-serif;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 28px;
+  text-align: center;
+  color: #a1a1aa;
+}
+
+.footer-cta__tagline-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 500px;
+  padding-bottom: 96px;
+}
+
+.footer-cta__tagline {
+  margin: 0;
+  width: 100%;
+  font-family: "DM Sans", sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 11px;
+  line-height: 16px;
+  text-align: center;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+  color: #c5a880;
+}
+
+/* -----------------------------------------
+   Columns
+----------------------------------------- */
+.footer-columns {
+  display: grid;
+  grid-template-columns: repeat(4, 258px);
+  justify-content: space-between;
+  column-gap: 48px;
+  width: 100%;
+  padding-top: 64.83px;
+  padding-bottom: 32px;
+  border-top: 0.6667px solid rgba(255, 255, 255, 0.08);
+}
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.footer-col--brand {
+  gap: 0;
+}
+
+.footer-col__logo {
+  width: 225px;
+  height: 80px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.footer-col__desc {
+  margin: 24px 0 0;
+  padding-bottom: 16px;
+  max-width: 248px;
+  font-family: "DM Sans", sans-serif;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 23px;
+  color: #8c8c8c;
+}
+
+.footer-col__heading {
+  margin: 0;
+  font-family: "Playfair Display", serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 28px;
+  color: #ffffff;
+}
+
+.footer-col__list {
+  list-style: none;
+  margin: 0;
+  padding: 24px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.footer-col__item {
+  width: 100%;
+}
+
+.footer-col__link {
+  display: inline-block;
+  font-family: "DM Sans", sans-serif;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 20px;
+  color: #8c8c8c;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-col__link:hover,
+.footer-col__link:focus-visible {
+  color: #c5a880;
+}
+
+.footer-col__link:focus-visible {
+  outline: 1px solid #c5a880;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Social icons */
+.footer-social {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+  padding-top: 24px;
+}
+
+.footer-social__link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.footer-social__icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.footer-social__link:hover,
+.footer-social__link:focus-visible {
+  opacity: 0.75;
+  transform: translateY(-1px);
+}
+
+.footer-social__link:focus-visible {
+  outline: 1px solid #c5a880;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* -----------------------------------------
+   Bottom bar
+----------------------------------------- */
+.footer-bottom {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  width: 100%;
+  padding: 32px 0 40px;
+  margin-top: 48px;
+  border-top: 0.6667px solid rgba(255, 255, 255, 0.08);
+}
+
+.footer-bottom__text {
+  margin: 0;
+  font-family: "DM Sans", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 15px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #8c8c8c;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   Responsive breakpoints
+   ========================================================= */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .footer__inner {
+    padding: 0 32px;
+  }
+
+  .footer-cta {
+    padding-top: 64px;
+  }
+
+  .footer-cta__title {
+    font-size: 44px;
+    line-height: 48px;
+  }
+
+  .footer-cta__paragraph {
+    font-size: 16px;
+    line-height: 26px;
+  }
+
+  .footer-cta__tagline-wrap {
+    padding-bottom: 64px;
+  }
+
+  .footer-columns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 40px;
+    column-gap: 32px;
+    padding-top: 48px;
+  }
+
+  .footer-col--brand {
+    grid-column: 1 / -1;
+  }
+
+  .footer-col__desc {
+    max-width: 100%;
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .footer__inner {
+    padding: 0 24px;
+  }
+
+  .footer__glow {
+    top: 48px;
+    height: 220px;
+  }
+
+  .footer-cta {
+    padding-top: 48px;
+  }
+
+  .footer-cta__heading {
+    padding-bottom: 16px;
+  }
+
+  .footer-cta__title {
+    font-size: 30px;
+    line-height: 36px;
+  }
+
+  .footer-cta__paragraph-wrap {
+    padding-bottom: 32px;
+  }
+
+  .footer-cta__paragraph {
+    font-size: 15px;
+    line-height: 24px;
+  }
+
+  .footer-cta__tagline {
+    font-size: 10px;
+    line-height: 15px;
+  }
+
+  .footer-cta__tagline-wrap {
+    padding-bottom: 48px;
+  }
+
+  .footer-columns {
+    grid-template-columns: 1fr;
+    row-gap: 32px;
+    padding-top: 40px;
+  }
+
+  .footer-col--brand {
+    grid-column: auto;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 24px 0 32px;
+  }
+}
