@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import mahreenLogo from "../../assets/Navbar/mahreen-logo.png";
+import iconStudio from "../../assets/Navbar/icon-studio.png";
 
 type NavigationItem = {
   label: string;
@@ -54,14 +54,16 @@ const isActiveRoute = (currentPath: string, href: string) => {
 };
 
 const navbarStyles = `
+  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,600;1,700&display=swap");
+
   :root {
-    --navbar-height: 74px;
+    --navbar-height: 78px;
     --navbar-bg: #000000;
-    --navbar-text: #ffffff;
-    --navbar-muted: rgba(255, 255, 255, 0.9);
-    --navbar-gold: #d8b86a;
-    --navbar-border: rgba(255, 255, 255, 0.14);
-    --navbar-font-size: 11px;
+    --navbar-text: rgba(255, 255, 255, 0.94);
+    --navbar-muted: rgba(255, 255, 255, 0.68);
+    --navbar-gold: #d7b982;
+    --navbar-border: rgba(255, 255, 255, 0.08);
+    --navbar-font-size: 10px;
     --navbar-letter-spacing: 1.85px;
   }
 
@@ -108,23 +110,23 @@ const navbarStyles = `
     max-width: none !important;
     height: var(--navbar-height);
     transform: none !important;
-    background: var(--navbar-bg);
+    background: rgba(0, 0, 0, 0.94);
     border-bottom: 1px solid var(--navbar-border);
     z-index: 1000;
     transition:
-      background-color 220ms ease,
-      border-color 220ms ease,
-      box-shadow 220ms ease,
-      backdrop-filter 220ms ease;
+      background-color 200ms ease,
+      border-color 200ms ease,
+      box-shadow 200ms ease,
+      backdrop-filter 200ms ease;
   }
 
   .site-header.is-scrolled {
-    background: rgba(0, 0, 0, 0.84);
-    border-bottom-color: rgba(216, 184, 106, 0.34);
-    backdrop-filter: blur(18px);
+    background: rgba(0, 0, 0, 0.86);
+    border-bottom-color: rgba(215, 185, 130, 0.22);
+    backdrop-filter: blur(16px);
     box-shadow:
-      0 12px 36px rgba(0, 0, 0, 0.38),
-      0 0 22px rgba(216, 184, 106, 0.1);
+      0 12px 34px rgba(0, 0, 0, 0.42),
+      0 0 18px rgba(215, 185, 130, 0.08);
   }
 
   .navbar {
@@ -134,13 +136,11 @@ const navbarStyles = `
     min-width: 0 !important;
     height: var(--navbar-height);
     margin: 0;
-    padding: 0 28px;
+    padding: 0 28px 0 20px;
     box-sizing: border-box;
-
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
-
     color: var(--navbar-text);
   }
 
@@ -157,21 +157,56 @@ const navbarStyles = `
     text-decoration: none;
   }
 
-  .navbar__left,
-  .navbar__right {
+  .navbar__brand {
+    display: inline-flex;
+    align-items: center;
+    justify-self: start;
+    width: fit-content;
+    min-width: 0;
+    line-height: 0;
+    color: #ffffff;
+  }
+
+  .navbar__brand:hover,
+  .navbar__brand:focus-visible {
+    background: transparent;
+    box-shadow: none;
+    text-shadow: none;
+    transform: none;
+  }
+
+  .navbar__brand:focus-visible {
+    outline: 1px solid rgba(215, 185, 130, 0.68);
+    outline-offset: 7px;
+  }
+
+  .navbar__brand-logo {
+    display: block;
+    width: 290px;
+    height: 74px;
+    object-fit: contain;
+    object-position: left center;
+    flex: 0 0 auto;
+    filter:
+      drop-shadow(0 0 8px rgba(255, 255, 255, 0.08))
+      drop-shadow(0 0 14px rgba(215, 185, 130, 0.08));
+  }
+
+  .navbar__center {
     display: flex;
     align-items: center;
-    min-width: 0;
-  }
-
-  .navbar__left {
     justify-content: flex-start;
-    gap: 52px;
+    min-width: 0;
+    gap: clamp(34px, 4.4vw, 64px);
+    padding-left: clamp(36px, 4.2vw, 58px);
   }
 
   .navbar__right {
+    display: inline-flex;
+    align-items: center;
     justify-content: flex-end;
-    gap: 46px;
+    gap: 11px;
+    min-width: 0;
   }
 
   .navbar__link,
@@ -189,20 +224,32 @@ const navbarStyles = `
     border-radius: 0;
     white-space: nowrap;
     cursor: pointer;
-
     color: var(--navbar-text);
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Inter", Arial, Helvetica, sans-serif;
     font-size: var(--navbar-font-size) !important;
-    font-weight: 700;
+    font-weight: 500;
     line-height: 1;
     letter-spacing: var(--navbar-letter-spacing) !important;
     text-transform: uppercase;
-
     transition:
-      color 180ms ease,
-      opacity 180ms ease,
-      text-shadow 180ms ease,
-      transform 180ms ease;
+      color 170ms ease,
+      opacity 170ms ease,
+      text-shadow 170ms ease,
+      transform 170ms ease;
+  }
+
+  .navbar__auth-link {
+    font-size: 11.5px !important;
+    letter-spacing: 1.65px !important;
+  }
+
+  .navbar__separator {
+    display: inline-block;
+    color: rgba(255, 255, 255, 0.62);
+    font-family: "Inter", Arial, Helvetica, sans-serif;
+    font-size: 12.5px;
+    line-height: 1;
+    transform: translateY(-1px);
   }
 
   .navbar__link.is-active,
@@ -210,10 +257,8 @@ const navbarStyles = `
   .navbar__mobile-menu a.is-active {
     color: var(--navbar-gold);
     text-shadow:
-      0 0 7px rgba(216, 184, 106, 1),
-      0 0 16px rgba(216, 184, 106, 0.92),
-      0 0 30px rgba(216, 184, 106, 0.62),
-      0 0 44px rgba(216, 184, 106, 0.36);
+      0 0 7px rgba(215, 185, 130, 0.72),
+      0 0 18px rgba(215, 185, 130, 0.34);
   }
 
   .navbar__link.is-active::after,
@@ -222,40 +267,31 @@ const navbarStyles = `
     position: absolute;
     left: 0;
     right: 0;
-    bottom: -6px;
+    bottom: 3px;
     height: 1px;
     background: var(--navbar-gold);
-    box-shadow:
-      0 0 8px rgba(216, 184, 106, 1),
-      0 0 20px rgba(216, 184, 106, 0.65);
-  }
-
-  .navbar__ecosystem-button.is-active {
-    text-shadow:
-      0 0 7px rgba(216, 184, 106, 1),
-      0 0 16px rgba(216, 184, 106, 0.92),
-      0 0 30px rgba(216, 184, 106, 0.62),
-      0 0 44px rgba(216, 184, 106, 0.36);
+    opacity: 0.9;
+    box-shadow: 0 0 10px rgba(215, 185, 130, 0.7);
   }
 
   .navbar__link:hover,
   .navbar__link:focus-visible,
   .navbar__auth-link:hover,
-  .navbar__auth-link:focus-visible {
+  .navbar__auth-link:focus-visible,
+  .navbar__ecosystem-button:hover,
+  .navbar__ecosystem-button:focus-visible {
     color: #ffffff;
     background: transparent;
     transform: translateY(-1px);
     text-shadow:
-      0 0 6px rgba(255, 255, 255, 1),
-      0 0 14px rgba(255, 255, 255, 0.88),
-      0 0 24px rgba(216, 184, 106, 0.62),
-      0 0 36px rgba(216, 184, 106, 0.34);
+      0 0 7px rgba(255, 255, 255, 0.72),
+      0 0 18px rgba(215, 185, 130, 0.24);
   }
 
   .navbar__link:focus-visible,
   .navbar__auth-link:focus-visible,
   .navbar__ecosystem-button:focus-visible {
-    outline: 1px solid var(--navbar-gold);
+    outline: 1px solid rgba(215, 185, 130, 0.64);
     outline-offset: 7px;
   }
 
@@ -266,50 +302,29 @@ const navbarStyles = `
   }
 
   .navbar__ecosystem-button {
-    gap: 12px;
-    color: var(--navbar-gold) !important;
-    padding-bottom: 10px;
+    gap: 14px;
+    color: var(--navbar-text) !important;
   }
 
-  .navbar__ecosystem-button span,
-  .navbar__ecosystem-button svg {
-    color: var(--navbar-gold) !important;
+  .navbar__ecosystem-button.is-active,
+  .navbar__ecosystem-button.is-active span,
+  .navbar__ecosystem-button.is-active svg {
+    color: #ffffff !important;
+    text-shadow: none !important;
   }
 
-  .navbar__ecosystem-button path {
-    stroke: var(--navbar-gold) !important;
-  }
-
-  .navbar__ecosystem-button::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 1px;
-    background: var(--navbar-gold);
-    box-shadow: 0 0 9px rgba(216, 184, 106, 0.72);
-  }
-
-  .navbar__ecosystem-button:hover,
-  .navbar__ecosystem-button:focus-visible {
-    color: var(--navbar-gold) !important;
-    background: transparent;
-    transform: translateY(-1px);
-    text-shadow:
-      0 0 7px rgba(216, 184, 106, 1),
-      0 0 16px rgba(216, 184, 106, 0.95),
-      0 0 30px rgba(216, 184, 106, 0.68),
-      0 0 44px rgba(216, 184, 106, 0.42);
+  .navbar__ecosystem-button.is-active::after {
+    content: none !important;
+    display: none !important;
   }
 
   .navbar__chevron {
-    width: 14px;
-    height: 9px;
+    width: 13px;
+    height: 8px;
     flex: 0 0 auto;
     color: currentColor;
     transform: translateY(1px);
-    transition: transform 180ms ease;
+    transition: transform 170ms ease;
   }
 
   .navbar__chevron.is-open {
@@ -318,111 +333,62 @@ const navbarStyles = `
 
   .navbar__dropdown {
     position: absolute;
-    top: calc(100% + 12px);
-    left: 0;
-    width: 220px;
-    padding: 10px;
+    top: calc(100% + 8px);
+    left: 50%;
+    width: 190px;
+    padding: 8px;
     display: flex;
     flex-direction: column;
     gap: 2px;
-    border: 1px solid rgba(216, 184, 106, 0.24);
-    background: rgba(0, 0, 0, 0.86);
+    border: 1px solid rgba(215, 185, 130, 0.22);
+    border-radius: 14px;
+    background: rgba(4, 4, 4, 0.88);
     backdrop-filter: blur(18px);
     box-shadow:
-      0 20px 44px rgba(0, 0, 0, 0.42),
-      0 0 22px rgba(216, 184, 106, 0.12);
+      0 20px 44px rgba(0, 0, 0, 0.46),
+      0 0 20px rgba(215, 185, 130, 0.1);
     visibility: hidden;
     opacity: 0;
-    transform: translateY(-8px);
+    transform: translate(-50%, -8px);
     pointer-events: none;
     transition:
-      opacity 180ms ease,
-      transform 180ms ease,
-      visibility 180ms ease;
+      opacity 170ms ease,
+      transform 170ms ease,
+      visibility 170ms ease;
   }
 
   .navbar__dropdown.is-open {
     visibility: visible;
     opacity: 1;
-    transform: translateY(0);
+    transform: translate(-50%, 0);
     pointer-events: auto;
   }
 
   .navbar__dropdown-link {
     display: block;
-    padding: 12px 10px;
-    color: rgba(255, 255, 255, 0.86);
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 10px;
-    font-weight: 700;
+    border-radius: 10px;
+    padding: 10px 11px;
+    color: rgba(255, 255, 255, 0.76);
+    font-family: "Inter", Arial, Helvetica, sans-serif;
+    font-size: 9.5px;
+    font-weight: 500;
     line-height: 1.2;
-    letter-spacing: 1.4px;
+    letter-spacing: 1.35px;
     text-transform: uppercase;
     transition:
-      color 180ms ease,
-      text-shadow 180ms ease,
-      transform 180ms ease;
+      color 170ms ease,
+      background-color 170ms ease,
+      text-shadow 170ms ease,
+      transform 170ms ease;
   }
 
-  .navbar__dropdown-link.is-active {
-    color: var(--navbar-gold);
-    text-shadow:
-      0 0 7px rgba(216, 184, 106, 1),
-      0 0 18px rgba(216, 184, 106, 0.72);
-  }
-
+  .navbar__dropdown-link.is-active,
   .navbar__dropdown-link:hover,
   .navbar__dropdown-link:focus-visible {
     color: var(--navbar-gold);
-    background: transparent;
-    transform: translateX(3px);
-    text-shadow:
-      0 0 7px rgba(216, 184, 106, 1),
-      0 0 18px rgba(216, 184, 106, 0.72);
-  }
-
-  .navbar__logo-link {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    justify-self: center;
-    line-height: 0;
-    pointer-events: auto;
-  }
-
-  .navbar__logo-link:hover,
-  .navbar__logo-link:focus-visible {
-    background: transparent;
-    box-shadow: none;
-    text-shadow: none;
-    transform: none;
-  }
-
-  .navbar__logo-link:focus-visible {
-    outline: 1px solid rgba(216, 184, 106, 0.7);
-    outline-offset: 6px;
-  }
-
-  .navbar__logo {
-    display: block;
-    width: 330px;
-    height: 70px;
-    object-fit: contain;
-  }
-
-  .navbar__auth {
-    display: inline-flex;
-    align-items: center;
-    gap: 18px;
-  }
-
-  .navbar__separator {
-    display: inline-block;
-    color: rgba(255, 255, 255, 0.72);
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 14px;
-    line-height: 1;
-    transform: translateY(-1px);
+    background: rgba(215, 185, 130, 0.08);
+    transform: translateX(2px);
+    text-shadow: 0 0 14px rgba(215, 185, 130, 0.42);
   }
 
   .navbar__menu-button,
@@ -430,48 +396,40 @@ const navbarStyles = `
     display: none;
   }
 
-  @media (max-width: 1200px) {
+  @media (max-width: 1120px) {
     .navbar {
-      padding: 0 22px;
+      padding-right: 22px;
     }
 
-    .navbar__left {
-      gap: 34px;
+    .navbar__center {
+      gap: clamp(28px, 3.5vw, 48px);
+      padding-left: clamp(28px, 3.4vw, 42px);
     }
 
-    .navbar__right {
-      gap: 30px;
-    }
-
-    .navbar__logo {
-      width: 280px;
+    .navbar__brand-logo {
+      width: 250px;
       height: 64px;
     }
   }
 
   @media (max-width: 920px) {
     :root {
-      --navbar-height: 70px;
+      --navbar-height: 74px;
     }
 
     .navbar {
       grid-template-columns: auto minmax(0, 1fr) auto;
-      padding: 0 20px;
+      padding: 0 18px;
     }
 
-    .navbar__left,
+    .navbar__center,
     .navbar__right {
       display: none;
     }
 
-    .navbar__logo-link {
-      grid-column: 1;
-      justify-self: start;
-    }
-
-    .navbar__logo {
-      width: 188px;
-      height: 56px;
+    .navbar__brand-logo {
+      width: 225px;
+      height: 58px;
     }
 
     .navbar__menu-button {
@@ -481,8 +439,8 @@ const navbarStyles = `
       flex-direction: column;
       justify-content: space-between;
       align-items: flex-end;
-      width: 30px;
-      height: 22px;
+      width: 27px;
+      height: 19px;
       padding: 0;
       border: 0;
       background: transparent;
@@ -491,14 +449,14 @@ const navbarStyles = `
 
     .navbar__menu-button span {
       display: block;
-      height: 2px;
+      height: 1.5px;
       background: #ffffff;
-      box-shadow: 0 0 8px rgba(255, 255, 255, 0.72);
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.46);
       transition:
-        transform 180ms ease,
-        width 180ms ease,
-        opacity 180ms ease,
-        background-color 180ms ease;
+        transform 170ms ease,
+        width 170ms ease,
+        opacity 170ms ease,
+        background-color 170ms ease;
     }
 
     .navbar__menu-button span:nth-child(1) {
@@ -506,7 +464,7 @@ const navbarStyles = `
     }
 
     .navbar__menu-button span:nth-child(2) {
-      width: 66%;
+      width: 68%;
     }
 
     .navbar__menu-button span:nth-child(3) {
@@ -516,13 +474,11 @@ const navbarStyles = `
     .navbar__menu-button:hover span,
     .navbar__menu-button:focus-visible span {
       background: var(--navbar-gold);
-      box-shadow:
-        0 0 8px rgba(216, 184, 106, 1),
-        0 0 20px rgba(216, 184, 106, 0.65);
+      box-shadow: 0 0 12px rgba(215, 185, 130, 0.62);
     }
 
     .navbar__menu-button.is-open span:nth-child(1) {
-      transform: translateY(10px) rotate(45deg);
+      transform: translateY(8.75px) rotate(45deg);
       width: 100%;
     }
 
@@ -532,46 +488,42 @@ const navbarStyles = `
     }
 
     .navbar__menu-button.is-open span:nth-child(3) {
-      transform: translateY(-10px) rotate(-45deg);
+      transform: translateY(-8.75px) rotate(-45deg);
       width: 100%;
     }
 
     .navbar__mobile-menu {
       position: fixed;
-      top: calc(var(--navbar-height) + 10px);
+      top: calc(var(--navbar-height) + 8px);
       left: 12px;
       right: 12px;
       width: auto !important;
       max-width: none !important;
-      max-height: calc(100svh - var(--navbar-height) - 22px);
-      overflow-y: auto;
-      padding: 10px 12px 12px;
+      padding: 10px;
       flex-direction: column;
       gap: 2px;
-      background:
-        linear-gradient(180deg, rgba(18, 18, 18, 0.96) 0%, rgba(5, 5, 5, 0.94) 100%);
-      border: 1px solid rgba(216, 184, 106, 0.2);
+      border: 1px solid rgba(215, 185, 130, 0.2);
       border-radius: 18px;
-      backdrop-filter: blur(18px);
+      background: rgba(2, 2, 2, 0.9);
+      backdrop-filter: blur(20px);
       box-shadow:
-        0 18px 42px rgba(0, 0, 0, 0.52),
-        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        0 22px 44px rgba(0, 0, 0, 0.48),
+        0 0 22px rgba(215, 185, 130, 0.08);
       visibility: hidden;
       opacity: 0;
-      transform: translateY(-8px) scale(0.985);
-      transform-origin: top center;
+      transform: translateY(-10px);
       pointer-events: none;
       transition:
-        opacity 180ms ease,
-        transform 180ms ease,
-        visibility 180ms ease;
+        opacity 170ms ease,
+        transform 170ms ease,
+        visibility 170ms ease;
     }
 
     .navbar__mobile-menu.is-open {
       display: flex;
       visibility: visible;
       opacity: 1;
-      transform: translateY(0) scale(1);
+      transform: translateY(0);
       pointer-events: auto;
     }
 
@@ -581,73 +533,39 @@ const navbarStyles = `
       min-height: 38px;
       padding: 0 10px;
       border: 0;
-      border-radius: 12px;
+      border-radius: 11px;
       background: transparent;
       color: rgba(255, 255, 255, 0.9);
       text-align: left;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: "Inter", Arial, Helvetica, sans-serif;
       font-size: 10px;
-      font-weight: 700;
+      font-weight: 500;
       line-height: 1.2;
-      letter-spacing: 1.25px;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
       transition:
-        background-color 180ms ease,
-        color 180ms ease,
-        text-shadow 180ms ease;
-    }
-
-    .navbar__mobile-menu a + a,
-    .navbar__mobile-menu button + a,
-    .navbar__mobile-ecosystem-list + a {
-      margin-top: 2px;
+        color 170ms ease,
+        background-color 170ms ease,
+        text-shadow 170ms ease;
     }
 
     .navbar__mobile-menu a:hover,
-    .navbar__mobile-menu button:hover {
-      color: #ffffff;
-      background: rgba(255, 255, 255, 0.045);
-      text-shadow:
-        0 0 6px rgba(255, 255, 255, 0.72),
-        0 0 14px rgba(216, 184, 106, 0.32);
-    }
-
-    .navbar__mobile-menu a.is-active {
-      background: rgba(216, 184, 106, 0.09);
-    }
-
-    .navbar__mobile-ecosystem-button,
-    .navbar__mobile-ecosystem-button span,
-    .navbar__mobile-ecosystem-button svg {
+    .navbar__mobile-menu button:hover,
+    .navbar__mobile-menu a.is-active,
+    .navbar__mobile-menu button.is-active {
       color: var(--navbar-gold) !important;
-    }
-
-    .navbar__mobile-ecosystem-button path {
-      stroke: var(--navbar-gold) !important;
-    }
-
-    .navbar__mobile-ecosystem-button:hover {
-      text-shadow:
-        0 0 6px rgba(216, 184, 106, 0.92),
-        0 0 16px rgba(216, 184, 106, 0.42) !important;
-    }
-
-    .navbar__mobile-ecosystem-button.is-active,
-    .navbar__mobile-ecosystem-list a.is-active {
-      color: var(--navbar-gold) !important;
-      text-shadow:
-        0 0 6px rgba(216, 184, 106, 0.86),
-        0 0 16px rgba(216, 184, 106, 0.42);
+      background: rgba(215, 185, 130, 0.08);
+      text-shadow: 0 0 14px rgba(215, 185, 130, 0.42);
     }
 
     .navbar__mobile-ecosystem-list {
       display: grid;
       grid-template-rows: 0fr;
       overflow: hidden;
-      transition: grid-template-rows 180ms ease;
+      transition: grid-template-rows 170ms ease;
     }
 
     .navbar__mobile-ecosystem-list.is-open {
@@ -659,44 +577,36 @@ const navbarStyles = `
       display: flex;
       flex-direction: column;
       gap: 1px;
-      margin: 4px 0 6px;
-      padding: 6px 0 6px 10px;
-      border-left: 1px solid rgba(216, 184, 106, 0.22);
+      padding: 3px 0 6px 10px;
     }
 
     .navbar__mobile-ecosystem-inner a {
-      min-height: 30px;
-      padding: 0 10px;
+      min-height: 32px;
       color: rgba(255, 255, 255, 0.68);
-      font-size: 9px;
-      letter-spacing: 1.1px;
-      border-bottom: 0;
+      font-size: 9.5px;
+      letter-spacing: 1.35px;
     }
   }
 
   @media (max-width: 520px) {
     :root {
-      --navbar-height: 66px;
+      --navbar-height: 72px;
     }
 
     .navbar {
-      padding: 0 16px;
+      padding: 0 15px;
     }
 
-    .navbar__logo {
-      width: 165px;
-      height: 50px;
+    .navbar__brand-logo {
+      width: 205px;
+      height: 54px;
     }
   }
 
   @media (max-width: 360px) {
-    .navbar {
-      padding: 0 14px;
-    }
-
-    .navbar__logo {
-      width: 145px;
-      height: 46px;
+    .navbar__brand-logo {
+      width: 180px;
+      height: 48px;
     }
   }
 
@@ -708,7 +618,8 @@ const navbarStyles = `
     .navbar__dropdown,
     .navbar__dropdown-link,
     .navbar__menu-button span,
-    .navbar__mobile-menu {
+    .navbar__mobile-menu,
+    .navbar__mobile-ecosystem-list {
       transition: none;
     }
   }
@@ -762,7 +673,6 @@ const Navbar = () => {
     }
 
     updateCurrentPath();
-
     window.addEventListener("hashchange", updateCurrentPath);
 
     return () => {
@@ -798,8 +708,24 @@ const Navbar = () => {
       <style data-component="navbar">{navbarStyles}</style>
 
       <header className={`site-header${isScrolled ? " is-scrolled" : ""}`}>
-        <nav className="navbar" aria-label="Navigasi utama Mahreen Indonesia">
-          <div className="navbar__left">
+        <nav className="navbar" aria-label="Navigasi utama Mahreen Studio">
+          <a
+            className="navbar__brand"
+            href="#/"
+            aria-label="Mahreen Studio Beranda"
+            onClick={closeMobileMenu}
+          >
+            <img
+              className="navbar__brand-logo"
+              src={iconStudio}
+              alt="Mahreen Studio"
+              width="290"
+              height="74"
+              decoding="async"
+            />
+          </a>
+
+          <div className="navbar__center">
             <a
               className={`navbar__link${
                 isActiveRoute(currentPath, "#/newsroom") ? " is-active" : ""
@@ -865,36 +791,6 @@ const Navbar = () => {
                 ))}
               </div>
             </div>
-          </div>
-
-          <a
-            className="navbar__logo-link"
-            href="#/"
-            aria-label="Mahreen Indonesia Beranda"
-            onClick={closeMobileMenu}
-          >
-            <img
-              className="navbar__logo"
-              src={mahreenLogo}
-              alt="Mahreen Indonesia"
-              width="330"
-              height="70"
-              decoding="async"
-            />
-          </a>
-
-          <div className="navbar__right">
-            <a
-              className={`navbar__link${
-                isActiveRoute(currentPath, "#/portofolio") ? " is-active" : ""
-              }`}
-              href="#/portofolio"
-              aria-current={
-                isActiveRoute(currentPath, "#/portofolio") ? "page" : undefined
-              }
-            >
-              Portofolio
-            </a>
 
             <a
               className={`navbar__link${
@@ -907,34 +803,34 @@ const Navbar = () => {
             >
               Tentang
             </a>
+          </div>
 
-            <div className="navbar__auth" aria-label="Aksi akun">
-              <a
-                className={`navbar__auth-link${
-                  isActiveRoute(currentPath, "#/daftar") ? " is-active" : ""
-                }`}
-                href="#/daftar"
-                aria-current={
-                  isActiveRoute(currentPath, "#/daftar") ? "page" : undefined
-                }
-              >
-                Daftar
-              </a>
-              <span className="navbar__separator" aria-hidden="true">
-                |
-              </span>
-              <a
-                className={`navbar__auth-link${
-                  isActiveRoute(currentPath, "#/login") ? " is-active" : ""
-                }`}
-                href="#/login"
-                aria-current={
-                  isActiveRoute(currentPath, "#/login") ? "page" : undefined
-                }
-              >
-                Login
-              </a>
-            </div>
+          <div className="navbar__right" aria-label="Aksi akun">
+            <a
+              className={`navbar__auth-link${
+                isActiveRoute(currentPath, "#/daftar") ? " is-active" : ""
+              }`}
+              href="#/daftar"
+              aria-current={
+                isActiveRoute(currentPath, "#/daftar") ? "page" : undefined
+              }
+            >
+              Daftar
+            </a>
+            <span className="navbar__separator" aria-hidden="true">
+              |
+            </span>
+            <a
+              className={`navbar__auth-link${
+                isActiveRoute(currentPath, "#/login") ? " is-active" : ""
+              }`}
+              href="#/login"
+              aria-current={
+                isActiveRoute(currentPath, "#/login") ? "page" : undefined
+              }
+            >
+              Login
+            </a>
           </div>
 
           <button
@@ -970,9 +866,7 @@ const Navbar = () => {
             </a>
 
             <button
-              className={`navbar__mobile-ecosystem-button${
-                isEcosystemActive ? " is-active" : ""
-              }`}
+              className={isEcosystemActive ? "is-active" : undefined}
               type="button"
               aria-expanded={ecosystemOpen}
               aria-controls="mobile-ecosystem-menu"
@@ -1022,21 +916,6 @@ const Navbar = () => {
                 ))}
               </div>
             </div>
-
-            <a
-              className={
-                isActiveRoute(currentPath, "#/portofolio")
-                  ? "is-active"
-                  : undefined
-              }
-              href="#/portofolio"
-              aria-current={
-                isActiveRoute(currentPath, "#/portofolio") ? "page" : undefined
-              }
-              onClick={closeMobileMenu}
-            >
-              Portofolio
-            </a>
 
             <a
               className={

@@ -1,4 +1,5 @@
 // src/pages/Home/sections/Partnership.tsx
+import { useEffect, useRef, type CSSProperties } from "react";
 
 import logoBerkarya from "../../../assets/Partnership/Icon-berkarya.png";
 import logoITB from "../../../assets/Partnership/ITB.png";
@@ -9,158 +10,257 @@ import logoPresUniv from "../../../assets/Partnership/PU.png";
 import logoUTB from "../../../assets/Partnership/UTB.png";
 
 const partners = [
-  { id: 1, name: "Berkarya", logo: logoBerkarya },
-  { id: 2, name: "ITB", logo: logoITB },
-  { id: 3, name: "Universitas Indonesia", logo: logoUI },
-  { id: 4, name: "Politeknik Negeri Padang", logo: logoPNP },
-  { id: 5, name: "Ma Chung", logo: logoMaChung },
-  { id: 6, name: "President University", logo: logoPresUniv },
-  { id: 7, name: "UTB", logo: logoUTB },
+  { id: 1, name: "Berkarya", logo: logoBerkarya, logoWidth: 190 },
+  { id: 2, name: "ITB", logo: logoITB, logoWidth: 84 },
+  { id: 3, name: "Universitas Indonesia", logo: logoUI, logoWidth: 84 },
+  { id: 4, name: "Politeknik Negeri Padang", logo: logoPNP, logoWidth: 84 },
+  { id: 5, name: "Ma Chung", logo: logoMaChung, logoWidth: 90 },
+  { id: 6, name: "President University", logo: logoPresUniv, logoWidth: 84 },
+  { id: 7, name: "UTB", logo: logoUTB, logoWidth: 102 },
 ];
 
+const partnershipJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "Partner dan Institusi Mahreen Indonesia",
+  description:
+    "Daftar partner dan institusi yang berkolaborasi dengan Mahreen Indonesia.",
+  itemListElement: partners.map((partner, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    name: partner.name,
+  })),
+};
+
 const partnershipStyles = `
+  @keyframes fadeInPartnership {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
   .partnership-section {
     width: 100%;
-    background-color: #000000;
-    padding: 28px 20px 38px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    box-sizing: border-box;
+    height: 210px;
+    min-height: 210px;
+    padding: 17px 32px 40px;
+    background: #111111;
     overflow: hidden;
   }
 
+  .partnership-section *,
+  .partnership-section *::before,
+  .partnership-section *::after {
+    box-sizing: border-box;
+  }
+
   .partnership-section__title {
-    margin: 0 0 32px 0;
-    color: rgba(255, 255, 255, 0.32);
+    height: 13px;
+    margin: 0 0 42px;
+    color: rgba(255, 255, 255, 0.82);
     font-family: "Inter", Arial, sans-serif;
-    font-size: 11px; /* Diperbesar dari 8px */
-    font-weight: 500;
-    line-height: 1;
-    letter-spacing: 2.5px; /* Disesuaikan agar tetap elegan */
-    text-transform: uppercase;
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 13px;
+    letter-spacing: 2.45px;
     text-align: center;
+    text-transform: uppercase;
+    white-space: nowrap;
   }
 
   .partnership-section__logos {
-    width: 100%;
-    max-width: 1100px;
+    width: max-content;
+    height: 86px;
+    margin: 0;
+    padding: 0;
     display: flex;
-    justify-content: center;
     align-items: center;
-    gap: clamp(34px, 5vw, 72px);
+    justify-content: flex-start;
+    gap: 28px;
+    list-style: none;
   }
 
   .partnership-section__logo-item {
+    width: var(--partner-logo-width);
+    min-width: var(--partner-logo-width);
+    height: 86px;
     display: flex;
-    justify-content: center;
     align-items: center;
-    min-width: 60px;
+    justify-content: center;
   }
 
   .partnership-section__logo-img {
-    height: 74px; 
-    max-width: 150px; 
+    display: block;
+    width: 100%;
+    height: 86px;
     object-fit: contain;
-    opacity: 0.82;
-    filter: grayscale(1);
-    transition:
-      opacity 0.3s ease,
-      transform 0.3s ease,
-      filter 0.3s ease;
-  }
-
-  .partnership-section__logo-img:hover {
+    object-position: center;
     opacity: 1;
-    filter: grayscale(0);
-    transform: translateY(-2px) scale(1.04);
+    filter: grayscale(1);
+    user-select: none;
+    -webkit-user-drag: none;
   }
 
-  @media (max-width: 1100px) {
-    .partnership-section__logos {
-      max-width: 900px;
-    }
-    
-    .partnership-section__logo-img {
-      height: 64px;
-      max-width: 130px;
-    }
+  .partnership-section.is-reveal-ready .partnership-section__title,
+  .partnership-section.is-reveal-ready .partnership-section__logo-item {
+    opacity: 0;
   }
 
-  @media (max-width: 950px) {
-    .partnership-section {
-      padding: 26px 18px 34px;
-    }
+  .partnership-section.is-visible .partnership-section__title,
+  .partnership-section.is-visible .partnership-section__logo-item {
+    animation: fadeInPartnership 0.55s ease-out forwards;
+  }
 
-    .partnership-section__logos {
-      max-width: 780px;
-      gap: clamp(24px, 4vw, 46px);
-    }
-
-    .partnership-section__logo-img {
-      height: 56px;
-      max-width: 115px;
-    }
+  .partnership-section__logo-name {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 
   @media (max-width: 680px) {
-    .partnership-section__logos {
-      flex-wrap: wrap;
-      row-gap: 32px;
-      column-gap: 42px;
-    }
-
-    .partnership-section__logo-img {
-      height: 50px;
-      max-width: 100px;
-    }
-  }
-
-  @media (max-width: 480px) {
     .partnership-section {
-      padding: 24px 16px 32px;
+      padding-right: 18px;
+      padding-left: 18px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .partnership-section::-webkit-scrollbar {
+      display: none;
     }
 
     .partnership-section__title {
-      margin-bottom: 24px;
-      font-size: 9px; /* Diperbesar dari 7px untuk HP */
+      position: sticky;
+      left: 0;
+      width: calc(100vw - 36px);
+      font-size: 9px;
       letter-spacing: 2px;
     }
+  }
 
-    .partnership-section__logos {
-      column-gap: 30px;
-      row-gap: 28px;
+  @media (prefers-reduced-motion: reduce) {
+    .partnership-section.is-reveal-ready .partnership-section__title,
+    .partnership-section.is-reveal-ready .partnership-section__logo-item {
+      opacity: 1;
     }
 
-    .partnership-section__logo-img {
-      height: 44px;
-      max-width: 90px;
+    .partnership-section.is-visible .partnership-section__title,
+    .partnership-section.is-visible .partnership-section__logo-item {
+      animation: none;
     }
   }
 `;
 
 const Partnership = () => {
+  const sectionRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const sectionElement = sectionRef.current;
+
+    if (!sectionElement) {
+      return;
+    }
+
+    if (!("IntersectionObserver" in window)) {
+      sectionElement.classList.add("is-visible");
+      return;
+    }
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    if (prefersReducedMotion) {
+      sectionElement.classList.add("is-visible");
+      return;
+    }
+
+    sectionElement.classList.add("is-reveal-ready");
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          sectionElement.classList.add("is-visible");
+          observer.disconnect();
+        }
+      },
+      {
+        threshold: 0.2,
+      }
+    );
+
+    observer.observe(sectionElement);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   return (
     <>
       <style data-component="partnership">{partnershipStyles}</style>
 
-      <section className="partnership-section" id="partnership">
-        <h3 className="partnership-section__title">
-          Trusted by Partners & Institutions
-        </h3>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(partnershipJsonLd),
+        }}
+      />
 
-        <div className="partnership-section__logos">
-          {partners.map((partner) => (
-            <div key={partner.id} className="partnership-section__logo-item">
+      <section
+        className="partnership-section"
+        id="partnership"
+        ref={sectionRef}
+        aria-labelledby="partnership-title"
+      >
+        <h2 className="partnership-section__title" id="partnership-title">
+          Trusted by Partners &amp; Institutions
+        </h2>
+
+        <ul
+          className="partnership-section__logos"
+          aria-label="Daftar partner Mahreen Indonesia"
+        >
+          {partners.map((partner, index) => (
+            <li
+              key={partner.id}
+              className="partnership-section__logo-item"
+              style={
+                {
+                  "--partner-logo-width": `${partner.logoWidth}px`,
+                  animationDelay: `${0.1 + index * 0.07}s`,
+                } as CSSProperties
+              }
+            >
               <img
                 src={partner.logo}
-                alt={`Logo ${partner.name}`}
+                alt={`Logo ${partner.name}, partner Mahreen Indonesia`}
                 className="partnership-section__logo-img"
                 loading="lazy"
+                decoding="async"
+                width={partner.logoWidth}
+                height={86}
               />
-            </div>
+
+              <span className="partnership-section__logo-name">
+                {partner.name}
+              </span>
+            </li>
           ))}
-        </div>
+        </ul>
       </section>
     </>
   );

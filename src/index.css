@@ -31,21 +31,25 @@
 html,
 body,
 #root {
-  width: 100%;
-  min-height: 100%;
-  margin: 0;
-  padding: 0;
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  min-height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: hidden !important;
+  background: #000000 !important;
 }
 
 html {
   scroll-behavior: smooth;
-  overflow-y: scroll;
+  overflow-y: auto;
   scrollbar-width: none;
 }
 
 body {
-  overflow-x: hidden;
-  background: #000000;
+  display: block !important;
+  place-items: initial !important;
   color: #ffffff;
   -ms-overflow-style: none;
 }
@@ -57,14 +61,67 @@ body::-webkit-scrollbar {
   display: none;
 }
 
-#root {
-  width: 100%;
-  max-width: 100%;
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  overflow-x: hidden;
-  background: #000000;
+#root,
+.app-shell,
+.app-route {
+  display: block !important;
+  position: relative !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  min-width: 0 !important;
+  min-height: 100svh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: hidden !important;
+  background: #000000 !important;
+  text-align: initial !important;
+}
+
+.app-route > * {
+  width: 100vw !important;
+  max-width: 100vw !important;
+  min-width: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+main,
+section,
+header,
+footer,
+.home-content,
+.home-page,
+.home-hero,
+.partnership-section,
+.purpose,
+.ekosistem,
+.closing-section,
+.footer {
+  max-width: 100vw !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.home-content,
+.home-page,
+.home-hero,
+.partnership-section,
+.purpose,
+.ekosistem,
+.closing-section,
+.footer,
+footer {
+  width: 100vw !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.site-header,
+.navbar,
+.navbar__container,
+.navbar__inner {
+  max-width: 100vw !important;
+  box-sizing: border-box !important;
 }
 
 a {
@@ -114,4 +171,32 @@ code {
   line-height: 135%;
   padding: 4px 8px;
   background: var(--code-bg);
+}
+
+@media (max-width: 768px) {
+  html,
+  body,
+  #root,
+  .app-shell,
+  .app-route,
+  .home-content,
+  .home-page,
+  .home-hero,
+  .partnership-section,
+  .purpose,
+  .ekosistem,
+  .closing-section,
+  .footer,
+  footer {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    min-width: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .home-hero {
+    background-size: cover !important;
+    background-position: center top !important;
+  }
 }

@@ -1,13 +1,56 @@
-import meetingImg from "../../../Assets/Purpose/meeting.jpg";
+import { useEffect, useRef } from "react";
+import meetingImg from "../../../assets/Purpose/meeting.jpg";
+
+const purposeJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPageElement",
+  name: "Tujuan Mahreen Indonesia",
+  description:
+    "Mahreen Indonesia membangun ide, mengembangkan kreativitas, dan menciptakan dampak melalui kolaborasi, pendidikan, teknologi, dan solusi kreatif.",
+  isPartOf: {
+    "@type": "WebPage",
+    name: "Beranda Mahreen Indonesia",
+  },
+};
 
 const purposeStyles = `
   @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600;700;800&display=swap");
+
+  @keyframes fadeInUpPurpose {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes revealImagePurpose {
+    from {
+      opacity: 0;
+      transform: scale(0.95) translateX(20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1) translateX(0);
+    }
+  }
 
   .purpose {
     width: 100%;
     background-color: #050505;
     padding: 76px 22px 78px;
     overflow: hidden;
+  }
+
+  .purpose *,
+  .purpose *::before,
+  .purpose *::after {
+    box-sizing: border-box;
   }
 
   .purpose .container {
@@ -71,6 +114,7 @@ const purposeStyles = `
   }
 
   .purpose .cta {
+    width: fit-content;
     min-width: 156px;
     height: 52px;
     padding: 0 34px;
@@ -78,19 +122,33 @@ const purposeStyles = `
     color: #111111;
     border: none;
     border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     font-family: "Inter", Arial, sans-serif;
     font-size: 10px;
     font-weight: 800;
     line-height: 1;
     letter-spacing: 1.1px;
     text-transform: uppercase;
+    text-decoration: none;
     cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.2s ease;
+    transition:
+      background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .purpose .cta:hover {
-    background-color: #cba66c;
-    transform: translateY(-1px);
+    background-color: #eed295;
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(215, 179, 123, 0.35);
+    text-decoration: none;
+  }
+
+  .purpose .cta:active {
+    transform: translateY(0) scale(0.96);
+    box-shadow: none;
   }
 
   .purpose .cta:focus-visible {
@@ -101,6 +159,7 @@ const purposeStyles = `
   .purpose .imageCol {
     width: 100%;
     height: 385px;
+    margin: 0;
     border-radius: 10px;
     overflow: hidden;
   }
@@ -110,6 +169,51 @@ const purposeStyles = `
     height: 100%;
     object-fit: cover;
     display: block;
+    transition: transform 0.7s ease;
+  }
+
+  .purpose .imageCol:hover .image {
+    transform: scale(1.05);
+  }
+
+  .purpose .srOnly {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .purpose.is-reveal-ready .eyebrow,
+  .purpose.is-reveal-ready .heading,
+  .purpose.is-reveal-ready .description,
+  .purpose.is-reveal-ready .cta,
+  .purpose.is-reveal-ready .imageCol {
+    opacity: 0;
+  }
+
+  .purpose.is-visible .eyebrow {
+    animation: fadeInUpPurpose 0.8s ease-out 0.1s forwards;
+  }
+
+  .purpose.is-visible .heading {
+    animation: fadeInUpPurpose 0.8s ease-out 0.3s forwards;
+  }
+
+  .purpose.is-visible .description {
+    animation: fadeInUpPurpose 0.8s ease-out 0.5s forwards;
+  }
+
+  .purpose.is-visible .cta {
+    animation: fadeInUpPurpose 0.8s ease-out 0.7s forwards;
+  }
+
+  .purpose.is-visible .imageCol {
+    animation: revealImagePurpose 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s forwards;
   }
 
   @media (max-width: 1100px) {
@@ -199,23 +303,101 @@ const purposeStyles = `
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .purpose .cta {
+    .purpose.is-reveal-ready .eyebrow,
+    .purpose.is-reveal-ready .heading,
+    .purpose.is-reveal-ready .description,
+    .purpose.is-reveal-ready .cta,
+    .purpose.is-reveal-ready .imageCol {
+      opacity: 1;
+    }
+
+    .purpose.is-visible .eyebrow,
+    .purpose.is-visible .heading,
+    .purpose.is-visible .description,
+    .purpose.is-visible .cta,
+    .purpose.is-visible .imageCol {
+      animation: none;
+    }
+
+    .purpose .cta,
+    .purpose .image {
       transition: none;
+    }
+
+    .purpose .cta:hover,
+    .purpose .imageCol:hover .image {
+      transform: none;
     }
   }
 `;
 
 const Purpose = () => {
+  const sectionRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const sectionElement = sectionRef.current;
+
+    if (!sectionElement) {
+      return;
+    }
+
+    if (!("IntersectionObserver" in window)) {
+      sectionElement.classList.add("is-visible");
+      return;
+    }
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    if (prefersReducedMotion) {
+      sectionElement.classList.add("is-visible");
+      return;
+    }
+
+    sectionElement.classList.add("is-reveal-ready");
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          sectionElement.classList.add("is-visible");
+          observer.disconnect();
+        }
+      },
+      {
+        threshold: 0.2,
+      }
+    );
+
+    observer.observe(sectionElement);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   return (
     <>
       <style data-component="purpose">{purposeStyles}</style>
 
-      <section className="purpose" id="purpose">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(purposeJsonLd),
+        }}
+      />
+
+      <section
+        className="purpose"
+        id="purpose"
+        ref={sectionRef}
+        aria-labelledby="purpose-title"
+      >
         <div className="container">
           <div className="textCol">
-            <span className="eyebrow">OUR PURPOSE</span>
+            <p className="eyebrow">Our Purpose</p>
 
-            <h2 className="heading">
+            <h2 className="heading" id="purpose-title">
               Building Ideas.
               <br />
               <span className="headingAccent">Creating Impact.</span>
@@ -223,24 +405,34 @@ const Purpose = () => {
 
             <p className="description">
               Kami percaya bahwa setiap ide memiliki potensi menjadi inovasi.
-              <br />
-              Melalui sinergi, kreativitas, dan kolaborasi, kami menghadirkan solusi
-              <br />
-              yang memberikan dampak nyata bagi masyarakat.
+              Melalui sinergi, kreativitas, dan kolaborasi, kami menghadirkan
+              solusi yang memberikan dampak nyata bagi masyarakat.
             </p>
 
-            <button type="button" className="cta">
+            <a
+              href="/about"
+              className="cta"
+              aria-label="Pelajari lebih lanjut tentang tujuan Mahreen Indonesia"
+            >
               Selengkapnya
-            </button>
+            </a>
           </div>
 
-          <div className="imageCol">
+          <figure className="imageCol">
             <img
               src={meetingImg}
-              alt="Tim sedang berdiskusi ide di depan papan sticky notes"
+              alt="Tim Mahreen Indonesia sedang berdiskusi ide kreatif dan strategi kolaborasi"
               className="image"
+              loading="lazy"
+              decoding="async"
+              width={620}
+              height={385}
             />
-          </div>
+            <figcaption className="srOnly">
+              Diskusi tim sebagai bagian dari proses pengembangan ide,
+              kreativitas, dan kolaborasi Mahreen Indonesia.
+            </figcaption>
+          </figure>
         </div>
       </section>
     </>
