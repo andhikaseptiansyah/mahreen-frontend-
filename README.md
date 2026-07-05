@@ -36,38 +36,59 @@
 
 ## 📂 Struktur Proyek
 
-Arsitektur direktori di bawah folder `src/` dirancang agar kode tetap bersih dan mudah dikelola antar anggota tim:
+Arsitektur direktori di bawah folder `src/` disusun agar kode lebih rapi, modular, dan mudah dikelola oleh tim pengembang.
 
 ```text
 src/
-├── assets/         # File statis (Gambar, Logo, Ikon)
-├── components/     # Komponen global yang dapat digunakan kembali
-│   ├── Navbar/     # Komponen navigasi utama
-│   └── Footer/     # Komponen kaki halaman
-├── pages/          # Komponen halaman utama berbasis fitur
-│   └── Home/       # Halaman beranda
-│       ├── Home.tsx
-│       └── sections/ # Sub-section khusus halaman Home
-│           ├── Hero.tsx
-│           ├── About.tsx
-│           ├── Services.tsx
-│           └── Contact.tsx
-│   └── About/
-│       ├── About.tsx
-│   └── Programs/
-│       ├── Programs.tsx
-│   └── Contact/
-│       ├── Contact.tsx
-│   └── Dashboard/
-│       ├── Dashboard.tsx 
-├── layouts/        # Pembungkus tata letak halaman (Layout Wrapper)
-├── routes/         # Konfigurasi dan manajemen routing aplikasi
-├── types/          # Definisi interface dan tipe data TypeScript global
-├── hooks/
-├── services/ 
-├── utils/          # Fungsi pembantu (helper) & konstanta global
-├── App.tsx         # Root component aplikasi
-└── main.tsx        # Entry point aplikasi untuk rendering DOM
+├── assets/                         # File statis (Gambar, Logo, Ikon)
+├── components/                     # Komponen global yang dapat digunakan kembali
+│   ├── Navbar/                     # Komponen navigasi utama
+│   │   ├── Navbar.tsx
+│   │   ├── StudioNavbar.tsx
+│   │   ├── Tanya-MahreenNavbar.tsx
+│   │   ├── CSR-Navbar.tsx
+│   │   └── Peduli-MahreenNavbar.tsx
+│   ├── Footer/                     # Komponen kaki halaman
+│   │   └── Footer.tsx
+│   ├── Cloasing-section/           # Komponen section akhir
+│   └── CTA/                        # Komponen call to action
+├── pages/                          # Komponen halaman utama berbasis fitur
+│   ├── Home/                       # Halaman beranda, menggunakan Navbar.tsx
+│   │   ├── Home.tsx
+│   │   └── sections/               # Sub-section khusus halaman Home
+│   │       ├── Partnership.tsx
+│   │       ├── Purpose.tsx
+│   │       ├── Ekosistem.tsx
+│   │       ├── LayananProfesional.tsx
+│   │       ├── KatalogKelas.tsx
+│   │       └── ClosingSection.tsx
+│   ├── Tentang/                    # Halaman profil Mahreen, menggunakan Navbar.tsx
+│   │   ├── Profil.tsx
+│   │   └── sections/
+│   │       ├── VisiMisi.tsx
+│   │       └── LegalStatus.tsx
+│   ├── Portofolio/                 # Halaman portofolio, menggunakan Navbar.tsx
+│   │   ├── Portofolio.tsx
+│   │   └── sections/
+│   │       └── Karya.tsx
+│   └── Mahreen-Studio/             # Halaman Mahreen Studio, menggunakan StudioNavbar.tsx
+│       ├── Studio.tsx
+│       ├── sections/
+│       │   ├── Collection.tsx
+│       │   └── Produk.tsx
+│       └── ProdukDetail/
+│           ├── DetailProduk.tsx
+│           └── Section/
+│               ├── CreativeProcess.tsx
+│               └── Experience.tsx
+├── layouts/                        # Pembungkus tata letak halaman
+├── routes/                         # Konfigurasi dan manajemen routing aplikasi
+├── types/                          # Definisi interface dan tipe data TypeScript global
+├── hooks/                          # Custom React hooks
+├── services/                       # Konfigurasi layanan atau API
+├── utils/                          # Fungsi pembantu dan konstanta global
+├── App.tsx                         # Root component aplikasi
+└── main.tsx                        # Entry point aplikasi untuk rendering DOM
 ```
 
 ---
