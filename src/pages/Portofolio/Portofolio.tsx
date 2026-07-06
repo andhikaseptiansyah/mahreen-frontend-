@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import Karya from "./sections/Karya";
 import ClosingSection from "../../components/Cloasing-section/cloasing-section";
+import CTA from "../../components/CTA";
 import Footer from "../../components/Footer/Footer";
 
 const PORTOFOLIO_PAGE_URL = "https://mahreenindonesia.com/portofolio";
@@ -407,6 +408,7 @@ const Portofolio = () => {
         </section>
 
         <Karya />
+        <CTA />
         <ClosingSection />
         <Footer />
       </main>
