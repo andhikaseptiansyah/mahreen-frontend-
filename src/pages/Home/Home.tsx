@@ -6,6 +6,7 @@ import Partnership from "./sections/Partnership";
 import Purpose from "./sections/Purpose";
 import Ekosistem from "./sections/Ekosistem";
 import LayananProfesional from "./sections/LayananProfesional";
+import LearningSection from "./sections/LearningSection";
 import Footer from "../../components/Footer/Footer";
 import ClosingSection from "../../components/Cloasing-section/cloasing-section";
 
@@ -632,6 +633,7 @@ const Home = () => {
         <Purpose />
         <Ekosistem />
         <LayananProfesional />
+        <LearningSection />
         <ClosingSection />
       </main>
 

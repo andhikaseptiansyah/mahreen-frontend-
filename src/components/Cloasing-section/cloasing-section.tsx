@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react";
+
 const closingSectionStyles = `
   .closing-section {
     position: relative;
@@ -69,6 +71,38 @@ const closingSectionStyles = `
     text-transform: uppercase;
   }
 
+  .closing-section [data-scroll-reveal] {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+
+  .closing-section.is-reveal-ready [data-scroll-reveal] {
+    transition:
+      opacity 0.75s ease,
+      transform 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+      filter 0.75s ease;
+    will-change: opacity, transform, filter;
+  }
+
+  .closing-section.is-reveal-ready [data-scroll-reveal]:not(.is-visible) {
+    opacity: 0;
+    transform: translateY(34px);
+    filter: blur(8px);
+  }
+
+  .closing-section__title[data-scroll-reveal] {
+    transition-delay: 80ms;
+  }
+
+  .closing-section__description[data-scroll-reveal] {
+    transition-delay: 180ms;
+  }
+
+  .closing-section__tagline[data-scroll-reveal] {
+    transition-delay: 280ms;
+  }
+
   @media (max-width: 1280px) {
     .closing-section__title {
       font-size: clamp(38px, 4.4vw, 58px);
@@ -122,24 +156,78 @@ const closingSectionStyles = `
       letter-spacing: 1.1px;
     }
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    .closing-section [data-scroll-reveal] {
+      opacity: 1;
+      transform: none;
+      filter: none;
+      transition: none;
+    }
+  }
 `;
 
 const ClosingSection = () => {
+  const sectionRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+
+    if (!section) return;
+
+    const revealElements = section.querySelectorAll<HTMLElement>(
+      "[data-scroll-reveal]"
+    );
+
+    if (typeof IntersectionObserver === "undefined") {
+      revealElements.forEach((element) => element.classList.add("is-visible"));
+      return;
+    }
+
+    section.classList.add("is-reveal-ready");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        });
+      },
+      {
+        threshold: 0.2,
+      }
+    );
+
+    revealElements.forEach((element) => observer.observe(element));
+
+    return () => {
+      observer.disconnect();
+      section.classList.remove("is-reveal-ready");
+    };
+  }, []);
+
   return (
     <>
       <style data-component="closing-section">{closingSectionStyles}</style>
 
       <section
         className="closing-section"
+        ref={sectionRef}
         aria-labelledby="closing-section-title"
       >
         <div className="closing-section__inner">
           <div className="closing-section__content">
-            <h2 className="closing-section__title" id="closing-section-title">
+            <h2
+              className="closing-section__title"
+              id="closing-section-title"
+              data-scroll-reveal
+            >
               Let&apos;s Build Something Meaningful Together
             </h2>
 
-            <div className="closing-section__description">
+            <div className="closing-section__description" data-scroll-reveal>
               <p>
                 Bersama Mahreen Indonesia, wujudkan ide, karya, dan bisnis menjadi lebih kreatif, profesional, dan
               </p>
@@ -149,7 +237,7 @@ const ClosingSection = () => {
               <p>sosial di era modern.</p>
             </div>
 
-            <p className="closing-section__tagline">
+            <p className="closing-section__tagline" data-scroll-reveal>
               Mari Bertumbuh dan Memberikan Manfaat Bersama Mahreen Indonesia.
             </p>
           </div>

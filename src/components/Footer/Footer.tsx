@@ -1,3 +1,6 @@
+import { useEffect, useRef } from "react";
+import type { CSSProperties } from "react";
+
 import emailIcon from "../../assets/social-logo/email-icon.svg";
 import instagramIcon from "../../assets/social-logo/instagram-icon.svg";
 import tiktokIcon from "../../assets/social-logo/tiktok-icon.svg";
@@ -339,6 +342,42 @@ const footerStyles = `
     outline-offset: 4px;
   }
 
+  .footer [data-scroll-reveal] {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+
+  .footer.is-reveal-ready [data-scroll-reveal] {
+    transition:
+      opacity 0.75s ease,
+      transform 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+      filter 0.75s ease,
+      color 220ms ease,
+      text-shadow 220ms ease,
+      filter 220ms ease,
+      opacity 220ms ease,
+      background-color 220ms ease,
+      border-color 220ms ease,
+      box-shadow 220ms ease;
+    transition-delay: var(--reveal-delay, 0ms);
+    will-change: opacity, transform, filter;
+  }
+
+  .footer.is-reveal-ready [data-scroll-reveal]:not(.is-visible) {
+    opacity: 0;
+    transform: translateY(34px);
+    filter: blur(8px);
+  }
+
+  .footer__separator[data-scroll-reveal] {
+    transition-delay: 280ms;
+  }
+
+  .footer__bottom[data-scroll-reveal] {
+    transition-delay: 360ms;
+  }
+
   @media (max-width: 1024px) {
     .footer__inner {
       padding: 34px 24px 0;
@@ -411,15 +450,22 @@ const footerStyles = `
     .footer__social-icon,
     .footer__link::before,
     .footer__social-link::before,
-    .footer__bottom-link::before {
+    .footer__bottom-link::before,
+    .footer [data-scroll-reveal] {
       transition: none;
     }
 
     .footer__link:hover,
     .footer__social-link:hover,
     .footer__bottom-link:hover,
-    .footer__logo-link:hover {
+    .footer__logo-link:hover,
+    .footer [data-scroll-reveal] {
       transform: none;
+    }
+
+    .footer [data-scroll-reveal] {
+      opacity: 1;
+      filter: none;
     }
   }
 `;
@@ -437,16 +483,66 @@ const renderLinks = (links: readonly FooterLink[]) => (
 );
 
 const Footer = () => {
+  const footerRef = useRef<HTMLElement | null>(null);
   const currentYear = new Date().getFullYear();
+
+  useEffect(() => {
+    const footer = footerRef.current;
+
+    if (!footer) return;
+
+    const revealElements = footer.querySelectorAll<HTMLElement>(
+      "[data-scroll-reveal]"
+    );
+
+    if (typeof IntersectionObserver === "undefined") {
+      revealElements.forEach((element) => element.classList.add("is-visible"));
+      return;
+    }
+
+    footer.classList.add("is-reveal-ready");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        });
+      },
+      {
+        threshold: 0.16,
+        rootMargin: "0px 0px -60px 0px",
+      }
+    );
+
+    revealElements.forEach((element) => observer.observe(element));
+
+    return () => {
+      observer.disconnect();
+      footer.classList.remove("is-reveal-ready");
+    };
+  }, []);
 
   return (
     <>
       <style data-component="footer">{footerStyles}</style>
 
-      <footer className="footer" role="contentinfo" aria-label="Footer Mahreen Indonesia">
+      <footer
+        className="footer"
+        ref={footerRef}
+        role="contentinfo"
+        aria-label="Footer Mahreen Indonesia"
+      >
         <div className="footer__inner">
           <div className="footer__main">
-            <section className="footer__brand" aria-label="Mahreen Indonesia">
+            <section
+              className="footer__brand"
+              aria-label="Mahreen Indonesia"
+              data-scroll-reveal
+              style={{ "--reveal-delay": "80ms" } as CSSProperties}
+            >
               <a className="footer__logo-link" href="/" aria-label="Mahreen Indonesia - Beranda">
                 <img
                   className="footer__logo"
@@ -468,21 +564,33 @@ const Footer = () => {
               </p>
             </section>
 
-            <nav aria-labelledby="footer-about-title">
+            <nav
+              aria-labelledby="footer-about-title"
+              data-scroll-reveal
+              style={{ "--reveal-delay": "160ms" } as CSSProperties}
+            >
               <h2 className="footer__column-title" id="footer-about-title">
                 Tentang Kami
               </h2>
               {renderLinks(aboutLinks)}
             </nav>
 
-            <nav aria-labelledby="footer-pillar-title">
+            <nav
+              aria-labelledby="footer-pillar-title"
+              data-scroll-reveal
+              style={{ "--reveal-delay": "220ms" } as CSSProperties}
+            >
               <h2 className="footer__column-title" id="footer-pillar-title">
                 Pilar Mahreen
               </h2>
               {renderLinks(pillarLinks)}
             </nav>
 
-            <nav aria-labelledby="footer-social-title">
+            <nav
+              aria-labelledby="footer-social-title"
+              data-scroll-reveal
+              style={{ "--reveal-delay": "280ms" } as CSSProperties}
+            >
               <h2 className="footer__column-title" id="footer-social-title">
                 Follow Us & Contact
               </h2>
@@ -519,9 +627,9 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="footer__separator" aria-hidden="true" />
+        <div className="footer__separator" data-scroll-reveal aria-hidden="true" />
 
-        <div className="footer__bottom">
+        <div className="footer__bottom" data-scroll-reveal>
           <p className="footer__copyright">
             © {currentYear} Mahreen Indonesia. Seluruh hak cipta dilindungi.
           </p>
