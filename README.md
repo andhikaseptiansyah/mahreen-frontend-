@@ -55,6 +55,10 @@ src/
 │   └── CTA/                 # Komponen Call to Action
 │       └── CTA.tsx
 ├── pages/                   # Komponen halaman utama berbasis fitur
+│   ├── Daftar/              # Halaman pendaftaran akun baru
+│   │   └── Daftar.tsx
+│   ├── Login/               # Halaman otentikasi/login
+│   │   └── Login.tsx
 │   ├── Home/                # Halaman beranda, menggunakan Navbar.tsx
 │   │   ├── Home.tsx 
 │   │   └── sections/        # Sub-section khusus halaman Home
