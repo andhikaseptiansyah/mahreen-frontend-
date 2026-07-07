@@ -40,55 +40,71 @@ Arsitektur direktori di bawah folder `src/` disusun agar kode lebih rapi, modula
 
 ```text
 src/
-├── assets/                         # File statis (Gambar, Logo, Ikon)
-├── components/                     # Komponen global yang dapat digunakan kembali
-│   ├── Navbar/                     # Komponen navigasi utama
+├── assets/                  # File statis (Gambar, Logo, Ikon)
+├── components/              # Komponen global yang dapat digunakan kembali
+│   ├── Navbar/              # Komponen navigasi utama
 │   │   ├── Navbar.tsx
 │   │   ├── StudioNavbar.tsx
 │   │   ├── Tanya-MahreenNavbar.tsx
 │   │   ├── CSR-Navbar.tsx
 │   │   └── Peduli-MahreenNavbar.tsx
-│   ├── Footer/                     # Komponen kaki halaman
+│   ├── Footer/              # Komponen kaki halaman
 │   │   └── Footer.tsx
-│   ├── Cloasing-section/           # Komponen section akhir
-│   └── CTA/                        # Komponen call to action
-├── pages/                          # Komponen halaman utama berbasis fitur
-│   ├── Home/                       # Halaman beranda, menggunakan Navbar.tsx
-│   │   ├── Home.tsx
-│   │   └── sections/               # Sub-section khusus halaman Home
+│   ├── Cloasing-section/    # Komponen section akhir
+│   │   └── cloasing-section.tsx
+│   └── CTA/                 # Komponen Call to Action
+│       └── CTA.tsx
+├── pages/                   # Komponen halaman utama berbasis fitur
+│   ├── Home/                # Halaman beranda, menggunakan Navbar.tsx
+│   │   ├── Home.tsx 
+│   │   └── sections/        # Sub-section khusus halaman Home
 │   │       ├── Partnership.tsx
 │   │       ├── Purpose.tsx
 │   │       ├── Ekosistem.tsx
-│   │       ├── LayananProfesional.tsx
-│   │       ├── KatalogKelas.tsx
-│   │       └── ClosingSection.tsx
-│   ├── Tentang/                    # Halaman profil Mahreen, menggunakan Navbar.tsx
+│   │       ├── Layanan-profesional.tsx
+│   │       ├── Katalog-kelas.tsx
+│   │       └── Closing section.tsx
+│   ├── Tentang/             # Halaman Profil Mahreen, menggunakan Navbar.tsx
 │   │   ├── Profil.tsx
-│   │   └── sections/
-│   │       ├── VisiMisi.tsx
-│   │       └── LegalStatus.tsx
-│   ├── Portofolio/                 # Halaman portofolio, menggunakan Navbar.tsx
+│   │   └── sections/        # Sub-section khusus halaman Tentang
+│   │       ├── Visi&misi.tsx
+│   │       └── Legal_status.tsx
+│   ├── Portofolio/          # Halaman Portofolio, menggunakan Navbar.tsx
 │   │   ├── Portofolio.tsx
-│   │   └── sections/
+│   │   └── sections/        # Sub-section khusus halaman Portofolio
 │   │       └── Karya.tsx
-│   └── Mahreen-Studio/             # Halaman Mahreen Studio, menggunakan StudioNavbar.tsx
-│       ├── Studio.tsx
-│       ├── sections/
-│       │   ├── Collection.tsx
-│       │   └── Produk.tsx
-│       └── ProdukDetail/
-│           ├── DetailProduk.tsx
-│           └── Section/
-│               ├── CreativeProcess.tsx
-│               └── Experience.tsx
-├── layouts/                        # Pembungkus tata letak halaman
-├── routes/                         # Konfigurasi dan manajemen routing aplikasi
-├── types/                          # Definisi interface dan tipe data TypeScript global
-├── hooks/                          # Custom React hooks
-├── services/                       # Konfigurasi layanan atau API
-├── utils/                          # Fungsi pembantu dan konstanta global
-├── App.tsx                         # Root component aplikasi
-└── main.tsx                        # Entry point aplikasi untuk rendering DOM
+│   ├── Mahreen-Studio/      # Halaman Studio, menggunakan StudioNavbar.tsx
+│   │   ├── studio.tsx
+│   │   ├── sections/        # Sub-section khusus halaman Studio
+│   │   │   ├── Collection.tsx
+│   │   │   ├── Produk.tsx
+│   │   │   └── Specialization.tsx
+│   │   └── ProdukDetail/    # Halaman detail produk Studio
+│   │       ├── Detail_Produk.tsx
+│   │       └── Sections/
+│   │           ├── Creative_process.tsx
+│   │           └── Experience.tsx
+│   └── Internship/          # Halaman portal Internship
+│       ├── Internship.tsx
+│       ├── FormInternship.tsx
+│       └── Sections/        # Sub-section khusus halaman Internship
+│           ├── Number.tsx
+│           ├── Jalur.tsx
+│           ├── Spesialisasi.tsx
+│           ├── WhyMahreen.tsx
+│           ├── AdmissionWindow.tsx
+│           ├── Alumni.tsx
+│           ├── Showcase.tsx
+│           └── Daftar.tsx
+├── layouts/                 # Pembungkus tata letak halaman (Layout Wrapper)
+├── routes/                  # Konfigurasi dan manajemen routing aplikasi
+│   └── AppRoutes.tsx
+├── types/                   # Definisi interface dan tipe data TypeScript global
+├── hooks/                   # Custom React hooks
+├── services/                # Konfigurasi layanan atau API
+├── utils/                   # Fungsi pembantu (helper) & konstanta global
+├── App.tsx                  # Root component aplikasi
+└── main.tsx                 # Entry point aplikasi untuk rendering DOM
 ```
 
 ---
