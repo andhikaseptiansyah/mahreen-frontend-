@@ -1,4 +1,8 @@
 import { useState, useEffect, useRef } from "react";
+import signatureNoirHoodieImage from "../../../assets/Mahreen-Studio/Collection/signature-noir-hoodie.png";
+import lifestyleEssentialsImage from "../../../assets/Mahreen-Studio/Collection/lifestyle-essentials.png";
+import merchandiseImage from "../../../assets/Mahreen-Studio/Collection/merchandise.png";
+import digitalShowroomImage from "../../../assets/Mahreen-Studio/Collection/digital-showroom.png";
 
 type CollectionTab = "apparel" | "merchandise" | "lifestyle";
 
@@ -26,8 +30,7 @@ const collectionCards: CollectionCard[] = [
     description: "Elevated comfort meets street sophistication.",
     eyebrow: "Featured Selection",
     layout: "featured",
-    image:
-      "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1800&q=90",
+    image: signatureNoirHoodieImage,
     imageAlt: "Model memakai hoodie gelap dengan gaya urban modern",
     imagePosition: "center 42%",
   },
@@ -36,8 +39,7 @@ const collectionCards: CollectionCard[] = [
     title: "Lifestyle Essentials",
     description: "Curated for the modern creative.",
     layout: "portrait",
-    image:
-      "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=1200&q=90",
+    image: lifestyleEssentialsImage,
     imageAlt: "Produk stationery premium berwarna hitam di atas meja",
     imagePosition: "center",
   },
@@ -46,8 +48,7 @@ const collectionCards: CollectionCard[] = [
     title: "Merchandise",
     description: "Everyday pieces, distinctly Mahreen.",
     layout: "compact",
-    image:
-      "https://images.unsplash.com/photo-1556229010-6c3f2c9ca5f8?auto=format&fit=crop&w=1200&q=90",
+    image: merchandiseImage,
     imageAlt: "Tekstur material hitam premium dengan detail emboss",
     imagePosition: "center",
   },
@@ -56,8 +57,7 @@ const collectionCards: CollectionCard[] = [
     title: "Digital Showroom",
     description: "Explore our full ecosystem in a virtual experience.",
     layout: "wide",
-    image:
-      "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1800&q=90",
+    image: digitalShowroomImage,
     imageAlt: "Interior showroom modern dengan pencahayaan hangat",
     imagePosition: "center 59%",
   },

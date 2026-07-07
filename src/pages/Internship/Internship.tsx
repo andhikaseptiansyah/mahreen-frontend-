@@ -1,11 +1,16 @@
-import { useEffect } from "react";
-import StudioNavbar from "../../components/Navbar/StudioNavbar";
+import { useEffect, type MouseEvent } from "react";
+import Navbar from "../../components/Navbar/InternshipNavbar";
 import ClosingSection from "../../components/Cloasing-section/cloasing-section";
 import Footer from "../../components/Footer/Footer";
-import studioHeroBackground from "../../assets/Mahreen-Studio/Home/bground-hero.png";
-import Collection from "./sections/Collection";
-import Produk from "./sections/Produk";
-import Specialization from "./sections/Specialization";
+import internshipHeroBackground from "../../assets/Internship/bground-intern.png";
+import Number from "./Sections/Number";
+import Jalur from "./Sections/Jalur";
+import Spesialisasi from "./Sections/Spesialisasi";
+import MengapaMahreen from "./Sections/WhyMahreen";
+import AdmissionWindow from "./Sections/AdmissionWindow";
+import Alumni from "./Sections/Alumni";
+import Showcase from "./Sections/Showcase";
+import Daftar from "./Sections/Daftar";
 
 const STUDIO_PAGE_URL = "https://mahreenindonesia.com/mahreen-studio";
 const STUDIO_PAGE_IMAGE = "https://mahreenindonesia.com/og-mahreen-studio.jpg";
@@ -112,7 +117,7 @@ const StudioSEO = () => {
       "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
     );
     setMetaByName("author", studioSeo.siteName);
-    setMetaByName("theme-color", "#050505");
+    setMetaByName("theme-color", "#0b0b0b");
 
     setMetaByProperty("og:type", "website");
     setMetaByProperty("og:locale", "id_ID");
@@ -136,7 +141,7 @@ const StudioSEO = () => {
 };
 
 const studioStyles = `
-  @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@500;600;700;800&display=swap");
+  @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700;800&display=swap");
 
   .studio-page {
     width: 100%;
@@ -152,6 +157,31 @@ const studioStyles = `
     box-sizing: border-box;
   }
 
+
+  @keyframes internshipHeroBackgroundEnter {
+    from {
+      opacity: 0;
+      transform: scale(1.035);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1.01);
+    }
+  }
+
+  @keyframes internshipHeroContentEnter {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 18px, 0);
+    }
+
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
   .studio-hero {
     position: relative;
     isolation: isolate;
@@ -162,120 +192,120 @@ const studioStyles = `
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    padding: 112px 24px 88px;
-    background: #050505;
+    padding: 118px 24px 68px;
+    background: #0b0b0b;
   }
 
   .studio-hero::before {
     content: "";
     position: absolute;
     inset: 0;
-    z-index: -2;
-    background-image:
-      linear-gradient(90deg, rgba(0, 0, 0, 0.38) 0%, rgba(0, 0, 0, 0.08) 48%, rgba(0, 0, 0, 0.36) 100%),
-      url("${studioHeroBackground}");
-    background-size: cover;
-    background-position: center 56px;
+    z-index: -3;
+    background-image: url("${internshipHeroBackground}");
     background-repeat: no-repeat;
-    filter: saturate(0.78) brightness(0.82) contrast(1.04);
-    animation: studioImageReveal 900ms ease-out both;
+    background-position: center center;
+    background-size: cover;
+    opacity: 0;
+    transform: scale(1.035);
+    filter: brightness(1.34) saturate(1.08) contrast(1.01);
+    animation: internshipHeroBackgroundEnter 900ms ease-out both;
+  }
+
+  .studio-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background:
+      linear-gradient(180deg, rgba(5, 5, 5, 0.30) 0%, rgba(5, 5, 5, 0.16) 44%, rgba(5, 5, 5, 0.46) 100%),
+      linear-gradient(90deg, rgba(5, 5, 5, 0.10) 0%, rgba(5, 5, 5, 0.00) 50%, rgba(5, 5, 5, 0.10) 100%);
   }
 
   .studio-hero__shade {
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.015) 30%, transparent 58%);
+    background: radial-gradient(
+      circle at 50% 43%,
+      rgba(255, 255, 255, 0.025) 0%,
+      rgba(255, 255, 255, 0.008) 28%,
+      transparent 58%
+    );
     pointer-events: none;
   }
 
   .studio-hero__inner {
-    width: 100%;
-    max-width: 760px;
+    width: min(100%, 820px);
     margin: 0 auto;
     text-align: center;
-    transform: translateY(8px);
-    animation: studioContentReveal 680ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both;
   }
 
   .studio-hero__title {
     margin: 0;
+    opacity: 0;
+    animation: internshipHeroContentEnter 560ms cubic-bezier(0.22, 1, 0.36, 1) 100ms both;
     color: #ffffff;
     font-family: "Playfair Display", Georgia, serif;
-    font-size: clamp(52px, 5.45vw, 78px);
-    font-weight: 700;
-    line-height: 0.92;
-    letter-spacing: -0.055em;
-    text-shadow:
-      0 2px 0 rgba(0, 0, 0, 0.34),
-      0 16px 40px rgba(0, 0, 0, 0.42);
+    font-size: clamp(54px, 6.5vw, 82px);
+    font-weight: 800;
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+    text-wrap: balance;
+    text-shadow: 0 8px 30px rgba(0, 0, 0, 0.38);
   }
 
-  .studio-hero__eyebrow {
-    width: fit-content;
-    margin: -8px auto 16px;
-    color: rgba(255, 255, 255, 0.7);
-    font-family: "Inter", Arial, sans-serif;
-    font-size: 8px;
-    font-weight: 700;
-    line-height: 1;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
+  .studio-hero__title-line {
+    display: block;
+  }
+
+  .studio-hero__title-line--gold {
+    margin-top: 4px;
+    color: #f0c979;
   }
 
   .studio-hero__description {
-    max-width: 680px;
-    margin: 18px auto 0;
-    color: rgba(255, 255, 255, 0.82);
-    font-family: "Inter", Arial, sans-serif;
-    font-size: clamp(12px, 1.1vw, 15px);
-    font-weight: 500;
-    line-height: 1.55;
-    letter-spacing: 7px;
-    text-transform: uppercase;
-    text-shadow: 0 10px 26px rgba(0, 0, 0, 0.52);
+    max-width: 700px;
+    opacity: 0;
+    animation: internshipHeroContentEnter 560ms cubic-bezier(0.22, 1, 0.36, 1) 210ms both;
+    margin: 24px auto 0;
+    color: rgba(255, 255, 255, 0.9);
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: clamp(16px, 1.55vw, 20px);
+    font-weight: 400;
+    line-height: 1.48;
+    letter-spacing: -0.015em;
+    text-shadow: 0 5px 18px rgba(0, 0, 0, 0.46);
   }
 
   .studio-hero__actions {
     display: flex;
-    justify-content: center;
+    opacity: 0;
+    animation: internshipHeroContentEnter 560ms cubic-bezier(0.22, 1, 0.36, 1) 320ms both;
     align-items: center;
+    justify-content: center;
     gap: 18px;
-    margin-top: 42px;
+    margin-top: 72px;
   }
 
   .studio-hero__button {
-    position: relative;
-    min-width: 134px;
-    min-height: 40px;
+    min-width: 176px;
+    min-height: 48px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     padding: 0 28px;
     border-radius: 999px;
-    text-decoration: none;
-    overflow: hidden;
-    font-family: "Inter", Arial, sans-serif;
-    font-size: 11px;
-    font-weight: 800;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
     line-height: 1;
-    letter-spacing: 0.7px;
+    text-decoration: none;
     transition:
       transform 180ms ease,
-      border-color 180ms ease,
       background-color 180ms ease,
+      border-color 180ms ease,
       color 180ms ease,
       box-shadow 180ms ease;
-  }
-
-  .studio-hero__button::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(110deg, transparent 0%, rgba(255, 255, 255, 0.26) 42%, transparent 62%);
-    transform: translateX(-120%);
-    transition: transform 420ms ease;
-    pointer-events: none;
   }
 
   .studio-hero__button:hover,
@@ -283,211 +313,189 @@ const studioStyles = `
     transform: translateY(-2px);
   }
 
-  .studio-hero__button:hover::before,
-  .studio-hero__button:focus-visible::before {
-    transform: translateX(120%);
-  }
-
   .studio-hero__button:focus-visible {
-    outline: 1px solid rgba(214, 180, 112, 0.76);
+    outline: 2px solid rgba(240, 201, 121, 0.8);
     outline-offset: 4px;
   }
 
   .studio-hero__button--primary {
-    border: 1px solid #d9b86f;
-    background: #d6b36b;
-    color: #0a0a0a;
-    box-shadow:
-      0 18px 40px rgba(0, 0, 0, 0.35),
-      0 0 18px rgba(214, 180, 112, 0.14);
+    border: 1px solid #f0c979;
+    background: #f0c979;
+    color: #101010;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.24);
   }
 
   .studio-hero__button--primary:hover,
   .studio-hero__button--primary:focus-visible {
-    background: #e0c07a;
-    border-color: #e0c07a;
-    box-shadow:
-      0 18px 42px rgba(0, 0, 0, 0.44),
-      0 0 22px rgba(214, 180, 112, 0.26);
+    border-color: #f6d58d;
+    background: #f6d58d;
+    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.32);
   }
 
   .studio-hero__button--secondary {
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    background: rgba(0, 0, 0, 0.12);
-    color: #ffffff;
-    backdrop-filter: blur(6px);
+    border: 1px solid rgba(240, 201, 121, 0.52);
+    background: rgba(15, 15, 15, 0.2);
+    color: #f0c979;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
   }
 
   .studio-hero__button--secondary:hover,
   .studio-hero__button--secondary:focus-visible {
-    border-color: rgba(214, 180, 112, 0.66);
-    background: rgba(214, 180, 112, 0.08);
-    color: #f2d391;
-    box-shadow: 0 0 18px rgba(214, 180, 112, 0.18);
+    border-color: #f0c979;
+    background: rgba(240, 201, 121, 0.09);
+    color: #f6d58d;
   }
 
-  @keyframes studioImageReveal {
-    from {
-      opacity: 0;
-      transform: scale(1.025);
-    }
-
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-
-  @keyframes studioContentReveal {
-    from {
-      opacity: 0;
-      transform: translateY(18px);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateY(8px);
-    }
-  }
 
   @media (prefers-reduced-motion: reduce) {
     .studio-hero::before,
-    .studio-hero__inner {
+    .studio-hero__title,
+    .studio-hero__description,
+    .studio-hero__actions {
+      opacity: 1;
       animation: none;
+    }
+
+    .studio-hero::before {
+      transform: scale(1.01);
+    }
+
+    .studio-hero__title,
+    .studio-hero__description,
+    .studio-hero__actions {
       transform: none;
     }
   }
 
   @media (max-width: 768px) {
     .studio-hero {
-      padding: 104px 20px 78px;
-      align-items: center;
+      min-height: 760px;
+      padding: 112px 20px 70px;
     }
 
     .studio-hero::before {
-      background-position: center 42px;
-      filter: saturate(0.72) brightness(0.74) contrast(1.04);
+      background-position: 55% center;
     }
 
-    .studio-hero__inner {
-      transform: translateY(0);
+    .studio-hero::after {
+      background:
+        linear-gradient(180deg, rgba(5, 5, 5, 0.34) 0%, rgba(5, 5, 5, 0.22) 44%, rgba(5, 5, 5, 0.52) 100%),
+        linear-gradient(90deg, rgba(5, 5, 5, 0.10) 0%, rgba(5, 5, 5, 0.01) 50%, rgba(5, 5, 5, 0.10) 100%);
     }
 
     .studio-hero__title {
-      font-size: clamp(46px, 13vw, 68px);
-      line-height: 0.96;
-    }
-
-    .studio-hero__eyebrow {
-      margin-bottom: 13px;
-      font-size: 7px;
-      letter-spacing: 1.3px;
+      font-size: clamp(48px, 12vw, 68px);
+      line-height: 1;
     }
 
     .studio-hero__description {
-      max-width: 520px;
-      margin-top: 18px;
-      font-size: 10px;
-      line-height: 1.7;
-      letter-spacing: 4px;
+      max-width: 590px;
+      margin-top: 22px;
+      font-size: 16px;
+      line-height: 1.55;
     }
 
     .studio-hero__actions {
-      gap: 12px;
-      margin-top: 34px;
-    }
-
-    .studio-hero__button {
-      min-width: 126px;
-      min-height: 38px;
-      padding: 0 22px;
-      font-size: 10px;
+      margin-top: 52px;
     }
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 520px) {
     .studio-hero {
-      padding: 100px 16px 74px;
+      min-height: 700px;
+      padding: 104px 18px 58px;
     }
 
     .studio-hero::before {
-      background-position: center 34px;
+      background-position: 58% center;
     }
 
     .studio-hero__title {
-      font-size: clamp(40px, 14vw, 56px);
+      font-size: clamp(42px, 13.5vw, 58px);
+      line-height: 1.02;
     }
 
     .studio-hero__description {
-      max-width: 330px;
-      font-size: 9px;
-      letter-spacing: 3px;
+      max-width: 360px;
+      margin-top: 20px;
+      font-size: 15px;
+      line-height: 1.56;
     }
 
     .studio-hero__actions {
       flex-direction: column;
       gap: 12px;
+      margin-top: 40px;
     }
 
     .studio-hero__button {
-      width: 156px;
+      width: min(100%, 220px);
+      min-height: 47px;
     }
   }
 `;
 
-const Studio = () => {
+const Internship = () => {
+  const scrollToProgram = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    document.getElementById("collection")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
+
   return (
     <>
       <StudioSEO />
       <style data-component="studio-page">{studioStyles}</style>
-      <StudioNavbar />
+      <Navbar />
 
       <main className="studio-page">
         <section className="studio-hero" aria-labelledby="studio-title">
           <span className="studio-hero__shade" aria-hidden="true" />
 
           <div className="studio-hero__inner">
-            <p className="studio-hero__eyebrow">Mahreen Studio</p>
-
             <h1 className="studio-hero__title" id="studio-title">
-              Mahreen Studio
+              <span className="studio-hero__title-line">Belajar. Berkarya.</span>
+              <span className="studio-hero__title-line studio-hero__title-line--gold">
+                Bertumbuh.
+              </span>
             </h1>
 
             <p className="studio-hero__description">
-              Modern Lifestyle Brand by Mahreen Indonesia
+              Mahreen Indonesia Internship menghadirkan pengalaman belajar berbasis
+              proyek nyata yang mempersiapkan talenta muda untuk dunia profesional
+              dengan standar industri global.
             </p>
 
-            <div className="studio-hero__actions" aria-label="Aksi Mahreen Studio">
+            <div className="studio-hero__actions" aria-label="Aksi program internship">
               <a
                 className="studio-hero__button studio-hero__button--primary"
-                href="#collection"
-                onClick={(event) => {
-                  event.preventDefault();
-                  document.getElementById("collection")?.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start",
-                  });
-                }}
+                href="#/internship/form"
               >
-                Shop Now
+                Daftar Internship
               </a>
 
               <a
                 className="studio-hero__button studio-hero__button--secondary"
-                href="#/portofolio"
+                href="#collection"
+                onClick={scrollToProgram}
               >
-                Explore Atelier
+                Lihat Program
               </a>
             </div>
           </div>
         </section>
 
-
-        <Collection />
-
-
-        <Produk />
-        <Specialization />
+       <Number />
+        <Jalur />
+        <Spesialisasi />
+        <MengapaMahreen />
+        <AdmissionWindow />
+        <Alumni />
+        <Showcase />
+        <Daftar />
 
         <ClosingSection />
         <Footer />
@@ -496,4 +504,4 @@ const Studio = () => {
   );
 };
 
-export default Studio;
+export default Internship;

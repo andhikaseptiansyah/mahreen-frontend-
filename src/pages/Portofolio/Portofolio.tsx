@@ -3,6 +3,7 @@ import Navbar from "../../components/Navbar/Navbar";
 import Karya from "./sections/Karya";
 import ClosingSection from "../../components/Cloasing-section/cloasing-section";
 import Footer from "../../components/Footer/Footer";
+import CTA from "../../components/CTA/CTA";
 
 const PORTOFOLIO_PAGE_URL = "https://mahreenindonesia.com/portofolio";
 const PORTOFOLIO_PAGE_IMAGE = "https://mahreenindonesia.com/og-portofolio.jpg";
@@ -407,6 +408,7 @@ const Portofolio = () => {
         </section>
 
         <Karya />
+        <CTA />
         <ClosingSection />
         <Footer />
       </main>
