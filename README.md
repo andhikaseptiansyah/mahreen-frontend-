@@ -10,7 +10,6 @@
     <a href="https://react.dev/"><img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React"></a>
     <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript"></a>
     <a href="https://vitejs.dev/"><img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite"></a>
-    <a href="https://tailwindcss.com/"><img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS"></a>
     <a href="https://www.npmjs.com/"><img src="https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white" alt="NPM"></a>
   </p>
 
@@ -33,62 +32,111 @@
 * 🧩 **Modular Component Architecture:** Struktur folder rapi berbasis fitur untuk kemudahan skalabilitas.
 
 ---
-
 ## 📂 Struktur Proyek
 
-Arsitektur direktori di bawah folder `src/` disusun agar kode lebih rapi, modular, dan mudah dikelola oleh tim pengembang.
+Arsitektur repositori saat ini mencakup cakupan penuh ekosistem aplikasi Mahreen, memisahkan *backend*, berbagai jenis *dashboard*, dan situs *frontend* utama. Berikut adalah rincian direktori proyek:
 
 ```text
-src/
-├── assets/                         # File statis (Gambar, Logo, Ikon)
-├── components/                     # Komponen global yang dapat digunakan kembali
-│   ├── Navbar/                     # Komponen navigasi utama
-│   │   ├── Navbar.tsx
-│   │   ├── StudioNavbar.tsx
-│   │   ├── Tanya-MahreenNavbar.tsx
-│   │   ├── CSR-Navbar.tsx
-│   │   └── Peduli-MahreenNavbar.tsx
-│   ├── Footer/                     # Komponen kaki halaman
-│   │   └── Footer.tsx
-│   ├── Cloasing-section/           # Komponen section akhir
-│   └── CTA/                        # Komponen call to action
-├── pages/                          # Komponen halaman utama berbasis fitur
-│   ├── Home/                       # Halaman beranda, menggunakan Navbar.tsx
-│   │   ├── Home.tsx
-│   │   └── sections/               # Sub-section khusus halaman Home
-│   │       ├── Partnership.tsx
-│   │       ├── Purpose.tsx
-│   │       ├── Ekosistem.tsx
-│   │       ├── LayananProfesional.tsx
-│   │       ├── KatalogKelas.tsx
-│   │       └── ClosingSection.tsx
-│   ├── Tentang/                    # Halaman profil Mahreen, menggunakan Navbar.tsx
-│   │   ├── Profil.tsx
-│   │   └── sections/
-│   │       ├── VisiMisi.tsx
-│   │       └── LegalStatus.tsx
-│   ├── Portofolio/                 # Halaman portofolio, menggunakan Navbar.tsx
-│   │   ├── Portofolio.tsx
-│   │   └── sections/
-│   │       └── Karya.tsx
-│   └── Mahreen-Studio/             # Halaman Mahreen Studio, menggunakan StudioNavbar.tsx
-│       ├── Studio.tsx
-│       ├── sections/
-│       │   ├── Collection.tsx
-│       │   └── Produk.tsx
-│       └── ProdukDetail/
-│           ├── DetailProduk.tsx
-│           └── Section/
-│               ├── CreativeProcess.tsx
-│               └── Experience.tsx
-├── layouts/                        # Pembungkus tata letak halaman
-├── routes/                         # Konfigurasi dan manajemen routing aplikasi
-├── types/                          # Definisi interface dan tipe data TypeScript global
-├── hooks/                          # Custom React hooks
-├── services/                       # Konfigurasi layanan atau API
-├── utils/                          # Fungsi pembantu dan konstanta global
-├── App.tsx                         # Root component aplikasi
-└── main.tsx                        # Entry point aplikasi untuk rendering DOM
+mahreen-mwebsite/
+├── backend/                     # API / Database / Auth / Logic
+├── admin-dashboard/             # Dashboard khusus Admin Mahreen
+├── client-dashboard/            # Dashboard khusus Klien Mahreen
+└── frontend/                    # Website utama Mahreen
+    └── src/                     # Source code Frontend Website Utama
+        ├── assets/              # File statis (Gambar, Logo, Ikon)
+        ├── components/          # Komponen global yang dapat digunakan kembali
+        │   ├── Navbar/          # Komponen navigasi utama (Varian Navbar)
+        │   │   ├── Navbar.tsx
+        │   │   ├── StudioNavbar.tsx
+        │   │   ├── Tanya-MahreenNavbar.tsx
+        │   │   ├── CSR-Navbar.tsx
+        │   │   └── Peduli-MahreenNavbar.tsx
+        │   ├── Footer/          # Komponen kaki halaman
+        │   │   └── Footer.tsx
+        │   ├── Cloasing-section/ 
+        │   │   └── cloasing-section.tsx
+        │   └── CTA/             # Komponen Call to Action
+        │       └── CTA.tsx
+        ├── pages/               # Komponen halaman utama berbasis fitur
+        │   ├── Daftar/          # Halaman pendaftaran akun baru
+        │   │   └── Daftar.tsx
+        │   ├── Login/           # Halaman otentikasi/login
+        │   │   └── Login.tsx
+        │   ├── Home/            # Halaman beranda utama
+        │   │   ├── Home.tsx
+        │   │   └── sections/
+        │   │       ├── Partnership.tsx
+        │   │       ├── Purpose.tsx
+        │   │       ├── Ekosistem.tsx
+        │   │       ├── Layanan-profesional.tsx
+        │   │       ├── Katalog-kelas.tsx
+        │   │       └── Closing section.tsx
+        │   ├── Tentang/         # Halaman Profil Mahreen
+        │   │   ├── Profil.tsx
+        │   │   └── sections/
+        │   │       ├── Visi&misi.tsx
+        │   │       └── Legal_status.tsx
+        │   ├── Portofolio/      # Halaman Portofolio Karya
+        │   │   ├── Portofolio.tsx
+        │   │   └── sections/
+        │   │       └── Karya.tsx
+        │   ├── Mahreen-Studio/  # Halaman Studio Kreatif
+        │   │   ├── studio.tsx
+        │   │   ├── sections/
+        │   │   │   ├── Collection.tsx
+        │   │   │   ├── Produk.tsx
+        │   │   │   └── Specialization.tsx
+        │   │   └── ProdukDetail/
+        │   │       ├── Detail_Produk.tsx
+        │   │       └── Sections/
+        │   │           ├── Creative_process.tsx
+        │   │           └── Experience.tsx
+        │   ├── MahreenCSR/      # Halaman Program Corporate Social Responsibility
+        │   │   ├── CSR.tsx
+        │   │   ├── sections/
+        │   │   │   ├── Tentang.tsx
+        │   │   │   ├── Program.tsx
+        │   │   │   ├── ProgramUnggulan.tsx
+        │   │   │   └── Daftar.tsx
+        │   │   └── ProgramObjektif/
+        │   │       ├── Program.tsx
+        │   │       └── Sections/
+        │   │           ├── ProgramObjektif.tsx
+        │   │           ├── Timeline.tsx
+        │   │           ├── Impact.tsx
+        │   │           ├── DokumentasiProyek.tsx
+        │   │           ├── Testimoni.tsx
+        │   │           ├── Pertanyaan.tsx
+        │   │           └── Daftar.tsx
+        │   ├── PeduliMahreen/   # Halaman Program Sosial & Donasi
+        │   │   ├── PeduliMahreen.tsx
+        │   │   └── sections/
+        │   │       ├── TargetPenerimaManfaat.tsx
+        │   │       ├── CeritaDampak.tsx
+        │   │       ├── JejakLangkah.tsx
+        │   │       ├── Kontribusi.tsx
+        │   │       └── TimelinePelaksanaan.tsx
+        │   └── Internship/      # Halaman Portal Internship (Magang)
+        │       ├── Internship.tsx
+        │       ├── FormInternship.tsx
+        │       └── Sections/
+        │           ├── Number.tsx
+        │           ├── Jalur.tsx
+        │           ├── Spesialisasi.tsx
+        │           ├── WhyMahreen.tsx
+        │           ├── AdmissionWindow.tsx
+        │           ├── Alumni.tsx
+        │           ├── Showcase.tsx
+        │           └── Daftar.tsx
+        ├── layouts/             # Pembungkus tata letak halaman (Layout Wrapper)
+        ├── routes/              # Konfigurasi dan manajemen routing aplikasi
+        │   └── AppRoutes.tsx
+        ├── types/               # Definisi interface dan tipe data TypeScript global
+        ├── hooks/               # Custom React hooks (Fungsi logika berulang)
+        ├── services/            # Konfigurasi layanan atau API calls
+        ├── utils/               # Fungsi pembantu (helper) & konstanta global
+        ├── App.tsx              # Root component aplikasi frontend
+        └── main.tsx             # Entry point aplikasi frontend untuk rendering DOM
 ```
 
 ---
