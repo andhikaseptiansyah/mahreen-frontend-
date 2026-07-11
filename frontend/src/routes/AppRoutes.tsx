@@ -6,6 +6,7 @@ import Studio from "../pages/Mahreen-Studio/Studio";
 import DetailProduk from "../pages/Mahreen-Studio/ProdukDetail/Produk_Detail";
 import Internship from "../pages/Internship/Internship";
 import PeduliMahreen from "../pages/PeduliMahreen/PeduliMahreen";
+import Tentang from "../pages/Tentang/Tentang";
 import FormInternship from "../pages/Internship/FormInternship";
 import Daftar from "../pages/Daftar/Daftar";
 import Login from "../pages/Login/Login";
@@ -74,7 +75,12 @@ const AppRoutes = () => {
       case "/login":
         return <Login />;
 
+      case "/tentang":
+      case "/tentang/profil-sejarah":
+      case "/tentang/visi-misi":
       case "/profil-sejarah":
+        return <Tentang />;
+
       case "/visi-misi":
       case "/legalitas":
       case "/tanya-mahreen":
