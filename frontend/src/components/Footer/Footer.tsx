@@ -17,9 +17,9 @@ type SocialLink = FooterLink &
   }>;
 
 const aboutLinks: readonly FooterLink[] = [
-  { label: "Profil & Sejarah", href: "/tentang/profil-sejarah" },
-  { label: "Visi & Misi", href: "/tentang/visi-misi" },
-  { label: "Legalitas Resmi", href: "/tentang/legalitas" },
+  { label: "Profil & Sejarah", href: "/tentang?section=profil-sejarah" },
+  { label: "Visi & Misi", href: "/tentang?section=visi-misi" },
+  { label: "Legalitas Resmi", href: "/tentang?section=legalitas" },
   { label: "Portofolio", href: "/portofolio" },
 ];
 
@@ -456,7 +456,7 @@ const Footer = () => {
     <>
       <style data-component="footer">{footerStyles}</style>
 
-      <footer className="footer" role="contentinfo" aria-label="Footer Mahreen Indonesia">
+      <footer id="contact" className="footer" role="contentinfo" aria-label="Footer Mahreen Indonesia">
         <div className="footer__inner">
           <div className="footer__main">
             <section className="footer__brand" aria-label="Mahreen Indonesia">

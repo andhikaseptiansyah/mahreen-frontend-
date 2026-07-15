@@ -15,6 +15,7 @@ type CollectionCard = {
   layout: "featured" | "portrait" | "compact" | "wide";
   eyebrow?: string;
   imagePosition?: string;
+  href: string;
 };
 
 const collectionTabs: { label: string; value: CollectionTab }[] = [
@@ -33,6 +34,7 @@ const collectionCards: CollectionCard[] = [
     image: signatureNoirHoodieImage,
     imageAlt: "Model memakai hoodie gelap dengan gaya urban modern",
     imagePosition: "center 42%",
+    href: "#/mahreen-studio/product/signature-noir-hoodie",
   },
   {
     id: "lifestyle-essentials",
@@ -42,6 +44,7 @@ const collectionCards: CollectionCard[] = [
     image: lifestyleEssentialsImage,
     imageAlt: "Produk stationery premium berwarna hitam di atas meja",
     imagePosition: "center",
+    href: "#/mahreen-studio?section=produk-unggulan",
   },
   {
     id: "merchandise",
@@ -51,6 +54,7 @@ const collectionCards: CollectionCard[] = [
     image: merchandiseImage,
     imageAlt: "Tekstur material hitam premium dengan detail emboss",
     imagePosition: "center",
+    href: "#/mahreen-studio?section=produk-unggulan",
   },
   {
     id: "digital-showroom",
@@ -60,6 +64,7 @@ const collectionCards: CollectionCard[] = [
     image: digitalShowroomImage,
     imageAlt: "Interior showroom modern dengan pencahayaan hangat",
     imagePosition: "center 59%",
+    href: "#/mahreen-studio?section=specializations",
   },
 ];
 
@@ -426,25 +431,27 @@ const Collection = () => {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
+    const sectionElement = sectionRef.current;
+
+    if (!sectionElement) return;
+
     // Observer API memantau elemen tanpa memberatkan performa
     const observer = new IntersectionObserver(
       ([entry]) => {
         // Jika elemen mulai terlihat setidaknya 15% dari viewport
         if (entry.isIntersecting) {
           setIsVisible(true);
-          // Hentikan observer setelah dipicu satu kali agar hemat memory
-          if (sectionRef.current) observer.unobserve(sectionRef.current);
+          observer.unobserve(sectionElement);
         }
       },
-      { threshold: 0.15 } 
+      { threshold: 0.15 }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
+    observer.observe(sectionElement);
 
     return () => {
-      if (sectionRef.current) observer.unobserve(sectionRef.current);
+      observer.unobserve(sectionElement);
+      observer.disconnect();
     };
   }, []);
 
@@ -492,7 +499,7 @@ const Collection = () => {
             <a
               key={card.id}
               className={`studio-collection__card studio-collection__card--${card.layout}`}
-              href={`#/mahreen-studio/${card.id}`}
+              href={card.href}
               aria-label={`Lihat ${card.title}`}
               // Delay animasi yang berbeda untuk setiap gambar (Stagger Effect)
               style={{ animationDelay: `${0.1 + index * 0.15}s` }} 

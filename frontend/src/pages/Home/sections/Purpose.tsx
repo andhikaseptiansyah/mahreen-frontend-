@@ -410,7 +410,7 @@ const Purpose = () => {
             </p>
 
             <a
-              href="/about"
+              href="#/tentang"
               className="cta"
               aria-label="Pelajari lebih lanjut tentang tujuan Mahreen Indonesia"
             >

@@ -85,6 +85,7 @@ const ctaStyles = `
     font-size: 16px;
     line-height: 1.55;
     cursor: pointer;
+    text-decoration: none;
     transition: transform 200ms ease, filter 200ms ease, background-color 200ms ease, border-color 200ms ease;
   }
 
@@ -176,18 +177,20 @@ const CTA = () => {
           </h2>
 
           <div className="section-final-cta__actions">
-            <button
-              type="button"
+            <a
               className="section-final-cta__button section-final-cta__button--primary"
+              href="#/tanya-mahreen"
+              aria-label="Mulai kolaborasi melalui Tanya Mahreen"
             >
               MULAI KOLABORASI
-            </button>
-            <button
-              type="button"
+            </a>
+            <a
               className="section-final-cta__button section-final-cta__button--secondary"
+              href="#/?section=contact"
+              aria-label="Lihat informasi kontak Mahreen Indonesia"
             >
               HUBUNGI KAMI
-            </button>
+            </a>
           </div>
         </div>
       </section>

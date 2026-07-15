@@ -253,22 +253,25 @@ const Produk = () => {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
+    const sectionElement = sectionRef.current;
+
+    if (!sectionElement) return;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
-          if (sectionRef.current) observer.unobserve(sectionRef.current);
+          observer.unobserve(sectionElement);
         }
       },
-      { threshold: 0.15 } 
+      { threshold: 0.15 }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
+    observer.observe(sectionElement);
 
     return () => {
-      if (sectionRef.current) observer.unobserve(sectionRef.current);
+      observer.unobserve(sectionElement);
+      observer.disconnect();
     };
   }, []);
 
@@ -314,6 +317,7 @@ const Produk = () => {
               key={card.id}
               className="studio-produk__card"
               href={`#/mahreen-studio/product/${card.id}`}
+              aria-label={`Lihat detail ${card.title}`}
               style={{ animationDelay: `${0.1 + index * 0.1}s` }} 
             >
               <div className="studio-produk__copy">

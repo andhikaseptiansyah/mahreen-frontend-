@@ -460,21 +460,14 @@ const Studio = () => {
             <div className="studio-hero__actions" aria-label="Aksi Mahreen Studio">
               <a
                 className="studio-hero__button studio-hero__button--primary"
-                href="#collection"
-                onClick={(event) => {
-                  event.preventDefault();
-                  document.getElementById("collection")?.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start",
-                  });
-                }}
+                href="#/mahreen-studio/latest-collection"
               >
                 Shop Now
               </a>
 
               <a
                 className="studio-hero__button studio-hero__button--secondary"
-                href="#/portofolio"
+                href="#/mahreen-studio?section=specializations"
               >
                 Explore Atelier
               </a>
@@ -482,9 +475,7 @@ const Studio = () => {
           </div>
         </section>
 
-
         <Collection />
-
 
         <Produk />
         <Specialization />

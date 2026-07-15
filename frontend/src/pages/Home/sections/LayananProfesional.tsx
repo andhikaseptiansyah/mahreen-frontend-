@@ -77,17 +77,58 @@ type LayananItem = {
   id: string;
   icon: ReactNode;
   label: string;
+  href: string;
 };
 
 const layananItems: LayananItem[] = [
-  { id: "web", icon: <GlobeIcon />, label: "Website\nDevelopment" },
-  { id: "graphic", icon: <GraphicIcon />, label: "Graphic Design" },
-  { id: "branding", icon: <BrandingIcon />, label: "Branding & Identity" },
-  { id: "uiux", icon: <UiUxIcon />, label: "UI/UX Design" },
-  { id: "digital", icon: <MarketingIcon />, label: "Digital Marketing" },
-  { id: "photo", icon: <CameraIcon />, label: "Photography" },
-  { id: "video", icon: <VideoIcon />, label: "Videography" },
-  { id: "business", icon: <BusinessIcon />, label: "Business Strategy" },
+  {
+    id: "web",
+    icon: <GlobeIcon />,
+    label: "Website\nDevelopment",
+    href: "#/tanya-mahreen?service=website-development",
+  },
+  {
+    id: "graphic",
+    icon: <GraphicIcon />,
+    label: "Graphic Design",
+    href: "#/tanya-mahreen?service=graphic-design",
+  },
+  {
+    id: "branding",
+    icon: <BrandingIcon />,
+    label: "Branding & Identity",
+    href: "#/tanya-mahreen?service=branding-identity",
+  },
+  {
+    id: "uiux",
+    icon: <UiUxIcon />,
+    label: "UI/UX Design",
+    href: "#/tanya-mahreen?service=ui-ux-design",
+  },
+  {
+    id: "digital",
+    icon: <MarketingIcon />,
+    label: "Digital Marketing",
+    href: "#/tanya-mahreen?service=digital-marketing",
+  },
+  {
+    id: "photo",
+    icon: <CameraIcon />,
+    label: "Photography",
+    href: "#/tanya-mahreen?service=photography",
+  },
+  {
+    id: "video",
+    icon: <VideoIcon />,
+    label: "Videography",
+    href: "#/tanya-mahreen?service=videography",
+  },
+  {
+    id: "business",
+    icon: <BusinessIcon />,
+    label: "Business Strategy",
+    href: "#/tanya-mahreen?service=business-strategy",
+  },
 ];
 
 const layananStyles = `
@@ -156,6 +197,7 @@ const layananStyles = `
     justify-content: center;
     gap: 32px;
     color: #d8af61;
+    text-decoration: none;
     box-sizing: border-box;
     opacity: 0;
     transform: translateY(18px) scale(0.985);
@@ -325,14 +367,16 @@ const LayananProfesional = () => {
 
           <div className="layanan__grid">
             {layananItems.map((item, index) => (
-              <article
+              <a
                 className="layanan__card"
                 key={item.id}
+                href={item.href}
+                aria-label={`Lihat layanan ${item.label.replace("\n", " ")} di Tanya Mahreen`}
                 style={{ transitionDelay: isVisible ? `${index * 55}ms` : "0ms" }}
               >
                 <div className="layanan__icon-wrapper">{item.icon}</div>
                 <p className="layanan__label">{item.label}</p>
-              </article>
+              </a>
             ))}
           </div>
         </div>

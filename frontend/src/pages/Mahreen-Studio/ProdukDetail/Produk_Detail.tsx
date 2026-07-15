@@ -13,6 +13,54 @@ import Experience from './sections/Experience';
 import ClosingSection from '../../../components/Cloasing-section/cloasing-section';
 import Footer from '../../../components/Footer/Footer';
 
+type StudioProductInfo = {
+    slug: string;
+    title: string;
+    price: string;
+    collection: string;
+};
+
+const studioProductCatalog: Record<string, StudioProductInfo> = {
+    "signature-noir-hoodie": {
+        slug: "signature-noir-hoodie",
+        title: "Signature Minimalist Hoodie",
+        price: "Rp 2.450.000",
+        collection: "Essentials Collection",
+    },
+    "signature-tee-new": {
+        slug: "signature-tee-new",
+        title: "Mahreen Signature Tee",
+        price: "Rp 249.000",
+        collection: "Signature Collection",
+    },
+    "refined-modisty-new": {
+        slug: "refined-modisty-new",
+        title: "Mahreen Refined Modisty",
+        price: "Rp 449.000",
+        collection: "Refined Collection",
+    },
+    "elevated-essentials-new": {
+        slug: "elevated-essentials-new",
+        title: "Mahreen Elevated Essentials",
+        price: "Rp 629.000",
+        collection: "Essentials Collection",
+    },
+    "everyday-motion-new": {
+        slug: "everyday-motion-new",
+        title: "Mahreen Everyday Motion",
+        price: "Rp 389.000",
+        collection: "Motion Collection",
+    },
+};
+
+const getCurrentProductSlug = () => {
+    const rawHash = window.location.hash.replace(/^#/, "").split("?")[0];
+    const pathParts = rawHash.split("/").filter(Boolean);
+    const slug = pathParts.at(-1) ?? "signature-noir-hoodie";
+
+    return decodeURIComponent(slug);
+};
+
 const detailProdukStyles = `
   .detail-produk-page {
     background-color: #0a0a0a;
@@ -81,6 +129,50 @@ const detailProdukStyles = `
     padding: 120px 20px 40px 20px; /* Padding top dinaikkan (120px) supaya tidak tertutup navbar fixed */
     font-family: 'Inter', sans-serif;
     color: #ffffff;
+  }
+  .product-breadcrumb {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 28px;
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .product-breadcrumb a {
+    color: rgba(255, 255, 255, 0.68);
+    text-decoration: none;
+    transition: color 180ms ease;
+  }
+  .product-breadcrumb a:hover,
+  .product-breadcrumb a:focus-visible {
+    color: #e4c47f;
+  }
+  .product-breadcrumb a:focus-visible {
+    outline: 2px solid rgba(228, 196, 127, 0.8);
+    outline-offset: 3px;
+  }
+  .product-breadcrumb__separator {
+    color: rgba(255, 255, 255, 0.24);
+  }
+  .size-guide-panel {
+    margin: -4px 0 24px;
+    padding: 16px 18px;
+    border: 1px solid rgba(228, 196, 127, 0.24);
+    background: rgba(228, 196, 127, 0.05);
+    color: rgba(255, 255, 255, 0.68);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .purchase-feedback {
+    margin: -46px 0 40px;
+    padding: 12px 14px;
+    border: 1px solid rgba(228, 196, 127, 0.3);
+    color: #e4c47f;
+    font-size: 12px;
+    line-height: 1.5;
   }
   .product-grid {
     display: grid;
@@ -331,6 +423,12 @@ const Detail_Produk: React.FC = () => {
     const [selectedSize, setSelectedSize] = useState<string>('M');
     const [activeImage, setActiveImage] = useState<number>(0);
     const [openAccordion, setOpenAccordion] = useState<string | null>(null);
+    const [showSizeGuide, setShowSizeGuide] = useState(false);
+    const [actionMessage, setActionMessage] = useState("");
+
+    const productSlug = getCurrentProductSlug();
+    const productInfo =
+        studioProductCatalog[productSlug] ?? studioProductCatalog["signature-noir-hoodie"];
 
     useEffect(() => {
         const animationFrame = window.requestAnimationFrame(() => {
@@ -359,6 +457,38 @@ const Detail_Produk: React.FC = () => {
         setOpenAccordion(openAccordion === section ? null : section);
     };
 
+    const saveProductToCart = () => {
+        const storageKey = "mahreen-studio-cart";
+        const storedCart = window.localStorage.getItem(storageKey);
+        let nextCart: unknown[] = [];
+
+        if (storedCart) {
+            try {
+                const parsedCart: unknown = JSON.parse(storedCart);
+                nextCart = Array.isArray(parsedCart) ? parsedCart : [];
+            } catch {
+                nextCart = [];
+            }
+        }
+
+        nextCart.push({
+            productSlug: productInfo.slug,
+            productTitle: productInfo.title,
+            color: selectedColor,
+            size: selectedSize,
+            quantity: 1,
+        });
+
+        window.localStorage.setItem(storageKey, JSON.stringify(nextCart));
+        setActionMessage(`${productInfo.title} ditambahkan ke keranjang.`);
+    };
+
+    const handleBuyNow = () => {
+        saveProductToCart();
+        const returnPath = `/mahreen-studio/product/${productInfo.slug}`;
+        window.location.hash = `#/login?redirect=${encodeURIComponent(returnPath)}&intent=checkout`;
+    };
+
     return (
         <div className={`detail-produk-page ${isPageReady ? 'is-ready' : ''}`}>
             <style data-component="detail-produk">{detailProdukStyles}</style>
@@ -368,6 +498,14 @@ const Detail_Produk: React.FC = () => {
 
             {/* SECTION ATAS: DETAIL & OPSI PRODUK */}
             <div className="detail-produk-container">
+                <nav className="product-breadcrumb" aria-label="Breadcrumb produk">
+                    <a href="#/mahreen-studio">Mahreen Studio</a>
+                    <span className="product-breadcrumb__separator" aria-hidden="true">/</span>
+                    <a href="#/mahreen-studio/latest-collection?section=collection">Collection</a>
+                    <span className="product-breadcrumb__separator" aria-hidden="true">/</span>
+                    <span aria-current="page">{productInfo.title}</span>
+                </nav>
+
                 <div className="product-grid">
 
                     {/* KIRI: Galeri Foto */}
@@ -376,6 +514,7 @@ const Detail_Produk: React.FC = () => {
                             {productImages.map((imgObj, idx) => (
                                 <button
                                     key={idx}
+                                    type="button"
                                     className={`thumbnail-btn ${activeImage === idx ? 'active' : ''}`}
                                     onClick={() => setActiveImage(idx)}
                                 >
@@ -391,9 +530,9 @@ const Detail_Produk: React.FC = () => {
 
                     {/* KANAN: Opsi Belanja */}
                     <div className="info-section">
-                        <span className="collection-label">Essentials Collection</span>
-                        <h1 className="product-title">Signature Minimalist Hoodie</h1>
-                        <div className="product-price">Rp 2.450.000</div>
+                        <span className="collection-label">{productInfo.collection}</span>
+                        <h1 className="product-title">{productInfo.title}</h1>
+                        <div className="product-price">{productInfo.price}</div>
 
                         {/* Pilih Warna */}
                         <div className="section-title">Warna: {currentColorObj.name}</div>
@@ -401,6 +540,7 @@ const Detail_Produk: React.FC = () => {
                             {colors.map((color) => (
                                 <button
                                     key={color.id}
+                                    type="button"
                                     className={`color-option ${selectedColor === color.id ? 'active' : ''}`}
                                     style={{ backgroundColor: color.hex }}
                                     onClick={() => {
@@ -416,8 +556,21 @@ const Detail_Produk: React.FC = () => {
                         <div className="size-block">
                             <div className="size-header">
                                 <p className="size-label">Select Size</p>
-                                <button className="size-guide" type="button">Size Guide</button>
+                                <button
+                                    className="size-guide"
+                                    type="button"
+                                    aria-expanded={showSizeGuide}
+                                    onClick={() => setShowSizeGuide((currentValue) => !currentValue)}
+                                >
+                                    Size Guide
+                                </button>
                             </div>
+
+                            {showSizeGuide ? (
+                                <div className="size-guide-panel">
+                                    S: lebar 52 cm · M: 55 cm · L: 58 cm · XL: 61 cm. Ukuran dapat berbeda 1–2 cm karena proses produksi.
+                                </div>
+                            ) : null}
 
                             <div className="size-picker" role="group" aria-label="Select product size">
                                 {sizes.map((size) => (
@@ -436,9 +589,19 @@ const Detail_Produk: React.FC = () => {
 
                         {/* CTA Buttons */}
                         <div className="action-buttons">
-                            <button className="btn-primary">Tambah ke Keranjang</button>
-                            <button className="btn-secondary">Beli Sekarang</button>
+                            <button className="btn-primary" type="button" onClick={saveProductToCart}>
+                                Tambah ke Keranjang
+                            </button>
+                            <button className="btn-secondary" type="button" onClick={handleBuyNow}>
+                                Beli Sekarang
+                            </button>
                         </div>
+
+                        {actionMessage ? (
+                            <p className="purchase-feedback" role="status" aria-live="polite">
+                                {actionMessage}
+                            </p>
+                        ) : null}
 
                         {/* Product Info Accordion */}
                         <div className="product-accordion">

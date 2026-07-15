@@ -711,7 +711,7 @@ const Navbar = () => {
         <nav className="navbar" aria-label="Navigasi utama Mahreen Studio">
           <a
             className="navbar__brand"
-            href="#/"
+            href="#/mahreen-studio"
             aria-label="Mahreen Studio Beranda"
             onClick={closeMobileMenu}
           >

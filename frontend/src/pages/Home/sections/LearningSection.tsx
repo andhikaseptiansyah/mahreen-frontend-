@@ -459,7 +459,7 @@ const LearningSection = () => {
               </p>
             </div>
 
-            <a className="learning-section__catalog-button" href="#/kelas">
+            <a className="learning-section__catalog-button" href="#/internship">
               Lihat Katalog Kelas
             </a>
           </div>
@@ -501,7 +501,7 @@ const LearningSection = () => {
                   ))}
                 </ul>
 
-                <a className="learning-card__button" href={`#/learning/${item.id}`}>
+                <a className="learning-card__button" href={`#/internship?program=${item.id}`}>
                   {item.buttonLabel}
                 </a>
               </article>

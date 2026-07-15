@@ -199,6 +199,12 @@ const homeStyles = `
     }
   }
 
+  #ecosystem,
+  #learning,
+  #contact {
+    scroll-margin-top: calc(var(--navbar-height, 74px) + 16px);
+  }
+
   .home-content {
     width: 100vw;
     max-width: 100vw;
@@ -592,14 +598,14 @@ const Home = () => {
               >
                 <a
                   className="home-hero__button home-hero__button--primary"
-                  href="#ecosystem"
+                  href="#/?section=ecosystem"
                   aria-label="Jelajahi ekosistem Mahreen Indonesia"
                 >
                   Jelajahi Ekosistem
                 </a>
                 <a
                   className="home-hero__button home-hero__button--outline"
-                  href="#/programs"
+                  href="#/?section=learning"
                   aria-label="Mulai belajar melalui program Mahreen Indonesia"
                 >
                   Mulai Belajar
