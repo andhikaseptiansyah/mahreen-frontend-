@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import mahreenLogo from "../../assets/Navbar/mahreen-logo.png";
+import iconStudio from "../../assets/Navbar/icon-tanyamahreen.png";
 
 type NavigationItem = {
   label: string;
@@ -54,14 +54,14 @@ const isActiveRoute = (currentPath: string, href: string) => {
 };
 
 const navbarStyles = `
+  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap");
+
   :root {
-    --navbar-height: 74px;
-    --navbar-bg: #000000;
-    --navbar-text: #ffffff;
-    --navbar-muted: rgba(255, 255, 255, 0.9);
-    --navbar-gold: #d8b86a;
-    --navbar-border: rgba(255, 255, 255, 0.14);
-    --navbar-font-size: 11px;
+    --navbar-height: 78px;
+    --navbar-text: rgba(255, 255, 255, 0.94);
+    --navbar-gold: #d7b982;
+    --navbar-border: rgba(255, 255, 255, 0.08);
+    --navbar-font-size: 10px;
     --navbar-letter-spacing: 1.85px;
   }
 
@@ -83,11 +83,11 @@ const navbarStyles = `
     place-items: initial !important;
     color: #ffffff !important;
   }
+
   body.mobile-nav-open {
     overflow: hidden !important;
     touch-action: none;
   }
-
 
   #root {
     display: block !important;
@@ -95,57 +95,41 @@ const navbarStyles = `
     text-align: initial !important;
   }
 
-  .home-content,
-  .home-page,
-  .partnership-section,
-  .purpose,
-  .ekosistem,
-  footer {
-    width: 100% !important;
-    max-width: none !important;
-    min-width: 0 !important;
-  }
-
   .site-header {
     position: fixed;
     inset: 0 0 auto 0;
-    width: 100% !important;
-    max-width: none !important;
-    height: var(--navbar-height);
-    transform: none !important;
-    background: var(--navbar-bg);
-    border-bottom: 1px solid var(--navbar-border);
     z-index: 1000;
+    width: 100%;
+    height: var(--navbar-height);
+    background: rgba(0, 0, 0, 0.96);
+    border-bottom: 1px solid var(--navbar-border);
     transition:
-      background-color 220ms ease,
-      border-color 220ms ease,
-      box-shadow 220ms ease,
-      backdrop-filter 220ms ease;
+      background-color 200ms ease,
+      border-color 200ms ease,
+      box-shadow 200ms ease,
+      backdrop-filter 200ms ease;
   }
 
   .site-header.is-scrolled {
-    background: rgba(0, 0, 0, 0.84);
-    border-bottom-color: rgba(216, 184, 106, 0.34);
-    backdrop-filter: blur(18px);
+    background: rgba(0, 0, 0, 0.88);
+    border-bottom-color: rgba(215, 185, 130, 0.22);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     box-shadow:
-      0 12px 36px rgba(0, 0, 0, 0.38),
-      0 0 22px rgba(216, 184, 106, 0.1);
+      0 12px 34px rgba(0, 0, 0, 0.42),
+      0 0 18px rgba(215, 185, 130, 0.08);
   }
 
   .navbar {
     position: relative;
-    width: 100% !important;
-    max-width: none !important;
-    min-width: 0 !important;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    width: 100%;
     height: var(--navbar-height);
     margin: 0;
-    padding: 0 28px;
+    padding: 0 28px 0 20px;
     box-sizing: border-box;
-
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-    align-items: center;
-
     color: var(--navbar-text);
   }
 
@@ -162,21 +146,48 @@ const navbarStyles = `
     text-decoration: none;
   }
 
-  .navbar__left,
-  .navbar__right {
+  .navbar__brand {
+    display: inline-flex;
+    align-items: center;
+    justify-self: start;
+    width: fit-content;
+    min-width: 0;
+    line-height: 0;
+    color: #ffffff;
+  }
+
+  .navbar__brand:focus-visible {
+    outline: 1px solid rgba(215, 185, 130, 0.68);
+    outline-offset: 7px;
+  }
+
+  .navbar__brand-logo {
+    display: block;
+    width: 290px;
+    height: 74px;
+    object-fit: contain;
+    object-position: left center;
+    flex: 0 0 auto;
+    filter:
+      drop-shadow(0 0 8px rgba(255, 255, 255, 0.08))
+      drop-shadow(0 0 14px rgba(215, 185, 130, 0.08));
+  }
+
+  .navbar__center {
     display: flex;
     align-items: center;
-    min-width: 0;
-  }
-
-  .navbar__left {
     justify-content: flex-start;
-    gap: 52px;
+    min-width: 0;
+    gap: clamp(24px, 3vw, 46px);
+    padding-left: clamp(28px, 3.4vw, 46px);
   }
 
   .navbar__right {
+    display: inline-flex;
+    align-items: center;
     justify-content: flex-end;
-    gap: 46px;
+    gap: 11px;
+    min-width: 0;
   }
 
   .navbar__link,
@@ -186,82 +197,67 @@ const navbarStyles = `
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 34px;
-    padding: 0;
-    border: 0;
+    min-height: 38px;
+    padding: 0 14px;
+    border: 1px solid transparent;
     outline: 0;
     background: transparent;
-    border-radius: 0;
+    border-radius: 999px;
     white-space: nowrap;
     cursor: pointer;
-
     color: var(--navbar-text);
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Inter", Arial, Helvetica, sans-serif;
     font-size: var(--navbar-font-size) !important;
-    font-weight: 700;
+    font-weight: 500;
     line-height: 1;
     letter-spacing: var(--navbar-letter-spacing) !important;
     text-transform: uppercase;
-
     transition:
-      color 180ms ease,
-      opacity 180ms ease,
-      text-shadow 180ms ease,
-      transform 180ms ease;
+      color 220ms ease,
+      background-color 220ms ease,
+      border-color 220ms ease,
+      box-shadow 220ms ease,
+      transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .navbar__auth-link {
+    font-size: 11.5px !important;
+    letter-spacing: 1.65px !important;
+  }
+
+  .navbar__separator {
+    display: inline-block;
+    color: rgba(255, 255, 255, 0.62);
+    font-family: "Inter", Arial, Helvetica, sans-serif;
+    font-size: 12.5px;
+    line-height: 1;
+    transform: translateY(-1px);
   }
 
   .navbar__link.is-active,
-  .navbar__auth-link.is-active,
-  .navbar__mobile-menu a.is-active {
+  .navbar__auth-link.is-active {
     color: var(--navbar-gold);
-    text-shadow:
-      0 0 7px rgba(216, 184, 106, 1),
-      0 0 16px rgba(216, 184, 106, 0.92),
-      0 0 30px rgba(216, 184, 106, 0.62),
-      0 0 44px rgba(216, 184, 106, 0.36);
   }
 
-  .navbar__link.is-active::after,
-  .navbar__auth-link.is-active::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -6px;
-    height: 1px;
-    background: var(--navbar-gold);
-    box-shadow:
-      0 0 8px rgba(216, 184, 106, 1),
-      0 0 20px rgba(216, 184, 106, 0.65);
-  }
-
-  .navbar__ecosystem-button.is-active {
-    text-shadow:
-      0 0 7px rgba(216, 184, 106, 1),
-      0 0 16px rgba(216, 184, 106, 0.92),
-      0 0 30px rgba(216, 184, 106, 0.62),
-      0 0 44px rgba(216, 184, 106, 0.36);
-  }
-
+  /* Efek Hover Desktop: Hanya Glow Teks Emas (Tanpa Garis Oval) */
   .navbar__link:hover,
-  .navbar__link:focus-visible,
   .navbar__auth-link:hover,
-  .navbar__auth-link:focus-visible {
-    color: #ffffff;
+  .navbar__ecosystem-button:hover {
+    color: var(--navbar-gold);
     background: transparent;
+    border-color: transparent; /* Kunci: Membuat garis tepi hilang */
     transform: translateY(-1px);
     text-shadow:
-      0 0 6px rgba(255, 255, 255, 1),
-      0 0 14px rgba(255, 255, 255, 0.88),
-      0 0 24px rgba(216, 184, 106, 0.62),
-      0 0 36px rgba(216, 184, 106, 0.34);
+      0 0 8px rgba(215, 185, 130, 0.9),
+      0 0 18px rgba(215, 185, 130, 0.5); /* Efek glow pada teks emas */
+    box-shadow: none; /* Kunci: Menghilangkan bayangan kotak berbentuk oval */
   }
 
   .navbar__link:focus-visible,
   .navbar__auth-link:focus-visible,
   .navbar__ecosystem-button:focus-visible {
-    outline: 1px solid var(--navbar-gold);
-    outline-offset: 7px;
+    outline: 1px solid rgba(215, 185, 130, 0.72);
+    outline-offset: 5px;
   }
 
   .navbar__ecosystem {
@@ -272,49 +268,15 @@ const navbarStyles = `
 
   .navbar__ecosystem-button {
     gap: 12px;
-    color: var(--navbar-gold) !important;
-    padding-bottom: 10px;
-  }
-
-  .navbar__ecosystem-button span,
-  .navbar__ecosystem-button svg {
-    color: var(--navbar-gold) !important;
-  }
-
-  .navbar__ecosystem-button path {
-    stroke: var(--navbar-gold) !important;
-  }
-
-  .navbar__ecosystem-button::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 1px;
-    background: var(--navbar-gold);
-    box-shadow: 0 0 9px rgba(216, 184, 106, 0.72);
-  }
-
-  .navbar__ecosystem-button:hover,
-  .navbar__ecosystem-button:focus-visible {
-    color: var(--navbar-gold) !important;
-    background: transparent;
-    transform: translateY(-1px);
-    text-shadow:
-      0 0 7px rgba(216, 184, 106, 1),
-      0 0 16px rgba(216, 184, 106, 0.95),
-      0 0 30px rgba(216, 184, 106, 0.68),
-      0 0 44px rgba(216, 184, 106, 0.42);
   }
 
   .navbar__chevron {
-    width: 14px;
-    height: 9px;
+    width: 13px;
+    height: 8px;
     flex: 0 0 auto;
     color: currentColor;
     transform: translateY(1px);
-    transition: transform 180ms ease;
+    transition: transform 220ms ease;
   }
 
   .navbar__chevron.is-open {
@@ -323,111 +285,76 @@ const navbarStyles = `
 
   .navbar__dropdown {
     position: absolute;
-    top: calc(100% + 12px);
-    left: 0;
-    width: 220px;
-    padding: 10px;
+    top: calc(100% + 9px);
+    left: 50%;
+    width: 205px;
+    padding: 8px;
     display: flex;
     flex-direction: column;
-    gap: 2px;
-    border: 1px solid rgba(216, 184, 106, 0.24);
-    background: rgba(0, 0, 0, 0.86);
+    gap: 4px;
+    border: 1px solid rgba(215, 185, 130, 0.22);
+    border-radius: 14px;
+    background: rgba(5, 5, 5, 0.96);
     backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
     box-shadow:
-      0 20px 44px rgba(0, 0, 0, 0.42),
-      0 0 22px rgba(216, 184, 106, 0.12);
+      0 20px 44px rgba(0, 0, 0, 0.46),
+      0 0 20px rgba(215, 185, 130, 0.1);
     visibility: hidden;
     opacity: 0;
-    transform: translateY(-8px);
+    transform: translate(-50%, -8px);
     pointer-events: none;
     transition:
-      opacity 180ms ease,
-      transform 180ms ease,
-      visibility 180ms ease;
+      opacity 220ms ease,
+      transform 220ms ease,
+      visibility 220ms ease;
   }
 
   .navbar__dropdown.is-open {
     visibility: visible;
     opacity: 1;
-    transform: translateY(0);
+    transform: translate(-50%, 0);
     pointer-events: auto;
   }
 
   .navbar__dropdown-link {
     display: block;
-    padding: 12px 10px;
-    color: rgba(255, 255, 255, 0.86);
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 10px;
-    font-weight: 700;
+    border-radius: 10px;
+    padding: 11px 12px;
+    color: rgba(255, 255, 255, 0.76);
+    font-family: "Inter", Arial, Helvetica, sans-serif;
+    font-size: 9.5px;
+    font-weight: 500;
     line-height: 1.2;
-    letter-spacing: 1.4px;
+    letter-spacing: 1.35px;
     text-transform: uppercase;
     transition:
-      color 180ms ease,
-      text-shadow 180ms ease,
-      transform 180ms ease;
+      color 220ms ease,
+      background-color 220ms ease,
+      box-shadow 220ms ease,
+      transform 220ms ease;
   }
 
-  .navbar__dropdown-link.is-active {
-    color: var(--navbar-gold);
-    text-shadow:
-      0 0 7px rgba(216, 184, 106, 1),
-      0 0 18px rgba(216, 184, 106, 0.72);
-  }
-
+  /* Mengatasi efek glow saat hover di dropdown desktop */
   .navbar__dropdown-link:hover,
   .navbar__dropdown-link:focus-visible {
-    color: var(--navbar-gold);
-    background: transparent;
-    transform: translateX(3px);
+    color: var(--navbar-gold) !important;
+    background: transparent !important;
+    transform: translateX(2px);
     text-shadow:
-      0 0 7px rgba(216, 184, 106, 1),
-      0 0 18px rgba(216, 184, 106, 0.72);
+      0 0 8px rgba(215, 185, 130, 0.8),
+      0 0 16px rgba(215, 185, 130, 0.4);
+    box-shadow: none !important;
   }
 
-  .navbar__logo-link {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    justify-self: center;
-    line-height: 0;
-    pointer-events: auto;
-  }
-
-  .navbar__logo-link:hover,
-  .navbar__logo-link:focus-visible {
-    background: transparent;
-    box-shadow: none;
-    text-shadow: none;
-    transform: none;
-  }
-
-  .navbar__logo-link:focus-visible {
-    outline: 1px solid rgba(216, 184, 106, 0.7);
-    outline-offset: 6px;
-  }
-
-  .navbar__logo {
-    display: block;
-    width: 330px;
-    height: 70px;
-    object-fit: contain;
-  }
-
-  .navbar__auth {
-    display: inline-flex;
-    align-items: center;
-    gap: 18px;
-  }
-
-  .navbar__separator {
-    display: inline-block;
-    color: rgba(255, 255, 255, 0.72);
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 14px;
-    line-height: 1;
-    transform: translateY(-1px);
+  /* Mengatasi background yg masih nempel saat halamannya aktif */
+  .navbar__dropdown-link.is-active {
+    color: var(--navbar-gold) !important;
+    background: transparent !important;
+    text-shadow:
+      0 0 8px rgba(215, 185, 130, 0.8),
+      0 0 16px rgba(215, 185, 130, 0.4);
+    box-shadow: none !important;
   }
 
   .navbar__menu-button,
@@ -435,21 +362,18 @@ const navbarStyles = `
     display: none;
   }
 
-  @media (max-width: 1200px) {
+  @media (max-width: 1120px) {
     .navbar {
-      padding: 0 22px;
+      padding-right: 22px;
     }
 
-    .navbar__left {
-      gap: 34px;
+    .navbar__center {
+      gap: 22px;
+      padding-left: 26px;
     }
 
-    .navbar__right {
-      gap: 30px;
-    }
-
-    .navbar__logo {
-      width: 280px;
+    .navbar__brand-logo {
+      width: 250px;
       height: 64px;
     }
   }
@@ -480,13 +404,13 @@ const navbarStyles = `
       display: none;
     }
 
-    .navbar__logo-link {
+    .navbar__brand {
       position: relative;
       z-index: 1003;
       justify-self: start;
     }
 
-    .navbar__logo {
+    .navbar__brand-logo {
       width: 270px;
       height: 66px;
       object-fit: contain;
@@ -662,20 +586,18 @@ const navbarStyles = `
       color: #d7b982;
     }
 
+    /* Hover Navigasi Mobile: Hapus Background */
     .navbar__mobile-link:hover,
     .navbar__mobile-link:focus-visible,
     .navbar__mobile-ecosystem-button:hover,
     .navbar__mobile-ecosystem-button:focus-visible {
       color: var(--navbar-gold);
-      background: transparent !important;
+      background: transparent;
       transform: translateY(-1px);
       text-shadow:
-        0 0 8px rgba(215, 185, 130, 0.95),
-        0 0 18px rgba(215, 185, 130, 0.58),
-        0 0 30px rgba(215, 185, 130, 0.28);
-      box-shadow:
-        0 0 14px rgba(215, 185, 130, 0.16),
-        0 0 26px rgba(215, 185, 130, 0.08);
+        0 0 8px rgba(215, 185, 130, 0.9),
+        0 0 18px rgba(215, 185, 130, 0.5);
+      box-shadow: none;
     }
 
     .navbar__mobile-ecosystem {
@@ -763,7 +685,7 @@ const navbarStyles = `
         transform 240ms ease;
     }
 
-    /* Ini mengatasi efek glow saat hover di dropdown mobile */
+    /* Mengatasi efek glow saat hover di dropdown mobile */
     .navbar__mobile-ecosystem-link:hover,
     .navbar__mobile-ecosystem-link:focus-visible {
       color: var(--navbar-gold) !important;
@@ -775,7 +697,7 @@ const navbarStyles = `
       box-shadow: none !important;
     }
 
-    /* Ini mengatasi background yg nempel pada menu aktif di dropdown mobile */
+    /* Mengatasi background yg nempel pada menu aktif di dropdown mobile */
     .navbar__mobile-ecosystem-link.is-active {
       color: var(--navbar-gold) !important;
       background: transparent !important;
@@ -829,11 +751,12 @@ const navbarStyles = `
       color: #111111;
     }
 
+    /* Hover Tombol Daftar Mobile: Hapus Background */
     .navbar__mobile-register:hover,
     .navbar__mobile-register:focus-visible {
       color: var(--navbar-gold);
       border-color: rgba(215, 185, 130, 0.82);
-      background: rgba(215, 185, 130, 0.055);
+      background: transparent;
       transform: translateY(-1px);
       text-shadow:
         0 0 8px rgba(215, 185, 130, 0.9),
@@ -861,7 +784,7 @@ const navbarStyles = `
       padding: 0 15px;
     }
 
-    .navbar__logo {
+    .navbar__brand-logo {
       width: min(250px, 70vw);
       height: 64px;
     }
@@ -909,7 +832,7 @@ const navbarStyles = `
   }
 
   @media (max-width: 360px) {
-    .navbar__logo {
+    .navbar__brand-logo {
       width: min(220px, 68vw);
       height: 58px;
     }
@@ -936,7 +859,14 @@ const navbarStyles = `
     .navbar__dropdown,
     .navbar__dropdown-link,
     .navbar__menu-button span,
-    .navbar__mobile-menu {
+    .navbar__mobile-menu,
+    .navbar__mobile-ecosystem-list,
+    .navbar__mobile-ecosystem-chevron,
+    .navbar__mobile-link,
+    .navbar__mobile-ecosystem-button,
+    .navbar__mobile-ecosystem-link,
+    .navbar__mobile-register,
+    .navbar__mobile-login {
       transition: none;
     }
   }
@@ -974,7 +904,10 @@ const Navbar = () => {
     };
 
     handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    window.addEventListener("scroll", handleScroll, {
+      passive: true,
+    });
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
@@ -986,6 +919,7 @@ const Navbar = () => {
       setCurrentPath(getCurrentRoute());
       setMobileOpen(false);
       setMobileEcosystemOpen(false);
+      setEcosystemOpen(false);
     };
 
     if (!window.location.hash || window.location.hash === "#") {
@@ -1033,6 +967,7 @@ const Navbar = () => {
       if (event.key === "Escape") {
         setMobileOpen(false);
         setMobileEcosystemOpen(false);
+        setEcosystemOpen(false);
       }
     };
 
@@ -1058,8 +993,24 @@ const Navbar = () => {
       <style data-component="navbar">{navbarStyles}</style>
 
       <header className={`site-header${isScrolled ? " is-scrolled" : ""}`}>
-        <nav className="navbar" aria-label="Navigasi utama Mahreen Indonesia">
-          <div className="navbar__left">
+        <nav className="navbar" aria-label="Navigasi utama Tanya Mahreen">
+          <a
+            className="navbar__brand"
+            href="#/tanya-mahreen"
+            aria-label="Tanya Mahreen Beranda"
+            onClick={closeMobileMenu}
+          >
+            <img
+              className="navbar__brand-logo"
+              src={iconStudio}
+              alt="Tanya Mahreen"
+              width="290"
+              height="74"
+              decoding="async"
+            />
+          </a>
+
+          <div className="navbar__center">
             <a
               className={`navbar__link${
                 isActiveRoute(currentPath, "#/newsroom") ? " is-active" : ""
@@ -1108,10 +1059,10 @@ const Navbar = () => {
               >
                 {ecosystemItems.map((item) => (
                   <a
+                    key={item.label}
                     className={`navbar__dropdown-link${
                       isActiveRoute(currentPath, item.href) ? " is-active" : ""
                     }`}
-                    key={item.label}
                     href={item.href}
                     aria-current={
                       isActiveRoute(currentPath, item.href) ? "page" : undefined
@@ -1125,36 +1076,6 @@ const Navbar = () => {
                 ))}
               </div>
             </div>
-          </div>
-
-          <a
-            className="navbar__logo-link"
-            href="#/"
-            aria-label="Mahreen Indonesia Beranda"
-            onClick={closeMobileMenu}
-          >
-            <img
-              className="navbar__logo"
-              src={mahreenLogo}
-              alt="Mahreen Indonesia"
-              width="330"
-              height="70"
-              decoding="async"
-            />
-          </a>
-
-          <div className="navbar__right">
-            <a
-              className={`navbar__link${
-                isActiveRoute(currentPath, "#/portofolio") ? " is-active" : ""
-              }`}
-              href="#/portofolio"
-              aria-current={
-                isActiveRoute(currentPath, "#/portofolio") ? "page" : undefined
-              }
-            >
-              Portofolio
-            </a>
 
             <a
               className={`navbar__link${
@@ -1167,34 +1088,36 @@ const Navbar = () => {
             >
               Tentang
             </a>
+          </div>
 
-            <div className="navbar__auth" aria-label="Aksi akun">
-              <a
-                className={`navbar__auth-link${
-                  isActiveRoute(currentPath, "#/daftar") ? " is-active" : ""
-                }`}
-                href="#/daftar"
-                aria-current={
-                  isActiveRoute(currentPath, "#/daftar") ? "page" : undefined
-                }
-              >
-                Daftar
-              </a>
-              <span className="navbar__separator" aria-hidden="true">
-                |
-              </span>
-              <a
-                className={`navbar__auth-link${
-                  isActiveRoute(currentPath, "#/login") ? " is-active" : ""
-                }`}
-                href="#/login"
-                aria-current={
-                  isActiveRoute(currentPath, "#/login") ? "page" : undefined
-                }
-              >
-                Login
-              </a>
-            </div>
+          <div className="navbar__right" aria-label="Aksi akun">
+            <a
+              className={`navbar__auth-link${
+                isActiveRoute(currentPath, "#/daftar") ? " is-active" : ""
+              }`}
+              href="#/daftar"
+              aria-current={
+                isActiveRoute(currentPath, "#/daftar") ? "page" : undefined
+              }
+            >
+              Daftar
+            </a>
+
+            <span className="navbar__separator" aria-hidden="true">
+              |
+            </span>
+
+            <a
+              className={`navbar__auth-link${
+                isActiveRoute(currentPath, "#/login") ? " is-active" : ""
+              }`}
+              href="#/login"
+              aria-current={
+                isActiveRoute(currentPath, "#/login") ? "page" : undefined
+              }
+            >
+              Login
+            </a>
           </div>
 
           <button
@@ -1227,11 +1150,15 @@ const Navbar = () => {
             <div className="navbar__mobile-navigation">
               <a
                 className={`navbar__mobile-link${
-                  isActiveRoute(currentPath, "#/") ? " is-active" : ""
+                  isActiveRoute(currentPath, "#/tanya-mahreen")
+                    ? " is-active"
+                    : ""
                 }`}
-                href="#/"
+                href="#/tanya-mahreen"
                 aria-current={
-                  isActiveRoute(currentPath, "#/") ? "page" : undefined
+                  isActiveRoute(currentPath, "#/tanya-mahreen")
+                    ? "page"
+                    : undefined
                 }
                 onClick={closeMobileMenu}
               >

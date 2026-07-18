@@ -1,11 +1,15 @@
 import { useEffect } from "react";
-import Navbar from "../../components/Navbar/Navbar";
+import Navbar from "../../components/Navbar/Tanya-MahreenNavbar";
 import Footer from "../../components/Footer/Footer";
 import ClosingSection from "../../components/Cloasing-section/cloasing-section";
-import tanyaMahreenBackground from "../../assets/TanyaMahreen/bground-tanyamahreen.png";
+import tanyaMahreenBackground from "../../assets/TanyaMahreen/Home/bground-tanyamahreen.png";
 
 import Solution from "./sections/Solution";
 import Workflow from "./sections/Workflow";
+import Excellence from "./sections/Excellence";
+import TheProcess from "./sections/TheProcess";
+import OurWork from "./sections/OurWork";
+import FAQ from "./sections/FAQ";
 
 const tanyaMahreenStyles = `
   @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@500;600;700&display=swap");
@@ -329,6 +333,11 @@ const TanyaMahreen = () => {
         
         <Solution />
         <Workflow />
+        <Excellence />
+        <TheProcess />
+        <OurWork />
+        <FAQ />
+
         <ClosingSection />
       </main>
 

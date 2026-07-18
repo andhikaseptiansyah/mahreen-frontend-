@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import iconConsultation from "../../../assets/TanyaMahreen/icon-consultation.png";
+import iconConsultation from "../../../assets/TanyaMahreen/Home/icon-consultation.png";
 
 const solutionStyles = `
   .solution-section {

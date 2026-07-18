@@ -85,6 +85,11 @@ const navbarStyles = `
     place-items: initial !important;
     color: #ffffff !important;
   }
+  body.mobile-nav-open {
+    overflow: hidden !important;
+    touch-action: none;
+  }
+
 
   #root {
     display: block !important;
@@ -417,8 +422,19 @@ const navbarStyles = `
       --navbar-height: 74px;
     }
 
+    .site-header {
+      height: var(--navbar-height);
+      background: rgba(0, 0, 0, 0.98);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+    }
+
     .navbar {
-      grid-template-columns: auto minmax(0, 1fr) auto;
+      position: relative;
+      z-index: 1002;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      width: 100%;
+      height: var(--navbar-height);
       padding: 0 18px;
     }
 
@@ -427,164 +443,375 @@ const navbarStyles = `
       display: none;
     }
 
+    .navbar__brand {
+      position: relative;
+      z-index: 1003;
+      justify-self: start;
+    }
+
     .navbar__brand-logo {
-      width: 225px;
-      height: 58px;
+      width: 270px;
+      height: 66px;
+      object-fit: contain;
+      object-position: left center;
     }
 
     .navbar__menu-button {
-      grid-column: 3;
+      position: relative;
+      z-index: 1005;
+      grid-column: 2;
       justify-self: end;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
       align-items: flex-end;
-      width: 27px;
-      height: 19px;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
       padding: 0;
       border: 0;
+      outline: 0;
       background: transparent;
+      border-radius: 0;
       cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .navbar__menu-button:focus,
+    .navbar__menu-button:active,
+    .navbar__menu-button:focus-visible {
+      background: transparent;
+      border: 0;
+      outline: none;
+      box-shadow: none;
     }
 
     .navbar__menu-button span {
       display: block;
-      height: 1.5px;
+      height: 3px;
+      margin: 3px 0;
+      border-radius: 999px;
       background: #ffffff;
-      box-shadow: 0 0 8px rgba(255, 255, 255, 0.46);
+      box-shadow: 0 0 6px rgba(255, 255, 255, 0.1);
+      transform-origin: center;
       transition:
-        transform 170ms ease,
-        width 170ms ease,
-        opacity 170ms ease,
-        background-color 170ms ease;
+        width 320ms cubic-bezier(0.16, 1, 0.3, 1),
+        transform 320ms cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 220ms ease,
+        background-color 220ms ease;
     }
 
     .navbar__menu-button span:nth-child(1) {
-      width: 100%;
+      width: 27px;
     }
 
     .navbar__menu-button span:nth-child(2) {
-      width: 68%;
+      width: 27px;
     }
 
     .navbar__menu-button span:nth-child(3) {
-      width: 86%;
-    }
-
-    .navbar__menu-button:hover span,
-    .navbar__menu-button:focus-visible span {
-      background: var(--navbar-gold);
-      box-shadow: 0 0 12px rgba(215, 185, 130, 0.62);
+      width: 14px;
     }
 
     .navbar__menu-button.is-open span:nth-child(1) {
-      transform: translateY(8.75px) rotate(45deg);
-      width: 100%;
+      width: 25px;
+      transform: translateY(9px) rotate(45deg);
     }
 
     .navbar__menu-button.is-open span:nth-child(2) {
       opacity: 0;
-      width: 0;
+      transform: scaleX(0);
     }
 
     .navbar__menu-button.is-open span:nth-child(3) {
-      transform: translateY(-8.75px) rotate(-45deg);
-      width: 100%;
+      width: 25px;
+      transform: translateY(-9px) rotate(-45deg);
     }
 
     .navbar__mobile-menu {
       position: fixed;
-      top: calc(var(--navbar-height) + 8px);
-      left: 12px;
-      right: 12px;
-      width: auto !important;
-      max-width: none !important;
-      padding: 10px;
+      top: var(--navbar-height);
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 1001;
+      display: flex;
       flex-direction: column;
-      gap: 2px;
-      border: 1px solid rgba(215, 185, 130, 0.2);
-      border-radius: 18px;
-      background: rgba(2, 2, 2, 0.9);
-      backdrop-filter: blur(20px);
-      box-shadow:
-        0 22px 44px rgba(0, 0, 0, 0.48),
-        0 0 22px rgba(215, 185, 130, 0.08);
+      align-items: center;
+      width: 100%;
+      height: calc(100dvh - var(--navbar-height));
+      padding:
+        clamp(40px, 6vh, 64px)
+        20px
+        max(30px, env(safe-area-inset-bottom));
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      border: 0;
+      border-radius: 0;
+      background:
+        radial-gradient(
+          circle at 68% 30%,
+          rgba(153, 118, 76, 0.08),
+          transparent 30%
+        ),
+        radial-gradient(
+          circle at 20% 12%,
+          rgba(255, 255, 255, 0.025),
+          transparent 28%
+        ),
+        linear-gradient(
+          145deg,
+          rgba(27, 29, 28, 0.998),
+          rgba(12, 11, 10, 1) 55%,
+          rgba(6, 6, 6, 1)
+        );
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       visibility: hidden;
       opacity: 0;
-      transform: translateY(-10px);
+      transform: translateY(-14px);
       pointer-events: none;
       transition:
-        opacity 170ms ease,
-        transform 170ms ease,
-        visibility 170ms ease;
+        opacity 380ms cubic-bezier(0.16, 1, 0.3, 1),
+        transform 380ms cubic-bezier(0.16, 1, 0.3, 1),
+        visibility 380ms ease;
     }
 
     .navbar__mobile-menu.is-open {
-      display: flex;
       visibility: visible;
       opacity: 1;
       transform: translateY(0);
       pointer-events: auto;
     }
 
-    .navbar__mobile-menu a,
-    .navbar__mobile-menu button {
-      width: 100%;
-      min-height: 38px;
-      padding: 0 10px;
-      border: 0;
-      border-radius: 11px;
-      background: transparent;
-      color: rgba(255, 255, 255, 0.9);
-      text-align: left;
+    .navbar__mobile-navigation {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: space-between;
-      font-family: "Inter", Arial, Helvetica, sans-serif;
-      font-size: 10px;
-      font-weight: 500;
-      line-height: 1.2;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      transition:
-        color 170ms ease,
-        background-color 170ms ease,
-        text-shadow 170ms ease;
+      width: 100%;
+      max-width: 420px;
+      margin: auto 0;
     }
 
-    .navbar__mobile-menu a:hover,
-    .navbar__mobile-menu button:hover,
-    .navbar__mobile-menu a.is-active,
-    .navbar__mobile-menu button.is-active {
-      color: var(--navbar-gold) !important;
-      background: rgba(215, 185, 130, 0.08);
-      text-shadow: 0 0 14px rgba(215, 185, 130, 0.42);
+    .navbar__mobile-link,
+    .navbar__mobile-ecosystem-button {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: min(100%, 330px);
+      min-height: 52px;
+      margin: 3px 0;
+      padding: 10px 24px;
+      border: 0;
+      border-radius: 12px;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.95);
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: clamp(23px, 6.4vw, 29px);
+      font-weight: 400;
+      line-height: 1.25;
+      letter-spacing: -0.5px;
+      text-transform: none;
+      text-decoration: none;
+      cursor: pointer;
+      transition:
+        color 260ms ease,
+        background-color 260ms ease,
+        box-shadow 260ms ease,
+        transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .navbar__mobile-link.is-active {
+      color: #d7b982;
+    }
+
+    .navbar__mobile-link:hover,
+    .navbar__mobile-link:focus-visible,
+    .navbar__mobile-ecosystem-button:hover,
+    .navbar__mobile-ecosystem-button:focus-visible {
+      color: var(--navbar-gold);
+      background: transparent !important;
+      transform: translateY(-1px);
+      text-shadow:
+        0 0 8px rgba(215, 185, 130, 0.95),
+        0 0 18px rgba(215, 185, 130, 0.58),
+        0 0 30px rgba(215, 185, 130, 0.28);
+      box-shadow:
+        0 0 14px rgba(215, 185, 130, 0.16),
+        0 0 26px rgba(215, 185, 130, 0.08);
+    }
+
+    .navbar__mobile-ecosystem {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    .navbar__mobile-ecosystem-button {
+      gap: 12px;
+    }
+
+    .navbar__mobile-ecosystem-chevron {
+      width: 15px;
+      height: 9px;
+      flex: 0 0 auto;
+      color: rgba(255, 255, 255, 0.92);
+      transform: translateY(2px);
+      transition:
+        transform 360ms cubic-bezier(0.16, 1, 0.3, 1),
+        color 260ms ease;
+    }
+
+    .navbar__mobile-ecosystem-chevron.is-open {
+      color: #d7b982;
+      transform: translateY(2px) rotate(180deg);
     }
 
     .navbar__mobile-ecosystem-list {
       display: grid;
       grid-template-rows: 0fr;
-      overflow: hidden;
-      transition: grid-template-rows 170ms ease;
+      width: 100%;
+      opacity: 0;
+      transition:
+        grid-template-rows 420ms cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 280ms ease;
     }
 
     .navbar__mobile-ecosystem-list.is-open {
       grid-template-rows: 1fr;
+      opacity: 1;
     }
 
     .navbar__mobile-ecosystem-inner {
       min-height: 0;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
-      gap: 1px;
-      padding: 3px 0 6px 10px;
+      align-items: center;
+      width: 100%;
     }
 
-    .navbar__mobile-ecosystem-inner a {
-      min-height: 32px;
-      color: rgba(255, 255, 255, 0.68);
-      font-size: 9.5px;
-      letter-spacing: 1.35px;
+    .navbar__mobile-ecosystem-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      padding: 5px 0 14px;
+    }
+
+    .navbar__mobile-ecosystem-link {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: min(100%, 290px);
+      min-height: 42px;
+      margin: 2px 0;
+      padding: 10px 18px;
+      border-radius: 10px;
+      color: rgba(255, 255, 255, 0.7);
+      font-family: "Inter", Arial, sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.4;
+      letter-spacing: 1.3px;
+      text-transform: uppercase;
+      text-align: center;
+      text-decoration: none;
+      transition:
+        color 240ms ease,
+        background-color 240ms ease,
+        box-shadow 240ms ease,
+        transform 240ms ease;
+    }
+
+    /* Ini mengatasi efek glow saat hover di dropdown mobile */
+    .navbar__mobile-ecosystem-link:hover,
+    .navbar__mobile-ecosystem-link:focus-visible {
+      color: var(--navbar-gold) !important;
+      background: transparent !important;
+      transform: translateY(-1px);
+      text-shadow:
+        0 0 8px rgba(215, 185, 130, 0.8),
+        0 0 16px rgba(215, 185, 130, 0.4);
+      box-shadow: none !important;
+    }
+
+    /* Ini mengatasi background yg nempel pada menu aktif di dropdown mobile */
+    .navbar__mobile-ecosystem-link.is-active {
+      color: var(--navbar-gold) !important;
+      background: transparent !important;
+      text-shadow:
+        0 0 8px rgba(215, 185, 130, 0.8),
+        0 0 16px rgba(215, 185, 130, 0.4);
+      box-shadow: none !important;
+    }
+
+    .navbar__mobile-actions {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: 274px;
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    .navbar__mobile-register,
+    .navbar__mobile-login {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 49px;
+      padding: 0 24px;
+      border-radius: 999px;
+      font-family: "Inter", Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition:
+        transform 280ms cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 280ms ease,
+        background 280ms ease,
+        color 280ms ease,
+        box-shadow 280ms ease;
+    }
+
+    .navbar__mobile-register {
+      border: 1px solid rgba(255, 255, 255, 0.88);
+      background: transparent;
+      color: #ffffff;
+    }
+
+    .navbar__mobile-login {
+      border: 1px solid #d7b982;
+      background: #d7b982;
+      color: #111111;
+    }
+
+    .navbar__mobile-register:hover,
+    .navbar__mobile-register:focus-visible {
+      color: var(--navbar-gold);
+      border-color: rgba(215, 185, 130, 0.82);
+      background: rgba(215, 185, 130, 0.055);
+      transform: translateY(-1px);
+      text-shadow:
+        0 0 8px rgba(215, 185, 130, 0.9),
+        0 0 18px rgba(215, 185, 130, 0.45);
+      box-shadow:
+        0 0 12px rgba(215, 185, 130, 0.22),
+        0 0 26px rgba(215, 185, 130, 0.12);
+    }
+
+    .navbar__mobile-login:hover,
+    .navbar__mobile-login:focus-visible {
+      transform: translateY(-1px);
+      box-shadow:
+        0 0 14px rgba(215, 185, 130, 0.52),
+        0 0 30px rgba(215, 185, 130, 0.24);
     }
   }
 
@@ -598,15 +825,69 @@ const navbarStyles = `
     }
 
     .navbar__brand-logo {
-      width: 205px;
-      height: 54px;
+      width: min(250px, 70vw);
+      height: 64px;
+    }
+
+    .navbar__menu-button {
+      width: 34px;
+      height: 34px;
+    }
+
+    .navbar__menu-button span:nth-child(1),
+    .navbar__menu-button span:nth-child(2) {
+      width: 25px;
+    }
+
+    .navbar__menu-button span:nth-child(3) {
+      width: 13px;
+    }
+
+    .navbar__menu-button.is-open span:nth-child(1) {
+      width: 24px;
+    }
+
+    .navbar__menu-button.is-open span:nth-child(3) {
+      width: 24px;
+    }
+
+    .navbar__mobile-menu {
+      padding:
+        clamp(34px, 5.5vh, 50px)
+        18px
+        max(28px, env(safe-area-inset-bottom));
+    }
+
+    .navbar__mobile-link,
+    .navbar__mobile-ecosystem-button {
+      width: min(100%, 310px);
+      min-height: 50px;
+      padding: 9px 20px;
+      font-size: clamp(22px, 6.5vw, 27px);
+    }
+
+    .navbar__mobile-actions {
+      margin-top: 25px;
     }
   }
 
   @media (max-width: 360px) {
     .navbar__brand-logo {
-      width: 180px;
-      height: 48px;
+      width: min(220px, 68vw);
+      height: 58px;
+    }
+
+    .navbar__mobile-link,
+    .navbar__mobile-ecosystem-button {
+      font-size: 21px;
+    }
+
+    .navbar__mobile-menu {
+      padding-top: 28px;
+    }
+
+    .navbar__mobile-actions {
+      margin-top: 20px;
     }
   }
 
@@ -628,6 +909,7 @@ const navbarStyles = `
 const Navbar = () => {
   const [ecosystemOpen, setEcosystemOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileEcosystemOpen, setMobileEcosystemOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [currentPath, setCurrentPath] = useState(() => getCurrentRoute());
 
@@ -666,6 +948,8 @@ const Navbar = () => {
   useEffect(() => {
     const updateCurrentPath = () => {
       setCurrentPath(getCurrentRoute());
+      setMobileOpen(false);
+      setMobileEcosystemOpen(false);
     };
 
     if (!window.location.hash || window.location.hash === "#") {
@@ -684,6 +968,7 @@ const Navbar = () => {
     const handleResize = () => {
       if (window.innerWidth > 920) {
         setMobileOpen(false);
+        setMobileEcosystemOpen(false);
       }
     };
 
@@ -694,8 +979,36 @@ const Navbar = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.classList.add("mobile-nav-open");
+    } else {
+      document.body.classList.remove("mobile-nav-open");
+    }
+
+    return () => {
+      document.body.classList.remove("mobile-nav-open");
+    };
+  }, [mobileOpen]);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMobileOpen(false);
+        setMobileEcosystemOpen(false);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
   const closeMobileMenu = () => {
     setMobileOpen(false);
+    setMobileEcosystemOpen(false);
     setEcosystemOpen(false);
   };
 
@@ -836,11 +1149,19 @@ const Navbar = () => {
           <button
             className={`navbar__menu-button${mobileOpen ? " is-open" : ""}`}
             type="button"
-            aria-label={mobileOpen ? "Tutup menu" : "Buka menu"}
+            aria-label={mobileOpen ? "Tutup menu navigasi" : "Buka menu navigasi"}
             aria-expanded={mobileOpen}
             aria-controls="mobile-menu"
             onClick={() => {
-              setMobileOpen((currentValue) => !currentValue);
+              setMobileOpen((currentValue) => {
+                const nextValue = !currentValue;
+
+                if (!nextValue) {
+                  setMobileEcosystemOpen(false);
+                }
+
+                return nextValue;
+              });
             }}
           >
             <span />
@@ -852,109 +1173,151 @@ const Navbar = () => {
             id="mobile-menu"
             className={`navbar__mobile-menu${mobileOpen ? " is-open" : ""}`}
           >
-            <a
-              className={
-                isActiveRoute(currentPath, "#/newsroom") ? "is-active" : undefined
-              }
-              href="#/newsroom"
-              aria-current={
-                isActiveRoute(currentPath, "#/newsroom") ? "page" : undefined
-              }
-              onClick={closeMobileMenu}
-            >
-              Newsroom
-            </a>
-
-            <button
-              className={isEcosystemActive ? "is-active" : undefined}
-              type="button"
-              aria-expanded={ecosystemOpen}
-              aria-controls="mobile-ecosystem-menu"
-              onClick={() => {
-                setEcosystemOpen((currentValue) => !currentValue);
-              }}
-            >
-              <span>Our Ecosystem</span>
-
-              <svg
-                className={`navbar__chevron${ecosystemOpen ? " is-open" : ""}`}
-                viewBox="0 0 14 9"
-                fill="none"
-                aria-hidden="true"
+            <div className="navbar__mobile-navigation">
+              <a
+                className={`navbar__mobile-link${
+                  isActiveRoute(currentPath, "#/peduli-mahreen") ? " is-active" : ""
+                }`}
+                href="#/peduli-mahreen"
+                aria-current={
+                  isActiveRoute(currentPath, "#/peduli-mahreen") ? "page" : undefined
+                }
+                onClick={closeMobileMenu}
               >
-                <path
-                  d="M1.5 1.5L7 7L12.5 1.5"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
+                Home
+              </a>
 
-            <div
-              id="mobile-ecosystem-menu"
-              className={`navbar__mobile-ecosystem-list${
-                ecosystemOpen ? " is-open" : ""
-              }`}
-            >
-              <div className="navbar__mobile-ecosystem-inner">
-                {ecosystemItems.map((item) => (
-                  <a
-                    key={item.label}
-                    className={
-                      isActiveRoute(currentPath, item.href) ? "is-active" : undefined
-                    }
-                    href={item.href}
-                    aria-current={
-                      isActiveRoute(currentPath, item.href) ? "page" : undefined
-                    }
-                    onClick={closeMobileMenu}
+              <a
+                className={`navbar__mobile-link${
+                  isActiveRoute(currentPath, "#/tentang") ? " is-active" : ""
+                }`}
+                href="#/tentang"
+                aria-current={
+                  isActiveRoute(currentPath, "#/tentang") ? "page" : undefined
+                }
+                onClick={closeMobileMenu}
+              >
+                Tentang
+              </a>
+
+              <div className="navbar__mobile-ecosystem">
+                <button
+                  className={`navbar__mobile-ecosystem-button${
+                    isEcosystemActive ? " is-active" : ""
+                  }`}
+                  type="button"
+                  aria-expanded={mobileEcosystemOpen}
+                  aria-controls="mobile-ecosystem-menu"
+                  onClick={() => {
+                    setMobileEcosystemOpen(
+                      (currentValue) => !currentValue
+                    );
+                  }}
+                >
+                  <span>Our Ecosystem</span>
+
+                  <svg
+                    className={`navbar__mobile-ecosystem-chevron${
+                      mobileEcosystemOpen ? " is-open" : ""
+                    }`}
+                    viewBox="0 0 14 9"
+                    fill="none"
+                    aria-hidden="true"
                   >
-                    {item.label}
-                  </a>
-                ))}
+                    <path
+                      d="M1.5 1.5L7 7L12.5 1.5"
+                      stroke="currentColor"
+                      strokeWidth="1.7"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+
+                <div
+                  id="mobile-ecosystem-menu"
+                  className={`navbar__mobile-ecosystem-list${
+                    mobileEcosystemOpen ? " is-open" : ""
+                  }`}
+                >
+                  <div className="navbar__mobile-ecosystem-inner">
+                    <div className="navbar__mobile-ecosystem-content">
+                      {ecosystemItems.map((item) => (
+                        <a
+                          key={item.label}
+                          className={`navbar__mobile-ecosystem-link${
+                            isActiveRoute(currentPath, item.href)
+                              ? " is-active"
+                              : ""
+                          }`}
+                          href={item.href}
+                          aria-current={
+                            isActiveRoute(currentPath, item.href)
+                              ? "page"
+                              : undefined
+                          }
+                          onClick={closeMobileMenu}
+                        >
+                          {item.label}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <a
+                className={`navbar__mobile-link${
+                  isActiveRoute(currentPath, "#/portofolio")
+                    ? " is-active"
+                    : ""
+                }`}
+                href="#/portofolio"
+                aria-current={
+                  isActiveRoute(currentPath, "#/portofolio")
+                    ? "page"
+                    : undefined
+                }
+                onClick={closeMobileMenu}
+              >
+                Portofolio
+              </a>
+
+              <a
+                className={`navbar__mobile-link${
+                  isActiveRoute(currentPath, "#/newsroom")
+                    ? " is-active"
+                    : ""
+                }`}
+                href="#/newsroom"
+                aria-current={
+                  isActiveRoute(currentPath, "#/newsroom")
+                    ? "page"
+                    : undefined
+                }
+                onClick={closeMobileMenu}
+              >
+                Newsroom
+              </a>
+
+              <div className="navbar__mobile-actions">
+                <a
+                  className="navbar__mobile-register"
+                  href="#/daftar"
+                  onClick={closeMobileMenu}
+                >
+                  Daftar
+                </a>
+
+                <a
+                  className="navbar__mobile-login"
+                  href="#/login"
+                  onClick={closeMobileMenu}
+                >
+                  Login
+                </a>
               </div>
             </div>
-
-            <a
-              className={
-                isActiveRoute(currentPath, "#/tentang") ? "is-active" : undefined
-              }
-              href="#/tentang"
-              aria-current={
-                isActiveRoute(currentPath, "#/tentang") ? "page" : undefined
-              }
-              onClick={closeMobileMenu}
-            >
-              Tentang
-            </a>
-
-            <a
-              className={
-                isActiveRoute(currentPath, "#/daftar") ? "is-active" : undefined
-              }
-              href="#/daftar"
-              aria-current={
-                isActiveRoute(currentPath, "#/daftar") ? "page" : undefined
-              }
-              onClick={closeMobileMenu}
-            >
-              Daftar
-            </a>
-
-            <a
-              className={
-                isActiveRoute(currentPath, "#/login") ? "is-active" : undefined
-              }
-              href="#/login"
-              aria-current={
-                isActiveRoute(currentPath, "#/login") ? "page" : undefined
-              }
-              onClick={closeMobileMenu}
-            >
-              Login
-            </a>
           </div>
         </nav>
       </header>

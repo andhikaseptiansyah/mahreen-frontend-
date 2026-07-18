@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import loginVisual from "../../assets/Daftar/login-visual.png";
 import mahreenIcon from "../../assets/icon.png";
 
@@ -818,8 +818,17 @@ const loginStyles = `
   }
 `;
 
-const Login = () => {
+type LoginProps = {
+  redirectTo?: string | null;
+};
+
+const Login = ({ redirectTo }: LoginProps) => {
   const [showPassword, setShowPassword] = useState(false);
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    window.location.hash = redirectTo ?? "/";
+  };
 
   const handleBack = () => {
     if (window.history.length > 1) {
@@ -860,7 +869,7 @@ const Login = () => {
             </p>
           </div>
 
-          <form className="client-login-form">
+          <form className="client-login-form" onSubmit={handleSubmit}>
             <label className="client-login-field">
               <span className="client-login-label">Alamat Email</span>
               <input
@@ -869,6 +878,7 @@ const Login = () => {
                 name="email"
                 placeholder="Masukkan email Anda"
                 autoComplete="email"
+                required
               />
             </label>
 
@@ -884,6 +894,7 @@ const Login = () => {
                   name="password"
                   placeholder="••••••••••••"
                   autoComplete="current-password"
+                  required
                 />
                 <button
                   className="client-login-eye"
@@ -922,7 +933,7 @@ const Login = () => {
             <span className="client-login-copyright">© 2026 PT Mahreen Indonesia</span>
             <span className="client-login-bottom-actions">
               <a className="client-login-bottom-button" href="#/syarat-ketentuan">Syarat &amp; Ketentuan</a>
-              <a className="client-login-bottom-button" href="#/privasi">Privasi</a>
+              <a className="client-login-bottom-button" href="#/kebijakan-privasi">Privasi</a>
             </span>
           </div>
         </div>

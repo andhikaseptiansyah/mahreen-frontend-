@@ -1,0 +1,310 @@
+import { useEffect, useState } from "react";
+import CTA from "./components/CTA";
+import ClosingSection from "./components/ClosingSection";
+import Footer from "./components/Footer";
+import NewsroomNavbar from "./components/NewsroomNavbar";
+import NewsroomSidebar from "./components/NewsroomSidebar";
+import EventCalendar from "./sections/EventCalendar";
+import FeaturedSection, {
+  type NewsroomCategory,
+} from "./sections/FeaturedSection";
+import HeroSection from "./sections/HeroSection";
+import NewsletterSection from "./sections/NewsletterSection";
+import WebinarSection from "./sections/WebinarSection";
+
+const styles = `
+  html.newsroom-document,
+  body.newsroom-document-body {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow-x: clip !important;
+    scroll-behavior: auto !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+
+  html.newsroom-document::-webkit-scrollbar,
+  body.newsroom-document-body::-webkit-scrollbar,
+  .newsroom-page::-webkit-scrollbar,
+  .newsroom-page *::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0 !important;
+    display: none !important;
+  }
+
+  body.newsroom-sidebar-open {
+    overflow: hidden !important;
+  }
+
+  .newsroom-page {
+    --newsroom-sidebar-width: 220px;
+    --newsroom-gold: #e5c477;
+    --newsroom-gold-light: #f0d58f;
+    --newsroom-black: #050505;
+    --newsroom-panel: #0d0c0b;
+    --newsroom-brown: #24211e;
+    --newsroom-brown-soft: #302c27;
+    --newsroom-border: rgba(229, 196, 119, 0.24);
+    --newsroom-muted: #aaa39a;
+
+    position: relative;
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    min-height: 100dvh;
+    align-items: flex-start;
+    overflow-x: clip;
+    color: #f4efe8;
+    background: var(--newsroom-black);
+    font-family: Arial, Helvetica, sans-serif;
+    scrollbar-width: none;
+    overscroll-behavior-x: none;
+  }
+
+  .app-route > .newsroom-page {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    overflow-x: clip !important;
+  }
+
+  .newsroom-page,
+  .newsroom-page *,
+  .newsroom-page *::before,
+  .newsroom-page *::after {
+    box-sizing: border-box;
+  }
+
+  .newsroom-page * {
+    scrollbar-width: none;
+  }
+
+  .newsroom-page a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .newsroom-page button,
+  .newsroom-page input {
+    font: inherit;
+  }
+
+  .newsroom-main-column {
+    position: relative;
+    flex: 1 1 0;
+    width: auto;
+    max-width: calc(100% - var(--newsroom-sidebar-width));
+    min-width: 0;
+    min-height: 100dvh;
+    overflow-x: clip;
+    background: #000;
+  }
+
+  .newsroom-main {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    min-height: 100dvh;
+    overflow-x: clip;
+    background: #000;
+  }
+
+  .newsroom-main > *,
+  .newsroom-main > * > * {
+    min-width: 0;
+  }
+
+  .newsroom-content-section {
+    width: min(100%, 1220px);
+    max-width: 100%;
+    margin-inline: auto;
+    padding-inline: clamp(28px, 4.5vw, 70px);
+  }
+
+  .newsroom-kicker {
+    display: inline-flex;
+    color: var(--newsroom-gold);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  .newsroom-inline-link {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    color: var(--newsroom-gold);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    transition: color 180ms ease, gap 180ms ease;
+  }
+
+  .newsroom-inline-link:hover,
+  .newsroom-inline-link:focus-visible {
+    gap: 12px;
+    color: var(--newsroom-gold-light);
+  }
+
+  .newsroom-page [data-newsroom-reveal] {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0);
+    transition:
+      opacity 480ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 480ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .newsroom-page [data-newsroom-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (max-width: 1024px) {
+    .newsroom-page {
+      display: block;
+    }
+
+    .newsroom-main-column {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .newsroom-content-section {
+      padding-inline: 20px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .newsroom-page *,
+    .newsroom-page *::before,
+    .newsroom-page *::after {
+      scroll-behavior: auto !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+
+    .newsroom-page [data-newsroom-reveal] {
+      opacity: 1;
+      transform: none;
+    }
+  }
+`;
+
+const NewsroomHome = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [activeCategory, setActiveCategory] =
+    useState<NewsroomCategory>("Semua");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    const html = document.documentElement;
+    const body = document.body;
+
+    html.classList.add("newsroom-document");
+    body.classList.add("newsroom-document-body");
+
+    return () => {
+      html.classList.remove("newsroom-document");
+      body.classList.remove(
+        "newsroom-document-body",
+        "newsroom-sidebar-open",
+      );
+    };
+  }, []);
+
+  useEffect(() => {
+    document.body.classList.toggle("newsroom-sidebar-open", isSidebarOpen);
+
+    return () => {
+      document.body.classList.remove("newsroom-sidebar-open");
+    };
+  }, [isSidebarOpen]);
+
+  useEffect(() => {
+    const elements = Array.from(
+      document.querySelectorAll<HTMLElement>(
+        ".newsroom-page [data-newsroom-reveal]:not(.is-visible)",
+      ),
+    );
+
+    if (elements.length === 0) return;
+
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    if (reduceMotion || typeof IntersectionObserver === "undefined") {
+      elements.forEach((element) => element.classList.add("is-visible"));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        });
+      },
+      {
+        threshold: 0.05,
+        rootMargin: "0px 0px 80px 0px",
+      },
+    );
+
+    elements.forEach((element) => observer.observe(element));
+    return () => observer.disconnect();
+  }, [activeCategory, searchQuery]);
+
+  return (
+    <div className="newsroom-page">
+      <style>{styles}</style>
+
+      <NewsroomSidebar
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+      />
+
+      <div className="newsroom-main-column">
+        <NewsroomNavbar onOpenSidebar={() => setIsSidebarOpen(true)} />
+
+        <main className="newsroom-main">
+          <HeroSection />
+          <FeaturedSection
+            activeCategory={activeCategory}
+            searchQuery={searchQuery}
+            onCategoryChange={setActiveCategory}
+            onSearchChange={setSearchQuery}
+          />
+          <WebinarSection
+            activeCategory={activeCategory}
+            searchQuery={searchQuery}
+          />
+          <EventCalendar />
+          <NewsletterSection />
+          <div data-newsroom-reveal>
+            <CTA />
+          </div>
+          <div data-newsroom-reveal>
+            <ClosingSection />
+          </div>
+          <div data-newsroom-reveal>
+            <Footer />
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+};
+
+export default NewsroomHome;
