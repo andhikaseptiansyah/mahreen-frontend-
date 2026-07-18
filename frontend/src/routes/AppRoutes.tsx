@@ -22,7 +22,9 @@ import WebinarRegistration from "../pages/Newsroom/WebinarRegistration/WebinarRe
 import WebinarPayment from "../pages/Newsroom/WebinarPayment/WebinarPayment";
 import RegistrationSuccess from "../pages/Newsroom/RegistrationSuccess/RegistrationSuccess";
 import Daftar from "../pages/Daftar/Daftar";
+import DaftarTahap2 from "../pages/Daftar/DaftarTahap2";
 import Login from "../pages/Login/Login";
+import HubungiKami from "../pages/HubungiKami/HubungiKami";
 import ComingSoon from "../pages/ComingSoon/ComingSoon";
 import { getWebinarBySlug } from "../data/webinars";
 
@@ -103,7 +105,9 @@ const staticRoutes: Readonly<Record<string, RouteRenderer>> = {
   "/internship": () => <Internship />,
   "/internship/form": () => <FormInternship />,
   "/peduli-mahreen": () => <PeduliMahreen />,
+  "/hubungi-kami": () => <HubungiKami />,
   "/daftar": () => <Daftar />,
+  "/daftar/tahap2": () => <DaftarTahap2 />,
   "/newsroom": () => <NewsroomHome />,
   "/mahreen-csr": () => (
     <ComingSoon

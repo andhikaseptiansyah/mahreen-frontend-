@@ -266,7 +266,7 @@ const CTA = () => {
 
             <a
               className="newsroom-final-cta__button newsroom-final-cta__button--secondary"
-              href="#/?section=contact"
+              href="#/hubungi-kami"
             >
               Hubungi Kami
             </a>

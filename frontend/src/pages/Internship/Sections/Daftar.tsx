@@ -336,7 +336,7 @@ const Daftar = () => {
 
               <a
                 className="daftar-section__button daftar-section__button--secondary"
-                href="#/kontak"
+                href="#/hubungi-kami"
               >
                 Hubungi Kami
               </a>

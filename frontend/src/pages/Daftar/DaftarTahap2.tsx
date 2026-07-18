@@ -2,7 +2,7 @@ import { useState } from "react";
 import loginVisual from "../../assets/Daftar/login-visual.png";
 import mahreenIcon from "../../assets/icon.png";
 
-const loginStyles = `
+const tahap2Styles = `
   @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap");
 
   @keyframes loginShellReveal {
@@ -48,7 +48,9 @@ const loginStyles = `
 
   .client-login-shell {
     width: min(100%, 1250px);
-    height: calc(100dvh - clamp(20px, 4vh, 36px));
+    /* TINGGI DIUBAH KE AUTO AGAR MENYUSUT MENGIKUTI FORM */
+    height: auto; 
+    max-height: calc(100dvh - clamp(20px, 4vh, 36px));
     min-height: 0;
     display: grid;
     grid-template-columns: 0.95fr 1.05fr;
@@ -118,6 +120,12 @@ const loginStyles = `
     font-size: 18px;
     line-height: 1;
     cursor: pointer;
+    transition: background-color 180ms ease, border-color 180ms ease;
+  }
+
+  .client-login-close:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.12);
   }
 
   .client-login-heading-row {
@@ -151,7 +159,6 @@ const loginStyles = `
     text-decoration: none;
   }
 
-
   .client-login-step {
     margin-bottom: 6px;
     color: #d8b66f;
@@ -176,7 +183,7 @@ const loginStyles = `
     content: "";
     position: absolute;
     inset: 0 auto 0 0;
-    width: 49%;
+    width: 100%;
     background: #d8b66f;
   }
 
@@ -195,7 +202,7 @@ const loginStyles = `
     min-height: 0;
     display: flex;
     flex-direction: column;
-    flex-shrink: 0;
+    /* Flex 1 dihapus agar tinggi mengikuti konten secara natural */
   }
 
   .client-login-field {
@@ -214,10 +221,16 @@ const loginStyles = `
     text-transform: uppercase;
   }
 
+  .client-login-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
   .client-login-input {
     width: 100%;
     height: clamp(46px, 6vh, 56px);
-    padding: 0 22px;
+    padding: 0 46px 0 22px;
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.045);
@@ -258,10 +271,120 @@ const loginStyles = `
     animation: loginFloatReveal 300ms ease forwards;
   }
 
-  .client-login-submit {
+  .client-login-checkbox.has-error {
+    border-color: #e57373;
+  }
+
+  /* Success View Animation */
+  .client-login-success-view {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 20px;
+    flex-grow: 1;
+    min-height: 350px;
+    animation: loginFloatReveal 500ms 100ms ease both;
+  }
+
+  .client-login-success-icon {
+    width: 80px;
+    height: 80px;
+  }
+
+  .client-login-success-icon .circle {
+    stroke-dasharray: 227;
+    stroke-dashoffset: 227;
+    animation: success-circle 600ms 300ms ease-out forwards;
+  }
+
+  .client-login-success-icon .check {
+    stroke-dasharray: 34;
+    stroke-dashoffset: 34;
+    animation: success-check 400ms 800ms ease-out forwards;
+  }
+
+  @keyframes success-circle { to { stroke-dashoffset: 0; } }
+  @keyframes success-check { to { stroke-dashoffset: 0; } }
+
+  .client-login-success-title {
+    margin: 24px 0 0;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 28px;
+    color: #d8b66f;
+    animation: loginFloatReveal 500ms 1100ms ease both;
+    opacity: 0;
+  }
+
+  .client-login-success-message {
+    margin: 8px 0 0;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 13px;
+    line-height: 1.6;
+    max-width: 300px;
+    animation: loginFloatReveal 500ms 1250ms ease both;
+    opacity: 0;
+  }
+
+  .client-login-eye-btn {
+    position: absolute;
+    right: 20px;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    transition: color 180ms ease;
+  }
+
+  .client-login-eye-btn:hover {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .client-login-checkbox-field {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: clamp(18px, 3vh, 28px);
+    margin-top: clamp(12px, 2vh, 20px);
+  }
+
+  .client-login-checkbox {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    margin-top: 3px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.045);
+    cursor: pointer;
+    accent-color: #d8b66f;
+  }
+
+  .client-login-checkbox-label {
+    flex: 1;
+    color: rgba(255, 255, 255, 0.58);
+    font-family: "Inter", Arial, sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.5;
+    cursor: pointer;
+  }
+
+  .client-login-button-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(12px, 2vw, 20px);
+    margin-top: clamp(12px, 2vh, 20px);
+  }
+
+  .client-login-submit,
+  .client-login-button-group a {
     width: 100%;
     height: clamp(46px, 6vh, 56px);
-    margin-top: 2px;
     border: 0;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.07);
@@ -273,18 +396,44 @@ const loginStyles = `
     text-transform: uppercase;
     cursor: pointer;
     transition: transform 180ms ease, background-color 180ms ease, color 180ms ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
   }
 
-  .client-login-submit:hover,
-  .client-login-submit:focus-visible {
+  .client-login-submit:hover:not(:disabled),
+  .client-login-submit:focus-visible:not(:disabled),
+  .client-login-button-group a:hover,
+  .client-login-button-group a:focus-visible {
     transform: translateY(-2px);
     background: #d8b66f;
     color: #101010;
   }
 
+  .client-login-submit:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .client-login-submit-secondary {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .client-login-submit-secondary:hover,
+  .client-login-submit-secondary:focus-visible {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.8);
+  }
+
   .client-login-bottom-bar {
     width: 100%;
-    margin: 10px 0 0;
+    /* MARGIN DIUBAH KE NATURAL BUKAN AUTO, AGAR LAYOUT BERHENTI DI SINI */
+    margin: clamp(28px, 4vh, 46px) 0 0;
+    padding-top: 14px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -293,7 +442,6 @@ const loginStyles = `
     font-family: "Inter", Arial, sans-serif;
     font-size: 11px;
     font-weight: 600;
-    line-height: 1.35;
     flex-shrink: 0;
   }
 
@@ -302,15 +450,6 @@ const loginStyles = `
     white-space: nowrap;
     transition: color 180ms ease, text-shadow 180ms ease;
   }
-
-  .client-login-copyright:hover {
-    color: #d8b66f;
-    text-shadow:
-      0 0 8px rgba(216, 182, 111, 0.34),
-      0 0 18px rgba(216, 182, 111, 0.22),
-      0 0 28px rgba(216, 182, 111, 0.14);
-  }
-
 
   .client-login-bottom-actions {
     display: inline-flex;
@@ -338,31 +477,6 @@ const loginStyles = `
       0 0 8px rgba(216, 182, 111, 0.34),
       0 0 18px rgba(216, 182, 111, 0.22),
       0 0 28px rgba(216, 182, 111, 0.14);
-  }
-
-
-  .client-login-footer {
-    margin-top: auto;
-    padding-top: clamp(14px, 3vh, 54px);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 18px;
-    color: rgba(255, 255, 255, 0.42);
-    font-family: "Inter", Arial, sans-serif;
-    font-size: 10px;
-    font-weight: 600;
-    flex-shrink: 0;
-  }
-
-  .client-login-links {
-    display: inline-flex;
-    gap: 20px;
-  }
-
-  .client-login-links a {
-    color: inherit;
-    text-decoration: none;
   }
 
   .client-login-visual {
@@ -451,8 +565,8 @@ const loginStyles = `
 
   .client-login-invoice {
     right: 34px;
-    top: 292px;
-    width: 174px;
+    top: 45%; 
+    width: 184px;
     padding: 19px 18px;
     background: #d8b66f;
     color: #16120a;
@@ -467,7 +581,7 @@ const loginStyles = `
   }
 
   .client-login-invoice-value {
-    margin: 9px 0 2px;
+    margin: 0px 0 2px;
     color: #100d08;
     font-family: "Cormorant Garamond", Georgia, serif;
     font-size: 28px;
@@ -479,7 +593,7 @@ const loginStyles = `
     margin: 0;
     color: rgba(22, 18, 10, 0.6);
     font-family: "Inter", Arial, sans-serif;
-    font-size: 9px;
+    font-size: 12px;
     font-weight: 800;
   }
 
@@ -504,14 +618,11 @@ const loginStyles = `
     display: grid;
     place-items: center;
     border-radius: 50%;
-    background: #d8b66f;
-    color: #0f0f0f;
-    font-size: 14px;
-    font-weight: 900;
+    background: transparent;
+    font-size: 20px;
   }
 
   .client-login-service-label {
-    margin: 0 0 6px;
     color: rgba(255, 255, 255, 0.58);
     font-family: "Inter", Arial, sans-serif;
     font-size: 9px;
@@ -521,21 +632,21 @@ const loginStyles = `
   }
 
   .client-login-service-title {
-    font-size: 12px;
+    font-size: 14px;
   }
 
   .client-login-service-subtitle {
-    margin: 3px 0 0;
     color: rgba(255, 255, 255, 0.48);
     font-family: "Inter", Arial, sans-serif;
     font-size: 10px;
     font-weight: 700;
   }
 
+  
   .client-login-mini-stack {
     position: absolute;
     left: 36px;
-    top: 295px;
+    top: 45%;
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -565,92 +676,28 @@ const loginStyles = `
     filter: drop-shadow(0 3px 7px rgba(0, 0, 0, 0.35));
   }
 
-
-  @media (min-width: 981px) and (max-height: 760px) {
-    .client-login-title {
-      font-size: 36px;
-    }
-
-    .client-login-panel {
-      padding-top: 18px;
-      padding-bottom: 16px;
-    }
-
-    .client-login-topbar {
-      margin-bottom: 14px;
-    }
-
-    .client-login-heading-row {
-      margin-bottom: 12px;
-    }
-
-    .client-login-progress {
-      margin-bottom: 14px;
-    }
-
-    .client-login-section-label {
-      margin-bottom: 10px;
-      font-size: 10px;
-    }
-
-    .client-login-field {
-      gap: 5px;
-      margin-bottom: 10px;
-    }
-
-    .client-login-input,
-    .client-login-submit {
-      height: 42px;
-    }
-
-    .client-login-label {
-      font-size: 9px;
-    }
-
-    .client-login-footer {
-      display: none;
-    }
-  }
-
+  /* Responsive Styling (Sisanya Tetap) */
   @media (max-width: 980px) {
     .client-login-page {
       height: auto;
       min-height: 100vh;
-      min-height: 100svh;
-      min-height: 100dvh;
       padding: 0;
       align-items: stretch;
       overflow-x: hidden;
       overflow-y: auto;
     }
-
     .client-login-shell {
       width: 100%;
-      min-height: 100vh;
-      min-height: 100svh;
-      min-height: 100dvh;
       height: auto;
       max-height: none;
       display: grid;
       grid-template-columns: 1fr;
-      grid-template-rows: auto 1fr;
       gap: 0;
       padding: 0;
       border-radius: 0;
       overflow: visible;
       background: #111111;
     }
-
-    .client-login-visual {
-      order: -1;
-      display: block;
-      width: 100%;
-      height: clamp(260px, 38vh, 380px);
-      min-height: 240px;
-      border-radius: 0 0 30px 30px;
-      background-position: center 42%;
-    }
-
     .client-login-panel {
       width: 100%;
       height: auto;
@@ -658,53 +705,44 @@ const loginStyles = `
       padding: clamp(24px, 4.4vh, 42px) clamp(28px, 7vw, 64px) clamp(22px, 4vh, 38px);
       overflow: visible;
     }
-
     .client-login-topbar {
       margin-bottom: clamp(18px, 3vh, 28px);
       flex-shrink: 0;
     }
-
     .client-login-back {
       min-height: 36px;
       padding: 0 17px;
       font-size: 11px;
     }
-
     .client-login-close {
       width: 34px;
       height: 34px;
       font-size: 16px;
     }
-
     .client-login-heading-row {
       gap: 16px;
       margin-bottom: clamp(14px, 2.2vh, 22px);
       flex-shrink: 0;
     }
-
     .client-login-title {
       font-size: clamp(34px, 6vw, 46px);
       line-height: 0.98;
     }
-
     .client-login-subtitle {
       margin-top: 7px;
       font-size: 12px;
       line-height: 1.35;
     }
-
     .client-login-step {
       margin-bottom: 4px;
       font-size: 9px;
       letter-spacing: 2px;
     }
-
     .client-login-progress {
       height: 3px;
       margin-bottom: clamp(18px, 2.8vh, 28px);
       flex-shrink: 0;
     }
-
     .client-login-section-label {
       margin-bottom: clamp(12px, 2vh, 18px);
       font-size: 10px;
@@ -712,72 +750,42 @@ const loginStyles = `
       line-height: 1.25;
       flex-shrink: 0;
     }
-
     .client-login-form {
       min-height: 0;
       flex: 0 0 auto;
       overflow: visible;
     }
-
     .client-login-field {
       gap: 7px;
       margin-bottom: 14px;
       flex-shrink: 0;
     }
-
     .client-login-label {
       font-size: 9px;
       line-height: 1.15;
       letter-spacing: 1.2px;
     }
-
     .client-login-input {
       height: 46px;
-      padding: 0 18px;
+      padding: 0 46px 0 18px;
       font-size: 12px;
     }
-
-    .client-login-submit {
+    .client-login-button-group {
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .client-login-submit,
+    .client-login-button-group a {
       height: 46px;
-      margin-top: 2px;
-      margin-bottom: 0;
       font-size: 10px;
       letter-spacing: 1.4px;
       flex-shrink: 0;
     }
-
     .client-login-bottom-bar {
-      margin-top: 16px;
-      padding-top: 14px;
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      margin-top: 14px;
+      padding-top: 12px;
       font-size: 10px;
-    }
-
-    .client-login-footer {
-      display: none;
-    }
-
-    .client-login-project,
-    .client-login-invoice,
-    .client-login-service {
-      display: none;
-    }
-
-    .client-login-mini-stack {
-      left: clamp(22px, 7vw, 54px);
-      top: 50%;
-      transform: translateY(-50%);
-      gap: 11px;
-    }
-
-    .client-login-mini {
-      width: 48px;
-      height: 48px;
-    }
-
-    .client-login-mini svg {
-      width: 21px;
-      height: 21px;
     }
   }
 
@@ -789,66 +797,45 @@ const loginStyles = `
   }
 
   @media (max-width: 640px) {
-    .client-login-visual {
-      height: clamp(210px, 34vh, 285px);
-      min-height: 205px;
-      border-radius: 0 0 24px 24px;
-      background-position: center top;
-    }
-
     .client-login-panel {
       padding: 22px 16px 20px;
     }
-
     .client-login-heading-row {
       grid-template-columns: 1fr;
       gap: 8px;
       align-items: start;
     }
-
     .client-login-title {
       font-size: clamp(30px, 9vw, 38px);
     }
-
     .client-login-step {
       justify-self: start;
     }
-
     .client-login-field {
       margin-bottom: 12px;
     }
-
-    .client-login-input,
-    .client-login-submit {
+    .client-login-input {
       height: 44px;
     }
-
-    .client-login-bottom-bar {
-      align-items: flex-start;
-      gap: 10px;
-      flex-wrap: wrap;
+    .client-login-button-group {
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .client-login-submit,
+    .client-login-button-group a {
+      height: 44px;
       font-size: 10px;
     }
-
-    .client-login-bottom-actions {
-      gap: 18px;
-      margin-left: auto;
-    }
-
-    .client-login-mini-stack {
-      left: 18px;
-      gap: 9px;
-    }
-
-    .client-login-mini {
-      width: 44px;
-      height: 44px;
+    .client-login-bottom-bar {
+      margin-top: 12px;
+      padding-top: 10px;
+      font-size: 9px;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .client-login-shell,
-    .client-login-card {
+    .client-login-shell {
       opacity: 1;
       animation: none;
       transform: none;
@@ -856,138 +843,196 @@ const loginStyles = `
   }
 `;
 
-const Login = () => {
-  const [formData, setFormData] = useState({
-    fullName: "",
-    businessEmail: "",
-    whatsapp: "",
-    businessName: "",
-  });
-  const [errors, setErrors] = useState<Partial<typeof formData>>({});
+const SuccessView = () => (
+  <div className="client-login-success-view">
+    <svg className="client-login-success-icon" viewBox="0 0 80 80" fill="none">
+      <circle className="circle" cx="40" cy="40" r="36" stroke="#d8b66f" strokeWidth="3" />
+      <path className="check" d="M25 41.5L35.5 52L56 31.5" stroke="#d8b66f" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+    <h2 className="client-login-success-title">Pendaftaran Berhasil!</h2>
+    <p className="client-login-success-message">
+      Akun Anda telah dibuat. Anda akan dialihkan ke halaman login secara otomatis.
+    </p>
+  </div>
+);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    if (errors[name as keyof typeof errors]) {
-      setErrors(prev => ({ ...prev, [name]: undefined }));
-    }
+const DaftarTahap2 = () => {
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [errors, setErrors] = useState<{ password?: string; confirmPassword?: string; terms?: string }>({});
+
+  const handleClose = () => {
+    window.location.hash = "#/";
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const newErrors: Partial<typeof formData> = {};
+    const newErrors: { password?: string; confirmPassword?: string; terms?: string } = {};
 
-    if (!formData.fullName.trim()) newErrors.fullName = "Nama lengkap wajib diisi.";
-    if (!formData.businessEmail.trim()) {
-      newErrors.businessEmail = "Alamat email wajib diisi.";
-    } else if (!/\S+@\S+\.\S+/.test(formData.businessEmail)) {
-      newErrors.businessEmail = "Format email tidak valid.";
+    if (!password) {
+      newErrors.password = "Kata sandi wajib diisi.";
+    } else if (password.length < 8) {
+      newErrors.password = "Kata sandi harus terdiri dari minimal 8 karakter.";
     }
-    if (!formData.whatsapp.trim()) newErrors.whatsapp = "Nomor WhatsApp wajib diisi.";
-    if (!formData.businessName.trim()) newErrors.businessName = "Nama bisnis wajib diisi.";
+
+    if (!confirmPassword) {
+      newErrors.confirmPassword = "Konfirmasi kata sandi wajib diisi.";
+    } else if (password && password !== confirmPassword) {
+      newErrors.confirmPassword = "Konfirmasi kata sandi tidak cocok.";
+    }
+
+    if (!termsAccepted) {
+      newErrors.terms = "Anda harus menyetujui syarat dan ketentuan untuk melanjutkan.";
+    }
 
     setErrors(newErrors);
 
-    if (Object.keys(newErrors).length === 0) {
-      window.location.hash = "#/daftar/tahap2";
+    if (Object.keys(newErrors).length > 0) {
+      return;
     }
+
+    // Menampilkan animasi sukses dan mengalihkan halaman setelah 4 detik
+    setIsSuccess(true);
+    setTimeout(() => {
+      window.location.hash = "#/login";
+    }, 4000);
   };
 
   return (
     <main className="client-login-page">
-      <style data-component="client-login">{loginStyles}</style>
+      <style data-component="client-login-tahap2">{tahap2Styles}</style>
 
-      <section className="client-login-shell" aria-labelledby="client-login-title">
+      <section className="client-login-shell" aria-labelledby="client-login-tahap2-title">
         <div className="client-login-panel">
           <div className="client-login-topbar">
-            <button className="client-login-back" type="button" aria-label="Klien Mahreen">
+            <a className="client-login-back" href="#/daftar" aria-label="Klien Mahreen">
               <img className="client-login-back-icon" src={mahreenIcon} alt="" aria-hidden="true" />
               Klien Mahreen
-            </button>
-            <a className="client-login-close" href="#/" aria-label="Tutup halaman login">
-              x
             </a>
+            <button className="client-login-close" type="button" onClick={handleClose} aria-label="Tutup halaman pendaftaran">x</button>
           </div>
 
           <div className="client-login-heading-row">
             <div>
-              <h1 className="client-login-title" id="client-login-title">
-                Daftar Akun Klien
-              </h1>
+              <h1 className="client-login-title" id="client-login-tahap2-title">Daftar Akun Klien</h1>
               <p className="client-login-subtitle">Sudah terdaftar? <a href="#/login">Masuk Portal</a></p>
             </div>
-            <p className="client-login-step">Langkah 1 dari 2</p>
+            <p className="client-login-step">Langkah 2 dari 2</p>
           </div>
 
           <div className="client-login-progress" aria-hidden="true" />
 
-          <p className="client-login-section-label">Data Diri &amp; Bisnis Anda</p>
+          {isSuccess ? (
+            <SuccessView />
+          ) : (
+            <>
+              <p className="client-login-section-label">ATUR KREDENSIAL KATA SANDI</p>
+              <form className="client-login-form" onSubmit={handleSubmit} noValidate>
+                <label className="client-login-field">
+                  <span className="client-login-label">BUAT KATA SANDI *</span>
+                  <div className="client-login-input-wrapper">
+                    <input
+                      className={`client-login-input ${errors.password ? 'has-error' : ''}`}
+                      type={showPassword ? "text" : "password"}
+                      name="password"
+                      placeholder="Minimal 8 karakter"
+                      value={password}
+                      onChange={(e) => {
+                        setPassword(e.target.value);
+                        if (errors.password) {
+                          setErrors(prev => ({ ...prev, password: undefined }));
+                        }
+                      }}
+                      required
+                    />
+                    <button type="button" className="client-login-eye-btn" onClick={() => setShowPassword(!showPassword)}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        {showPassword ? (
+                          <><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></>
+                        ) : (
+                          <><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></>
+                        )}
+                      </svg>
+                    </button>
+                  </div>
+                  {errors.password && <p className="client-login-field-error">{errors.password}</p>}
+                </label>
 
-          <form className="client-login-form" onSubmit={handleSubmit} noValidate>
-            <label className="client-login-field">
-              <span className="client-login-label">Nama Lengkap *</span>
-              <input
-                className={`client-login-input ${errors.fullName ? 'has-error' : ''}`}
-                type="text"
-                name="fullName"
-                placeholder="Nama lengkap Anda (sesuai identitas)"
-                value={formData.fullName}
-                onChange={handleChange}
-              />
-              {errors.fullName && <p className="client-login-field-error">{errors.fullName}</p>}
-            </label>
+                <label className="client-login-field">
+                  <span className="client-login-label">KONFIRMASI SANDI *</span>
+                  <div className="client-login-input-wrapper">
+                    <input
+                      className={`client-login-input ${errors.confirmPassword ? 'has-error' : ''}`}
+                      type={showConfirmPassword ? "text" : "password"}
+                      name="confirmPassword"
+                      placeholder="Ulangi kata sandi"
+                      value={confirmPassword}
+                      onChange={(e) => {
+                        setConfirmPassword(e.target.value);
+                        if (errors.confirmPassword) {
+                          setErrors(prev => ({ ...prev, confirmPassword: undefined }));
+                        }
+                      }}
+                      required
+                    />
+                    <button type="button" className="client-login-eye-btn" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        {showConfirmPassword ? (
+                          <><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></>
+                        ) : (
+                          <><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></>
+                        )}
+                      </svg>
+                    </button>
+                  </div>
+                  {errors.confirmPassword && <p className="client-login-field-error">{errors.confirmPassword}</p>}
+                </label>
 
-            <label className="client-login-field">
-              <span className="client-login-label">Alamat Email Bisnis *</span>
-              <input
-                className={`client-login-input ${errors.businessEmail ? 'has-error' : ''}`}
-                type="email"
-                name="businessEmail"
-                placeholder="email@perusahaan.com"
-                value={formData.businessEmail}
-                onChange={handleChange}
-              />
-              {errors.businessEmail && <p className="client-login-field-error">{errors.businessEmail}</p>}
-            </label>
+                <div className="client-login-field">
+                  <label className="client-login-checkbox-field" style={{marginBottom: 0}}>
+                    <input
+                      className={`client-login-checkbox ${errors.terms ? 'has-error' : ''}`}
+                      type="checkbox"
+                      name="terms"
+                      checked={termsAccepted}
+                      onChange={(e) => {
+                        setTermsAccepted(e.target.checked);
+                        if (errors.terms) setErrors(p => ({ ...p, terms: undefined }));
+                      }}
+                      required
+                    />
+                    <span className="client-login-checkbox-label" onClick={() => {
+                      const newChecked = !termsAccepted;
+                      setTermsAccepted(newChecked);
+                      if (errors.terms) setErrors(p => ({ ...p, terms: undefined }));
+                    }}>
+                      Saya menyetujui Syarat & Ketentuan dan Kebijakan Privasi Portal Klien Mahreen Indonesia.
+                    </span>
+                  </label>
+                  {errors.terms && <p className="client-login-field-error" style={{margin: '8px 0 0 4px'}}>{errors.terms}</p>}
+                </div>
 
-            <label className="client-login-field">
-              <span className="client-login-label">Nomor Whatsapp Aktif *</span>
-              <input
-                className={`client-login-input ${errors.whatsapp ? 'has-error' : ''}`}
-                type="tel"
-                name="whatsapp"
-                placeholder="08xxxxxxxxxx"
-                value={formData.whatsapp}
-                onChange={handleChange}
-              />
-              {errors.whatsapp && <p className="client-login-field-error">{errors.whatsapp}</p>}
-            </label>
+                <div className="client-login-button-group">
+                  <a className="client-login-submit client-login-submit-secondary" href="#/daftar">KEMBALI</a>
+                  <button className="client-login-submit" type="submit" disabled={!password || !confirmPassword || !termsAccepted}>
+                    BUAT AKUN KLIEN
+                  </button>
+                </div>
 
-            <label className="client-login-field">
-              <span className="client-login-label">Nama Perusahaan / Bisnis *</span>
-              <input
-                className={`client-login-input ${errors.businessName ? 'has-error' : ''}`}
-                type="text"
-                name="businessName"
-                placeholder="Nama brand / perusahaan Anda"
-                value={formData.businessName}
-                onChange={handleChange}
-              />
-              {errors.businessName && <p className="client-login-field-error">{errors.businessName}</p>}
-            </label>
-
-            <button className="client-login-submit" type="submit">
-              Langkah selanjutnya -&gt;
-            </button>
-
-            <div className="client-login-bottom-bar">
-              <span className="client-login-copyright">© 2026 PT Mahreen Indonesia</span>
-              <span className="client-login-bottom-actions">
-                <a className="client-login-bottom-button" href="#/bantuan">Bantuan</a>
-                <a className="client-login-bottom-button" href="#/privasi">Privasi</a>
-              </span>
-            </div>
-          </form>
+                <div className="client-login-bottom-bar">
+                  <span className="client-login-copyright">© 2026 PT Mahreen Indonesia</span>
+                  <span className="client-login-bottom-actions">
+                    <a className="client-login-bottom-button" href="#/bantuan">Bantuan</a>
+                    <a className="client-login-bottom-button" href="#/privasi">Privasi</a>
+                  </span>
+                </div>
+              </form>
+            </>
+          )}
         </div>
 
         <aside className="client-login-visual" aria-label="Ilustrasi layanan klien Mahreen">
@@ -1033,7 +1078,7 @@ const Login = () => {
 
           <div className="client-login-card client-login-service">
             <div className="client-login-service-inner">
-              <span className="client-login-service-icon">M</span>
+              <span className="client-login-service-icon">🎨</span>
               <div>
                 <p className="client-login-service-label">Layanan Dipesan</p>
                 <p className="client-login-service-title">Branding &amp; Identity</p>
@@ -1047,4 +1092,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default DaftarTahap2;

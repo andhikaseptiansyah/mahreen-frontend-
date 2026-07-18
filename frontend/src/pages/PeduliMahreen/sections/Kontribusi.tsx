@@ -217,7 +217,7 @@ const JejakLangkah = () => {
             Ikut Berkontribusi
           </a>
 
-          <a href="#hubungi-kami" className="jejak-langkah__button jejak-langkah__button--secondary">
+          <a href="#/hubungi-kami" className="jejak-langkah__button jejak-langkah__button--secondary">
             Hubungi Kami
           </a>
         </div>
