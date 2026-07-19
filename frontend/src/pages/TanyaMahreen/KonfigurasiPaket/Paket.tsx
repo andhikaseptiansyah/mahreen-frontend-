@@ -1,11 +1,20 @@
 import { useState } from "react";
 import FeatureComparison from "./sections/FeatureComparison";
 import LayananTambahan from "./sections/LayananTambahan";
-import Footer from '../../../components/Footer/Footer';
-import ClosingSection from '../../../components/Cloasing-section/cloasing-section';
+import Footer from "../../../components/Footer/Footer";
+import ClosingSection from "../../../components/Cloasing-section/cloasing-section";
 import Navbar from "../../../components/Navbar/Navbar";
 
-type TierId = "professional" | "business" | "enterprise";
+type TabId =
+  | "website"
+  | "branding"
+  | "sosmed"
+  | "digital"
+  | "advertising"
+  | "content"
+  | "consultation";
+
+type TierId = "better" | "good" | "best";
 
 type Tier = {
   id: TierId;
@@ -17,44 +26,397 @@ type Tier = {
   recommended?: boolean;
 };
 
-const tiers: Tier[] = [
+type TabData = {
+  id: TabId;
+  label: string;
+  eyebrow: string;
+  tiers: Tier[];
+};
+
+const tabsData: TabData[] = [
   {
-    id: "professional",
-    tier: "Tier 01",
-    name: "Professional",
-    price: "Rp750k",
-    priceNum: 750000,
-    features: [
-      "Basic landing page",
-      "3 sections",
-      "1 revision",
+    id: "website",
+    label: "Website Solutions",
+    eyebrow: "Website Solutions",
+    tiers: [
+      {
+        id: "better",
+        tier: "Tier 01",
+        name: "Better Package",
+        price: "Rp 1.500.000",
+        priceNum: 1500000,
+        features: [
+          "Company Profile (max 5 pages)",
+          "Logo Design",
+          "Integrasi WhatsApp",
+          "Google Business Profile Setup",
+          "Basic SEO",
+          "Domain & Hosting Setup",
+          "Support 30 hari",
+        ],
+      },
+      {
+        id: "good",
+        tier: "Tier 02",
+        name: "Good Package",
+        price: "Rp 2.500.000",
+        priceNum: 2500000,
+        recommended: true,
+        features: [
+          "Company Profile Website",
+          "Landing Page",
+          "Logo Design",
+          "Basic SEO",
+          "Google Analytics & Console",
+          "Integrasi WhatsApp",
+          "Form Lead",
+          "Pelatihan Admin",
+          "Support 60 hari",
+          "Free Banner & Speed Optimization",
+        ],
+      },
+      {
+        id: "best",
+        tier: "Tier 03",
+        name: "Best Package",
+        price: "Rp 4.500.000",
+        priceNum: 4500000,
+        features: [
+          "Website Development",
+          "Dashboard Admin",
+          "Database Integration",
+          "Multi User Support",
+          "Landing Page",
+          "Logo Design",
+          "SEO Basic",
+          "Performance Optimization",
+          "UI/UX Design",
+          "Dokumentasi Sistem",
+          "Support 90 hari",
+        ],
+      },
     ],
   },
   {
-    id: "business",
-    tier: "Tier 02",
-    name: "Business",
-    price: "Rp1.5m",
-    priceNum: 1500000,
-    features: [
-      "Full company profile",
-      "5 sections",
-      "3 revisions",
-      "SEO basic",
+    id: "branding",
+    label: "Branding & Design",
+    eyebrow: "Branding & Design",
+    tiers: [
+      {
+        id: "better",
+        tier: "Tier 01",
+        name: "Better Package",
+        price: "Rp 499.000",
+        priceNum: 499000,
+        features: [
+          "Logo Design (2 Alternatif Konsep)",
+          "Revisi Max 2 Kali",
+          "Color Palette",
+          "File PNG, JPG, PDF",
+          "Logo Mockup",
+          "Gratis konsultasi 30 menit",
+          "Social Media Ready Files",
+        ],
+      },
+      {
+        id: "good",
+        tier: "Tier 02",
+        name: "Good Package",
+        price: "Rp 1.499.000",
+        priceNum: 1499000,
+        recommended: true,
+        features: [
+          "Logo Design",
+          "Brand Identity",
+          "Brand Guideline",
+          "Typography & Color Palette",
+          "Social Media Identity",
+          "Stationery Mockup",
+          "5 Template Feed Instagram",
+          "File Lengkap (PNG, JPG, PDF, SVG)",
+          "Gratis konsultasi 1 jam + Support 7 hari",
+        ],
+      },
+      {
+        id: "best",
+        tier: "Tier 03",
+        name: "Best Package",
+        price: "Rp 1.999.000",
+        priceNum: 1999000,
+        features: [
+          "Logo Design & Brand Identity",
+          "Brand Guideline",
+          "Company Profile Design",
+          "Presentation Design",
+          "Packaging Design",
+          "Marketing Materials (2 pilihan)",
+          "Social Media Identity",
+          "Stationery Design",
+          "Prioritas Pengerjaan & Support 14 hari",
+        ],
+      },
     ],
-    recommended: true,
   },
   {
-    id: "enterprise",
-    tier: "Tier 03",
-    name: "Enterprise",
-    price: "Rp3m+",
-    priceNum: 3000000,
-    features: [
-      "Custom web app",
-      "Unlimited sections",
-      "Priority support",
-      "Full SEO",
+    id: "sosmed",
+    label: "Social Media Management",
+    eyebrow: "Social Media Management",
+    tiers: [
+      {
+        id: "better",
+        tier: "Tier 01",
+        name: "Better Package",
+        price: "Rp 699.000",
+        priceNum: 699000,
+        features: [
+          "Content Planning & Calendar",
+          "8 Desain Feed Instagram",
+          "8 Copywriting Post",
+          "1 Revisi per desain",
+          "Monthly Report",
+        ],
+      },
+      {
+        id: "good",
+        tier: "Tier 02",
+        name: "Good Package",
+        price: "Rp 999.000",
+        priceNum: 999000,
+        recommended: true,
+        features: [
+          "Content Planning & Calendar",
+          "12 Feed Instagram",
+          "8 Story Design",
+          "Copywriting & Hashtags",
+          "Community Management",
+          "Monthly Report & Insight",
+          "Konsultasi Bulanan",
+        ],
+      },
+      {
+        id: "best",
+        tier: "Tier 03",
+        name: "Best Package",
+        price: "Rp 1.999.000",
+        priceNum: 1999000,
+        features: [
+          "Content Planning & Calendar",
+          "16 Feed & 12 Story",
+          "4 Carousel Design",
+          "Copywriting & Community Mgmt",
+          "Monthly Report & Insight",
+          "Strategy Meeting",
+          "Priority Support & Revision",
+        ],
+      },
+    ],
+  },
+  {
+    id: "digital",
+    label: "Digital Marketing",
+    eyebrow: "Digital Marketing",
+    tiers: [
+      {
+        id: "better",
+        tier: "Tier 01",
+        name: "Better Package",
+        price: "Rp 799.000",
+        priceNum: 799000,
+        features: [
+          "Digital Marketing Strategy",
+          "Basic SEO & Keyword Research",
+          "Google Business Profile Optimization",
+          "Monthly Consultation (1x)",
+        ],
+      },
+      {
+        id: "good",
+        tier: "Tier 02",
+        name: "Good Package",
+        price: "Rp 999.000",
+        priceNum: 999000,
+        recommended: true,
+        features: [
+          "Digital Marketing Strategy",
+          "SEO Optimization",
+          "Lead Generation Strategy",
+          "Email Marketing Setup",
+          "Monthly Performance Report",
+          "Konsultasi Bulanan",
+          "Bonus: Audit Digital Marketing",
+        ],
+      },
+      {
+        id: "best",
+        tier: "Tier 03",
+        name: "Best Package",
+        price: "Rp 1.999.000",
+        priceNum: 1999000,
+        features: [
+          "Digital Marketing Strategy",
+          "SEO Optimization",
+          "Lead Generation & Funnel Strategy",
+          "Marketing Automation",
+          "Monthly Report & Strategy Meeting",
+          "Priority Support",
+          "Bonus: Audit Web & Scored",
+        ],
+      },
+    ],
+  },
+  {
+    id: "advertising",
+    label: "Advertising Campaign",
+    eyebrow: "Advertising Campaign",
+    tiers: [
+      {
+        id: "better",
+        tier: "Tier 01",
+        name: "Better Package",
+        price: "Rp 1.999.000",
+        priceNum: 1999000,
+        features: [
+          "1 Platform Ads (Meta/TikTok/Google)",
+          "Campaign Setup & Targeting",
+          "Ad Copywriting",
+          "Monitoring Campaign",
+          "Optimasi Mingguan",
+          "Monthly Report",
+        ],
+      },
+      {
+        id: "good",
+        tier: "Tier 02",
+        name: "Good Package",
+        price: "Rp 2.499.000",
+        priceNum: 2499000,
+        recommended: true,
+        features: [
+          "Maksimal 2 Platform Ads",
+          "Campaign Strategy & Setup",
+          "Audience Research",
+          "Ad Copywriting",
+          "Campaign Optimization",
+          "Monthly Performance Report",
+          "Gratis Audit Campaign & Konsultasi",
+        ],
+      },
+      {
+        id: "best",
+        tier: "Tier 03",
+        name: "Best Package",
+        price: "Rp 2.999.000",
+        priceNum: 2999000,
+        features: [
+          "4 Platform Ads (Meta, TikTok, Google, LinkedIn)",
+          "Campaign Strategy & Funnel Review",
+          "Conversion Tracking",
+          "Budget Optimization",
+          "Performance Dashboard",
+          "Weekly Monitoring & Monthly Meeting",
+          "Priority Support",
+        ],
+      },
+    ],
+  },
+  {
+    id: "content",
+    label: "Content Production",
+    eyebrow: "Content Production",
+    tiers: [
+      {
+        id: "better",
+        tier: "Tier 01",
+        name: "Better Package",
+        price: "Rp 1.250.000",
+        priceNum: 1250000,
+        features: [
+          "Photography Session",
+          "10 Foto Produk",
+          "2 Reels/TikTok",
+          "Basic Editing",
+        ],
+      },
+      {
+        id: "good",
+        tier: "Tier 02",
+        name: "Good Package",
+        price: "Rp 1.499.000",
+        priceNum: 1499000,
+        recommended: true,
+        features: [
+          "Photography Session",
+          "15 Foto Pilihan",
+          "4 Reels/TikTok",
+          "Basic Copy Caption",
+          "Editing Seluruh Konten",
+        ],
+      },
+      {
+        id: "best",
+        tier: "Tier 03",
+        name: "Best Package",
+        price: "Rp 2.999.000",
+        priceNum: 2999000,
+        features: [
+          "Photography & Videography",
+          "Company Profile Video",
+          "30 Foto Pilihan",
+          "8 Reels/TikTok",
+          "Editing Lengkap & Prioritas Revisi",
+        ],
+      },
+    ],
+  },
+  {
+    id: "consultation",
+    label: "Business Consultation",
+    eyebrow: "Business Consultation",
+    tiers: [
+      {
+        id: "better",
+        tier: "Tier 01",
+        name: "Better Package",
+        price: "Rp 749.000",
+        priceNum: 749000,
+        features: [
+          "2 sesi Business Consultation",
+          "1 sesi Marketing Strategy",
+          "Ringkasan Hasil Konsultasi",
+          "Action Plan 30 Hari",
+        ],
+      },
+      {
+        id: "good",
+        tier: "Tier 02",
+        name: "Good Package",
+        price: "Rp 1.499.000",
+        priceNum: 1499000,
+        recommended: true,
+        features: [
+          "2 sesi Business Consultation",
+          "1 sesi Branding Consultation",
+          "1 sesi Digital Strategy",
+          "2 sesi Marketing Strategy",
+          "Roadmap Pengembangan Bisnis (90 Hari)",
+        ],
+      },
+      {
+        id: "best",
+        tier: "Tier 03",
+        name: "Best Package",
+        price: "Rp 1.999.000",
+        priceNum: 1999000,
+        features: [
+          "3 sesi Business Consultation",
+          "Branding Consultation",
+          "Digital Strategy",
+          "Business Development & Marketing Strategy",
+          "Personal Branding Consultation (Owner)",
+          "Roadmap Bisnis 6 Bulan",
+          "Prioritas Sesi",
+        ],
+      },
     ],
   },
 ];
@@ -82,10 +444,9 @@ const paketStyles = `
     padding: 100px 22px 80px;
   }
 
-  /* ── Header ── */
   .paket-header {
     text-align: center;
-    margin-bottom: 56px;
+    margin-bottom: 40px;
   }
 
   .paket-header__eyebrow {
@@ -118,10 +479,49 @@ const paketStyles = `
     line-height: 1.7;
   }
 
+  /* ── Category Tabs ── */
+  .paket-category-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 48px;
+    list-style: none;
+    padding: 0;
+    margin-top: 0;
+  }
+
+  .paket-category-tab {
+    appearance: none;
+    background: transparent;
+    border: 1px solid transparent;
+    color: rgba(255,255,255,0.45);
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .paket-category-tab:hover {
+    color: rgba(255,255,255,0.8);
+    border-color: rgba(255,255,255,0.2);
+  }
+
+  .paket-category-tab.is-active {
+    color: #000000;
+    background: #d6a35c;
+    border-color: #d6a35c;
+  }
+
   /* ── Grid Layout ── */
   .paket-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 320px;
+    grid-template-columns: 1fr 1fr 1fr 300px;
     gap: 20px;
     align-items: start;
   }
@@ -134,6 +534,9 @@ const paketStyles = `
     position: relative;
     cursor: pointer;
     transition: border-color 0.2s ease;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
   }
 
   .paket-card:hover {
@@ -176,7 +579,7 @@ const paketStyles = `
 
   .paket-card__name {
     font-family: "Playfair Display", Georgia, serif;
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 500;
     color: #ffffff;
     margin: 0 0 4px;
@@ -184,36 +587,38 @@ const paketStyles = `
 
   .paket-card__price {
     font-family: "Playfair Display", Georgia, serif;
-    font-size: 32px;
+    font-size: clamp(22px, 2.5vw, 30px);
     font-weight: 600;
     color: #d6a35c;
-    margin: 0 0 24px;
+    margin: 0 0 20px;
     letter-spacing: -0.02em;
+    line-height: 1.1;
   }
 
   .paket-card__features {
     list-style: none;
-    margin: 0 0 28px;
+    margin: 0 0 24px;
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
+    flex: 1;
   }
 
   .paket-card__feature {
     display: flex;
     align-items: flex-start;
     gap: 8px;
-    font-size: 13px;
-    color: rgba(255,255,255,0.75);
-    line-height: 1.4;
+    font-size: 12px;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.45;
   }
 
   .paket-card__feature-icon {
     color: #d6a35c;
-    font-size: 14px;
+    font-size: 12px;
     flex-shrink: 0;
-    margin-top: 1px;
+    margin-top: 2px;
   }
 
   .paket-card__btn {
@@ -232,6 +637,7 @@ const paketStyles = `
     text-transform: uppercase;
     color: rgba(255,255,255,0.5);
     transition: color 0.2s ease;
+    margin-top: auto;
   }
 
   .paket-card.is-selected .paket-card__btn {
@@ -297,7 +703,7 @@ const paketStyles = `
 
   .ringkasan__total-value {
     font-family: "Playfair Display", Georgia, serif;
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 600;
     color: #d6a35c;
     margin: 0 0 4px;
@@ -345,11 +751,10 @@ const paketStyles = `
   }
 
   /* ── Responsive ── */
-  @media (max-width: 1024px) {
+  @media (max-width: 1100px) {
     .paket-grid {
       grid-template-columns: 1fr 1fr 1fr;
     }
-
     .ringkasan {
       grid-column: 1 / -1;
       position: static;
@@ -360,21 +765,37 @@ const paketStyles = `
     .paket-grid {
       grid-template-columns: 1fr;
     }
+    .paket-category-tabs {
+      gap: 6px;
+    }
+    .paket-category-tab {
+      font-size: 8px;
+      padding: 6px 12px;
+    }
   }
 `;
 
 const Paket = () => {
-  const [selectedTier, setSelectedTier] = useState<TierId>("business");
-  const selectedTierObj = tiers.find((t) => t.id === selectedTier)!;
+  const [activeTab, setActiveTab] = useState<TabId>("website");
+  const [selectedTier, setSelectedTier] = useState<TierId>("good");
+
+  const currentTab = tabsData.find((t) => t.id === activeTab)!;
+  const selectedTierObj = currentTab.tiers.find((t) => t.id === selectedTier)!;
+
+  const handleTabChange = (tabId: TabId) => {
+    setActiveTab(tabId);
+    setSelectedTier("good");
+  };
 
   return (
     <div className="paket-page">
       <style data-component="paket">{paketStyles}</style>
+      <Navbar />
 
       <div className="paket-container">
         {/* ── Header ── */}
         <div className="paket-header">
-          <p className="paket-header__eyebrow">Website Solutions</p>
+          <p className="paket-header__eyebrow">{currentTab.eyebrow}</p>
           <h1 className="paket-header__title">Konfigurasi Paket Anda</h1>
           <p className="paket-header__subtitle">
             Tailor-made digital experiences meticulously crafted to elevate
@@ -383,9 +804,24 @@ const Paket = () => {
           </p>
         </div>
 
+        {/* ── Category Tabs ── */}
+        <ul className="paket-category-tabs">
+          {tabsData.map((tab) => (
+            <li key={tab.id}>
+              <button
+                type="button"
+                className={`paket-category-tab ${activeTab === tab.id ? "is-active" : ""}`}
+                onClick={() => handleTabChange(tab.id)}
+              >
+                {tab.label}
+              </button>
+            </li>
+          ))}
+        </ul>
+
         {/* ── Grid: Tier Cards + Ringkasan ── */}
         <div className="paket-grid">
-          {tiers.map((tier) => (
+          {currentTab.tiers.map((tier) => (
             <div
               key={tier.id}
               className={`paket-card ${selectedTier === tier.id ? "is-selected" : ""} ${tier.recommended ? "is-recommended" : ""}`}
@@ -416,15 +852,9 @@ const Paket = () => {
                 }}
               >
                 {selectedTier === tier.id ? (
-                  <>
-                    <span>Selected</span>
-                    <span>✓</span>
-                  </>
+                  <><span>Selected</span><span>✓</span></>
                 ) : (
-                  <>
-                    <span>Select</span>
-                    <span>→</span>
-                  </>
+                  <><span>Select</span><span>→</span></>
                 )}
               </button>
             </div>
@@ -433,24 +863,18 @@ const Paket = () => {
           {/* ── Ringkasan Pesanan ── */}
           <div className="ringkasan">
             <h3 className="ringkasan__title">Ringkasan Pesanan</h3>
-
             <div className="ringkasan__row">
               <span className="ringkasan__label">
                 Tier: {selectedTierObj.name}
               </span>
               <span className="ringkasan__value">
-                Rp{selectedTierObj.priceNum.toLocaleString("id-ID")}
+                {selectedTierObj.price}
               </span>
             </div>
-
             <hr className="ringkasan__divider" />
-
             <p className="ringkasan__total-label">Total Estimation</p>
-            <p className="ringkasan__total-value">
-              Rp{selectedTierObj.priceNum.toLocaleString("id-ID")}
-            </p>
+            <p className="ringkasan__total-value">{selectedTierObj.price}</p>
             <p className="ringkasan__total-note">*Exclude VAT 11%</p>
-
             <button
               type="button"
               className="ringkasan__cta"
@@ -460,7 +884,6 @@ const Paket = () => {
             >
               Lanjut ke Pembayaran 🔒
             </button>
-
             <div className="ringkasan__secure">
               <span>⊙</span>
               <span>Secure Transaction via Midtrans</span>
@@ -469,12 +892,12 @@ const Paket = () => {
         </div>
 
         {/* ── Sub Sections ── */}
-        <Navbar />
         <FeatureComparison selectedTier={selectedTier} />
         <LayananTambahan />
-        <ClosingSection />
-        <Footer />
       </div>
+
+      <ClosingSection />
+      <Footer />
     </div>
   );
 };

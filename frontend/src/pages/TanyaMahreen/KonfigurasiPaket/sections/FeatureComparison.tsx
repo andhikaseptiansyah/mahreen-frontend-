@@ -1,42 +1,42 @@
-type TierId = "professional" | "business" | "enterprise";
+import type { TierId } from "../types";
 
 type FeatureRow = {
   label: string;
-  professional: string | boolean;
-  business: string | boolean;
-  enterprise: string | boolean;
+  better: string | boolean;
+  good: string | boolean;
+  best: string | boolean;
 };
 
 const features: FeatureRow[] = [
   {
     label: "Mobile Responsiveness",
-    professional: true,
-    business: true,
-    enterprise: true,
+    better: true,
+    good: true,
+    best: true,
   },
   {
     label: "Visual Design Style",
-    professional: "Standard",
-    business: "Custom Luxury",
-    enterprise: "Bespoke Artisan",
+    better: "Standard",
+    good: "Custom Luxury",
+    best: "Bespoke Artisan",
   },
   {
     label: "Content Writing",
-    professional: false,
-    business: "Up to 3 Pages",
-    enterprise: true,
+    better: false,
+    good: "Up to 3 Pages",
+    best: true,
   },
   {
     label: "Dynamic Components",
-    professional: false,
-    business: true,
-    enterprise: true,
+    better: false,
+    good: true,
+    best: true,
   },
   {
     label: "Custom Code Access",
-    professional: false,
-    business: false,
-    enterprise: true,
+    better: false,
+    good: false,
+    best: true,
   },
 ];
 
@@ -74,7 +74,6 @@ const featureComparisonStyles = `
 
   .feature-comparison__table th:first-child {
     text-align: left;
-    color: rgba(255,255,255,0.4);
   }
 
   .feature-comparison__table td {
@@ -135,21 +134,21 @@ const FeatureComparison = ({ selectedTier }: { selectedTier: TierId }) => {
         <thead>
           <tr>
             <th>Features</th>
-            <th>Professional</th>
-            <th>Business</th>
-            <th>Enterprise</th>
+            <th>Better</th>
+            <th>Good</th>
+            <th>Best</th>
           </tr>
         </thead>
         <tbody>
           {features.map((row) => (
             <tr
               key={row.label}
-              className={selectedTier === "business" ? "is-highlighted" : ""}
+              className={selectedTier === "good" ? "is-highlighted" : ""}
             >
               <td>{row.label}</td>
-              <td>{renderCell(row.professional)}</td>
-              <td>{renderCell(row.business)}</td>
-              <td>{renderCell(row.enterprise)}</td>
+              <td>{renderCell(row.better)}</td>
+              <td>{renderCell(row.good)}</td>
+              <td>{renderCell(row.best)}</td>
             </tr>
           ))}
         </tbody>
