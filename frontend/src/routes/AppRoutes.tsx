@@ -9,6 +9,8 @@ import PeduliMahreen from "../pages/PeduliMahreen/PeduliMahreen";
 import FormInternship from "../pages/Internship/FormInternship";
 import Daftar from "../pages/Daftar/Daftar";
 import Login from "../pages/Login/Login";
+import CSR from "../pages/CSR/CSR";
+import ProgramObjective from "../pages/ProgramObjective/ProgramObjective";
 
 const getCurrentRoute = () => {
   const hash = window.location.hash;
@@ -79,9 +81,14 @@ const AppRoutes = () => {
       case "/legalitas":
       case "/tanya-mahreen":
       case "/mahreen-csr":
+        return <CSR />;
+
       case "/kebijakan-privasi":
       case "/syarat-ketentuan":
         return <Home />;
+
+      case "/program-objective":
+        return <ProgramObjective />;
 
       case "/":
       default:
