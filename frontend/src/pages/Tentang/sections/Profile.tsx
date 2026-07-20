@@ -1,4 +1,6 @@
 import { Fragment } from "react";
+import dzikriImage from "../../../assets/Tentang-Mahreen/profile-founder.jpeg";
+import taniaImage from "../../../assets/Tentang-Mahreen/profile-ceo.jpeg";
 
 const founders = [
   {
@@ -6,12 +8,14 @@ const founders = [
     role: "Founder",
     company: "Mahreen Indonesia",
     className: "profile-section__founder--first",
+    image: dzikriImage,
   },
   {
     name: "Tania Restiani Fajar",
     role: "Chief Executive Officer",
     company: "Mahreen Indonesia",
     className: "profile-section__founder--second",
+    image: taniaImage,
   },
 ] as const;
 
@@ -159,6 +163,7 @@ const profileSectionStyles = `
     width: 80px;
     height: 80px;
     overflow: hidden;
+    object-fit: cover;
     border: 1px solid var(--tentang-gold-border);
     border-radius: 9999px;
     background: radial-gradient(
@@ -383,8 +388,10 @@ const ProfileSection = () => {
                     <article
                       className={`profile-section__founder ${founder.className}`}
                     >
-                      <div
+                      <img
                         className="profile-section__avatar"
+                        src={founder.image}
+                        alt=""
                         aria-hidden="true"
                       />
 
