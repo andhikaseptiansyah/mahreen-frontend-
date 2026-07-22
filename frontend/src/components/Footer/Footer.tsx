@@ -21,13 +21,15 @@ const aboutLinks: readonly FooterLink[] = [
   { label: "Visi & Misi", href: "/tentang?section=visi-misi" },
   { label: "Legalitas Resmi", href: "/tentang?section=legalitas" },
   { label: "Portofolio", href: "/portofolio" },
+  { label: "Contact", href: "/contact" },
 ];
 
 const pillarLinks: readonly FooterLink[] = [
   { label: "Mahreen Studio", href: "/mahreen-studio" },
   { label: "Tanya Mahreen", href: "/tanya-mahreen" },
   { label: "Peduli Mahreen", href: "/peduli-mahreen" },
-  { label: "Mahreen CSR", href: "/mahreen-csr" },
+  { label: "Mahreen CSR", href: "#/mahreen-csr" },
+  { label: "Mahreen Indonesia Internship", href: "/internship" },
 ];
 
 const socialLinks: readonly SocialLink[] = [
@@ -542,6 +544,9 @@ const Footer = () => {
           <div className="footer__bottom-links">
             <a className="footer__bottom-link" href="#/kebijakan-privasi">
               Kebijakan Privasi
+            </a>
+            <a className="footer__bottom-link" href="#/help-center">
+              Help Center
             </a>
             <a className="footer__bottom-link" href="#/syarat-ketentuan">
               Syarat & Ketentuan

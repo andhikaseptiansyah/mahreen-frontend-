@@ -1,8 +1,6 @@
 import { useEffect } from "react";
-import Navbar from "../../../components/Navbar/Navbar";
+import NewsroomLayout from "../layout/NewsroomLayout";
 import type { WebinarData } from "../../../data/webinars";
-import ClosingSection from "../Home/components/ClosingSection";
-import Footer from "../Home/components/Footer";
 import PaymentForm from "./components/PaymentForm";
 
 const styles = `
@@ -75,19 +73,16 @@ const WebinarPayment = ({ webinar }: WebinarPaymentProps) => {
     <>
       <style>{styles}</style>
 
-      <div className="webinar-payment-page">
-        <Navbar />
-
-        <main className="webinar-payment-page__main">
+      <NewsroomLayout>
+        <div className="webinar-payment-page">
+          <main className="webinar-payment-page__main">
           <section className="webinar-payment-page__section" aria-label="Webinar payment">
             <PaymentForm webinar={webinar} key={webinar.slug} />
           </section>
 
-          <ClosingSection />
-        </main>
-
-        <Footer />
-      </div>
+          </main>
+        </div>
+      </NewsroomLayout>
     </>
   );
 };

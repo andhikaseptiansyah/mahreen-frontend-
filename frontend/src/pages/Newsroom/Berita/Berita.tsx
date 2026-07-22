@@ -7,9 +7,7 @@ import meetingImage from "../../../assets/Purpose/meeting.jpg";
 import brandingImage from "../../../assets/TanyaMahreen/Home/our-work-branding.png";
 import contentImage from "../../../assets/TanyaMahreen/Home/our-work-content.png";
 import websiteImage from "../../../assets/TanyaMahreen/Home/our-work-website.png";
-import ClosingSection from "../Home/components/ClosingSection";
-import Footer from "../Home/components/Footer";
-import NewsroomContentNavbar from "../components/NewsroomContentNavbar";
+import NewsroomLayout from "../layout/NewsroomLayout";
 import type { NewsroomArticle } from "./components/ArticleCard";
 import ArticleGridSection from "./sections/ArticleGridSection";
 import FilterSection, {
@@ -28,6 +26,7 @@ const styles = `
     max-width: 100%;
     min-width: 0;
     min-height: 100dvh;
+    padding-top: var(--navbar-height, 74px);
     overflow-x: clip;
     color: #f4efe8;
     background: #000;
@@ -303,38 +302,33 @@ const NewsroomBerita = () => {
   };
 
   return (
-    <div className="newsroom-list-page">
+    <>
       <style>{styles}</style>
 
-      <NewsroomContentNavbar />
-
-      <main className="newsroom-list-page__main">
-        <HeroSection />
-        <FilterSection
-          searchQuery={searchQuery}
-          categories={categories}
-          activeCategory={activeCategory}
-          sortBy={sortBy}
-          isFilterOpen={isFilterOpen}
-          onSearchChange={handleSearchChange}
-          onCategoryChange={handleCategoryChange}
-          onSortChange={handleSortChange}
-          onToggleFilter={() => setIsFilterOpen((current) => !current)}
-        />
-        <ArticleGridSection
-          articles={filteredArticles}
-          visibleCount={visibleCount}
-          onLoadMore={() => setVisibleCount((current) => current + 3)}
-        />
-
-        <div data-newsroom-list-reveal>
-          <ClosingSection />
+      <NewsroomLayout>
+        <div className="newsroom-list-page">
+          <main className="newsroom-list-page__main">
+            <HeroSection />
+            <FilterSection
+              searchQuery={searchQuery}
+              categories={categories}
+              activeCategory={activeCategory}
+              sortBy={sortBy}
+              isFilterOpen={isFilterOpen}
+              onSearchChange={handleSearchChange}
+              onCategoryChange={handleCategoryChange}
+              onSortChange={handleSortChange}
+              onToggleFilter={() => setIsFilterOpen((current) => !current)}
+            />
+            <ArticleGridSection
+              articles={filteredArticles}
+              visibleCount={visibleCount}
+              onLoadMore={() => setVisibleCount((current) => current + 3)}
+            />
+          </main>
         </div>
-        <div data-newsroom-list-reveal>
-          <Footer />
-        </div>
-      </main>
-    </div>
+      </NewsroomLayout>
+    </>
   );
 };
 

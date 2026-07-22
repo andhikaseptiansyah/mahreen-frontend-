@@ -1,4 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
+import ProtectedRoute from "../components/Auth/ProtectedRoute";
 
 import Home from "../pages/Home/Home";
 import Tentang from "../pages/Tentang/Tentang";
@@ -7,24 +8,56 @@ import Studio from "../pages/Mahreen-Studio/Studio";
 import LatestCollections from "../pages/Mahreen-Studio/LatestCollection/LatestCollection";
 import DetailProduk from "../pages/Mahreen-Studio/ProdukDetail/Produk_Detail";
 import TanyaMahreen from "../pages/TanyaMahreen/TanyaMahreen";
-import Konsultasi from "../pages/TanyaMahreen/FreeKonsultasi/Konsultasi";
-import CekData from "../pages/TanyaMahreen/CekData/CekData";
-import KonsultasiSelesai from "../pages/TanyaMahreen/PermintaanSelesai/KonsultasiSelesai";
-import Paket from "../pages/TanyaMahreen/KonfigurasiPaket/Paket";
+import Konsultasi from "../pages/TanyaMahreen/Konsultasi/FreeKonsultasi/Konsultasi";
+import CekData from "../pages/TanyaMahreen/Konsultasi/CekData/CekData";
+import KonsultasiSelesai from "../pages/TanyaMahreen/Konsultasi/PermintaanSelesai/KonsultasiSelesai";
+import HubungiPM from "../pages/TanyaMahreen/Konsultasi/HubungiPM/HubungiPM";
+import KonfigurasiPaketWeb from "../pages/TanyaMahreen/KonfigurasiPaket/KonfigurasiPaketWeb/KonfigurasiPaketWeb";
+import KonfigurasiPaketBranding from "../pages/TanyaMahreen/KonfigurasiPaket/KonfigurasiPaketBranding/KonfigurasiPaketBranding";
+import KonfigurasiPaketSocialMedia from "../pages/TanyaMahreen/KonfigurasiPaket/KonfigurasiPaketSocialMedia/KonfigurasiPaketSocialMedia";
+import KonfigurasiPaketDigitalMarketing from "../pages/TanyaMahreen/KonfigurasiPaket/KonfigurasiPaketDigitalMarketing/KonfigurasiPaketDigitalMarketing";
+import KonfigurasiPaketAdvertising from "../pages/TanyaMahreen/KonfigurasiPaket/KonfigurasiPaketAdvertising/KonfigurasiPaketAdvertising";
+import KonfigurasiPaketContent from "../pages/TanyaMahreen/KonfigurasiPaket/KonfigurasiPaketContent/KonfigurasiPaketContent";
+import KonfigurasiPaketConsultation from "../pages/TanyaMahreen/KonfigurasiPaket/KonfigurasiPaketConsultation/KonfigurasiPaketConsultation";
+import Pembayaran from "../pages/TanyaMahreen/KonfigurasiPaket/Pembayaran/Pembayaran";
+import KonfirmasiPembayaran from "../pages/TanyaMahreen/KonfigurasiPaket/Pembayaran/KonfirmasiPembayaran";
+import PembayaranBerhasil from "../pages/TanyaMahreen/KonfigurasiPaket/Pembayaran/PembayaranBerhasil";
+import AksesClientPortal from "../pages/TanyaMahreen/KonfigurasiPaket/Pembayaran/AksesClientPortal";
+import KickoffMeeting from "../pages/TanyaMahreen/KonfigurasiPaket/Pembayaran/KickoffMeeting";
 import Internship from "../pages/Internship/Internship";
 import FormInternship from "../pages/Internship/FormInternship";
 import PeduliMahreen from "../pages/PeduliMahreen/PeduliMahreen";
+import MahreenCSR from "../pages/CSR/CSR";
+import ProgramObjective from "../pages/CSR/ProgramObjective/ProgramObjective";
+import {
+  CSRDetailsPage,
+  CSRMotivationPage,
+  CSRRolePage,
+  CSRSuccessPage,
+} from "../pages/CSR/Registration";
+import PilihNominal from "../pages/PeduliMahreen/Donasi/PilihNominal";
+import DataDonatur from "../pages/PeduliMahreen/Donasi/DataDonatur";
+import MetodePembayaranDonasi from "../pages/PeduliMahreen/Donasi/MetodePembayaran";
+import DonasiBerhasil from "../pages/PeduliMahreen/Donasi/DonasiBerhasil";
 import NewsroomHome from "../pages/Newsroom/Home/Home";
 import NewsroomBerita from "../pages/Newsroom/Berita/Berita";
 import DetailBerita from "../pages/Newsroom/ArticleDetail/DetailBerita";
 import WebinarDetail from "../pages/Newsroom/WebinarDetail/WebinarDetail";
 import WebinarRegistration from "../pages/Newsroom/WebinarRegistration/WebinarRegistration";
 import WebinarPayment from "../pages/Newsroom/WebinarPayment/WebinarPayment";
+import WebinarPaymentQris from "../pages/Newsroom/WebinarPaymentQris/WebinarPaymentQris";
+import WebinarBankTransfer from "../pages/Newsroom/WebinarBankTransfer/WebinarBankTransfer";
 import RegistrationSuccess from "../pages/Newsroom/RegistrationSuccess/RegistrationSuccess";
 import Daftar from "../pages/Daftar/Daftar";
+import InformasiDasar from "../pages/Daftar/InformasiDasar";
+import ProfilPreferensi from "../pages/Daftar/ProfilPreferensi";
+import RingkasanPendaftaran from "../pages/Daftar/RingkasanPendaftaran";
 import Login from "../pages/Login/Login";
+import DashboardClient from "../pages/DashboardClient/DashboardClient";
+import Contact from "../pages/Contact/Contact";
 import ComingSoon from "../pages/ComingSoon/ComingSoon";
 import { getWebinarBySlug } from "../data/webinars";
+import { packageCatalog } from "../pages/TanyaMahreen/KonfigurasiPaket/packageCatalog";
 
 type RouteLocation = {
   path: string;
@@ -32,6 +65,17 @@ type RouteLocation = {
 };
 
 type RouteRenderer = () => ReactNode;
+
+const protectedRoutePrefixes = [
+  "/akun",
+  "/peduli-mahreen/donasi",
+  "/tanya-mahreen/pembayaran",
+] as const;
+
+const requiresAuthentication = (path: string) =>
+  protectedRoutePrefixes.some(
+    (prefix) => path === prefix || path.startsWith(`${prefix}/`),
+  );
 
 const normalizePath = (path: string) => {
   const pathWithLeadingSlash = path.startsWith("/") ? path : `/${path}`;
@@ -79,6 +123,11 @@ const getSafeRedirectTarget = (value: string | null) => {
   return rawQuery ? `${targetPath}?${rawQuery}` : targetPath;
 };
 
+const getRouteTarget = ({ path, searchParams }: RouteLocation) => {
+  const query = searchParams.toString();
+  return query ? `${path}?${query}` : path;
+};
+
 const getTargetSection = ({ path, searchParams }: RouteLocation) => {
   const explicitSection = searchParams.get("section");
 
@@ -93,32 +142,58 @@ const staticRoutes: Readonly<Record<string, RouteRenderer>> = {
   "/": () => <Home />,
   "/tentang": () => <Tentang />,
   "/portofolio": () => <Portofolio />,
+  "/contact": () => <Contact />,
+  "/kontak": () => <Contact />,
+  "/hubungi-kami": () => <Contact />,
   "/mahreen-studio": () => <Studio />,
   "/mahreen-studio/latest-collection": () => <LatestCollections />,
   "/tanya-mahreen": () => <TanyaMahreen />,
   "/tanya-mahreen/konsultasi": () => <Konsultasi />,
   "/tanya-mahreen/konsultasi/cek-data": () => <CekData />,
   "/tanya-mahreen/konsultasi/selesai": () => <KonsultasiSelesai />,
-  "/tanya-mahreen/paket": () => <Paket />,
+  "/tanya-mahreen/konsultasi/hubungi-pm": () => <HubungiPM />,
+  // Alias lama dipertahankan agar tautan lama tidak rusak.
+  "/tanya-mahreen/paket": () => <KonfigurasiPaketWeb />,
+  [packageCatalog.website.route]: () => <KonfigurasiPaketWeb />,
+  [packageCatalog.branding.route]: () => <KonfigurasiPaketBranding />,
+  [packageCatalog["social-media"].route]: () => <KonfigurasiPaketSocialMedia />,
+  [packageCatalog["digital-marketing"].route]: () => <KonfigurasiPaketDigitalMarketing />,
+  [packageCatalog.advertising.route]: () => <KonfigurasiPaketAdvertising />,
+  [packageCatalog["content-production"].route]: () => <KonfigurasiPaketContent />,
+  [packageCatalog.consultation.route]: () => <KonfigurasiPaketConsultation />,
   "/internship": () => <Internship />,
   "/internship/form": () => <FormInternship />,
   "/peduli-mahreen": () => <PeduliMahreen />,
+  "/peduli-mahreen/donasi": () => <PilihNominal />,
+  "/peduli-mahreen/donasi/data-diri": () => <DataDonatur />,
+  "/peduli-mahreen/donasi/pembayaran": () => <MetodePembayaranDonasi />,
+  "/peduli-mahreen/donasi/berhasil": () => <DonasiBerhasil />,
   "/daftar": () => <Daftar />,
+  "/daftar/informasi-dasar": () => <InformasiDasar />,
+  "/daftar/profil-preferensi": () => <ProfilPreferensi />,
+  "/daftar/ringkasan": () => <RingkasanPendaftaran />,
+  "/akun": () => <DashboardClient />,
+  "/akun/edit": () => (
+    <ComingSoon
+      eyebrow="Client Dashboard"
+      title="Edit profile sedang disiapkan"
+      description="Form pembaruan identitas, perusahaan, alamat resmi, dan integrasi LinkedIn akan tersedia pada tahap berikutnya."
+    />
+  ),
   "/newsroom": () => <NewsroomHome />,
-  "/mahreen-csr": () => (
-    <ComingSoon
-      eyebrow="Mahreen CSR"
-      title="Platform kolaborasi CSR sedang disiapkan"
-      description="Informasi program, kemitraan, dan laporan dampak Mahreen CSR akan tersedia di halaman ini."
-    />
-  ),
-  "/tanya-mahreen/pembayaran": () => (
-    <ComingSoon
-      eyebrow="Pembayaran"
-      title="Halaman pembayaran sedang disiapkan"
-      description="Konfigurasi paket Anda sudah tersimpan. Integrasi pembayaran akan tersedia setelah modul transaksi diaktifkan."
-    />
-  ),
+  "/mahreen-csr": () => <MahreenCSR />,
+  "/mahreen-csr/program-objective": () => <ProgramObjective />,
+  "/mahreen-csr/pendaftaran": () => <CSRRolePage />,
+  "/mahreen-csr/pendaftaran/detail": () => <CSRDetailsPage />,
+  "/mahreen-csr/pendaftaran/motivasi": () => <CSRMotivationPage />,
+  "/mahreen-csr/pendaftaran/sukses": () => <CSRSuccessPage />,
+  // Alias lama dipertahankan agar tautan yang sudah tersebar tetap berfungsi.
+  "/program-objective": () => <ProgramObjective />,
+  "/tanya-mahreen/pembayaran": () => <Pembayaran />,
+  "/tanya-mahreen/pembayaran/konfirmasi": () => <KonfirmasiPembayaran />,
+  "/tanya-mahreen/pembayaran/berhasil": () => <PembayaranBerhasil />,
+  "/tanya-mahreen/pembayaran/client-portal": () => <AksesClientPortal />,
+  "/tanya-mahreen/pembayaran/kick-off": () => <KickoffMeeting />,
   "/lupa-sandi": () => (
     <ComingSoon
       eyebrow="Akun"
@@ -187,7 +262,7 @@ const renderRoute = (location: RouteLocation) => {
       path.slice("/newsroom/webinar/".length),
     );
     const webinarSegments = webinarPath.split("/").filter(Boolean);
-    const [webinarSlug, webinarAction] = webinarSegments;
+    const [webinarSlug, webinarAction, webinarPaymentAction] = webinarSegments;
     const webinar = webinarSlug ? getWebinarBySlug(webinarSlug) : null;
 
     if (!webinar) {
@@ -209,7 +284,35 @@ const renderRoute = (location: RouteLocation) => {
     }
 
     if (webinarSegments.length === 2 && webinarAction === "pembayaran") {
-      return <WebinarPayment webinar={webinar} />;
+      return webinar.isFree ? (
+        <WebinarRegistration webinar={webinar} />
+      ) : (
+        <WebinarPayment webinar={webinar} />
+      );
+    }
+
+    if (
+      webinarSegments.length === 3 &&
+      webinarAction === "pembayaran" &&
+      webinarPaymentAction === "qris"
+    ) {
+      return webinar.isFree ? (
+        <WebinarRegistration webinar={webinar} />
+      ) : (
+        <WebinarPaymentQris webinar={webinar} />
+      );
+    }
+
+    if (
+      webinarSegments.length === 3 &&
+      webinarAction === "pembayaran" &&
+      webinarPaymentAction === "transfer-bank"
+    ) {
+      return webinar.isFree ? (
+        <WebinarRegistration webinar={webinar} />
+      ) : (
+        <WebinarBankTransfer webinar={webinar} />
+      );
     }
 
     if (webinarSegments.length === 2 && webinarAction === "sukses") {
@@ -236,13 +339,23 @@ const renderRoute = (location: RouteLocation) => {
   }
 
   if (path === "/login") {
-    return <Login redirectTo={getSafeRedirectTarget(searchParams.get("redirect"))} />;
+    return (
+      <Login
+        redirectTo={getSafeRedirectTarget(searchParams.get("redirect"))}
+        registered={searchParams.get("registered") === "1"}
+        initialEmail={searchParams.get("email")}
+        authRequired={searchParams.get("required") === "1"}
+      />
+    );
   }
 
   const routeRenderer = staticRoutes[path];
 
   if (routeRenderer) {
-    return routeRenderer();
+    const page = routeRenderer();
+    return requiresAuthentication(path) ? (
+      <ProtectedRoute targetPath={getRouteTarget(location)}>{page}</ProtectedRoute>
+    ) : page;
   }
 
   return (

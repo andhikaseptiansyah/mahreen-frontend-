@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown, Menu, PanelLeft } from "lucide-react";
 import mahreenLogo from "../../../../assets/Navbar/mahreen-logo.png";
+import NavbarAccountControl from "../../../../components/Navbar/NavbarAccountControl";
 
 type NavigationItem = {
   label: string;
@@ -9,6 +10,7 @@ type NavigationItem = {
 
 type NewsroomNavbarProps = {
   onOpenSidebar?: () => void;
+  onCloseSidebar?: () => void;
 };
 
 const ecosystemItems: readonly NavigationItem[] = [
@@ -53,8 +55,14 @@ const isActiveRoute = (currentPath: string, href: string) => {
 };
 
 const styles = `
+  body.newsroom-mobile-nav-open {
+    overflow: hidden !important;
+    overscroll-behavior: none;
+  }
+
   .newsroom-home-navbar {
     --home-navbar-height: 64px;
+    --home-sidebar-width: 220px;
     --home-navbar-gold: #d8b86a;
     --home-navbar-text: #ffffff;
     --home-navbar-border: rgba(255, 255, 255, 0.14);
@@ -62,9 +70,11 @@ const styles = `
     position: sticky;
     top: 0;
     z-index: 1100;
-    width: 100%;
+    width: calc(100% - var(--home-sidebar-width));
+    max-width: calc(100% - var(--home-sidebar-width));
     min-width: 0;
     height: var(--home-navbar-height);
+    margin-left: var(--home-sidebar-width);
     color: var(--home-navbar-text);
     background: #000000;
     border-bottom: 1px solid var(--home-navbar-border);
@@ -112,6 +122,7 @@ const styles = `
     padding: 0 24px;
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     align-items: center;
+    gap: 24px;
   }
 
   .newsroom-home-navbar a,
@@ -129,13 +140,22 @@ const styles = `
   }
 
   .newsroom-home-navbar__left {
+    grid-column: 1;
+    width: auto;
+    max-width: none;
+    height: 100%;
+    padding: 0;
     justify-content: flex-start;
-    gap: 30px;
+    gap: clamp(24px, 3vw, 42px);
+    overflow: visible;
+    border-right: 0;
   }
 
   .newsroom-home-navbar__right {
+    grid-column: 3;
+    padding-right: 0;
     justify-content: flex-end;
-    gap: 28px;
+    gap: clamp(22px, 2.5vw, 34px);
   }
 
   .newsroom-home-navbar__link,
@@ -309,6 +329,7 @@ const styles = `
   }
 
   .newsroom-home-navbar__logo-link {
+    grid-column: 2;
     display: inline-flex;
     justify-self: center;
     align-items: center;
@@ -348,17 +369,28 @@ const styles = `
     display: none;
   }
 
+  body.mahreen-authenticated .newsroom-home-navbar__right {
+    gap: 0;
+  }
+
+  body.mahreen-authenticated .newsroom-home-navbar__right > .newsroom-home-navbar__link {
+    display: none;
+  }
+
   @media (max-width: 1280px) {
     .newsroom-home-navbar__inner {
-      padding-inline: 18px;
+      padding-inline: 20px;
+      gap: 18px;
     }
 
     .newsroom-home-navbar__left {
-      gap: 24px;
+      padding-inline: 0;
+      gap: 22px;
     }
 
     .newsroom-home-navbar__right {
-      gap: 22px;
+      padding-right: 0;
+      gap: 20px;
     }
 
     .newsroom-home-navbar__logo {
@@ -372,12 +404,25 @@ const styles = `
       font-size: 10px !important;
       letter-spacing: 0.8px;
     }
+
+    .newsroom-home-navbar__left .newsroom-home-navbar__link,
+    .newsroom-home-navbar__left .newsroom-home-navbar__ecosystem-button {
+      font-size: 9px !important;
+      letter-spacing: 0.55px;
+    }
   }
 
   @media (max-width: 1024px) {
     .newsroom-home-navbar {
       --home-navbar-height: 64px;
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 1500;
+      width: 100%;
+      max-width: 100%;
+      margin-left: 0;
       background: rgba(0, 0, 0, 0.98);
+      transform: translateZ(0);
     }
 
     .newsroom-home-navbar__inner {
@@ -432,7 +477,7 @@ const styles = `
       right: 0;
       bottom: 0;
       left: 0;
-      z-index: 1090;
+      z-index: 1490;
       display: flex;
       width: 100%;
       height: calc(100dvh - var(--home-navbar-height));
@@ -623,7 +668,10 @@ const styles = `
   }
 `;
 
-const NewsroomNavbar = ({ onOpenSidebar }: NewsroomNavbarProps) => {
+const NewsroomNavbar = ({
+  onOpenSidebar,
+  onCloseSidebar,
+}: NewsroomNavbarProps) => {
   const [ecosystemOpen, setEcosystemOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileEcosystemOpen, setMobileEcosystemOpen] = useState(false);
@@ -667,9 +715,9 @@ const NewsroomNavbar = ({ onOpenSidebar }: NewsroomNavbarProps) => {
   }, []);
 
   useEffect(() => {
-    document.body.classList.toggle("mobile-nav-open", mobileOpen);
+    document.body.classList.toggle("newsroom-mobile-nav-open", mobileOpen);
 
-    return () => document.body.classList.remove("mobile-nav-open");
+    return () => document.body.classList.remove("newsroom-mobile-nav-open");
   }, [mobileOpen]);
 
   useEffect(() => {
@@ -739,14 +787,14 @@ const NewsroomNavbar = ({ onOpenSidebar }: NewsroomNavbarProps) => {
           <div className="newsroom-home-navbar__left">
             <a
               className={`newsroom-home-navbar__link${
-                isActiveRoute(currentPath, "#/newsroom") ? " is-active" : ""
+                isActiveRoute(currentPath, "#/") ? " is-active" : ""
               }`}
-              href="#/newsroom"
+              href="#/"
               aria-current={
-                isActiveRoute(currentPath, "#/newsroom") ? "page" : undefined
+                isActiveRoute(currentPath, "#/") ? "page" : undefined
               }
             >
-              Newsroom
+              Home
             </a>
 
             <div className="newsroom-home-navbar__ecosystem" ref={ecosystemRef}>
@@ -792,8 +840,8 @@ const NewsroomNavbar = ({ onOpenSidebar }: NewsroomNavbarProps) => {
 
           <a
             className="newsroom-home-navbar__logo-link"
-            href="#/"
-            aria-label="Mahreen Indonesia Beranda"
+            href="#/newsroom"
+            aria-label="Kembali ke Home Newsroom"
             onClick={closeMobileMenu}
           >
             <img
@@ -816,27 +864,7 @@ const NewsroomNavbar = ({ onOpenSidebar }: NewsroomNavbarProps) => {
               Portofolio
             </a>
 
-            <div className="newsroom-home-navbar__auth" aria-label="Aksi akun">
-              <a
-                className={`newsroom-home-navbar__auth-link${
-                  isActiveRoute(currentPath, "#/daftar") ? " is-active" : ""
-                }`}
-                href="#/daftar"
-              >
-                Daftar
-              </a>
-              <span className="newsroom-home-navbar__separator" aria-hidden="true">
-                |
-              </span>
-              <a
-                className={`newsroom-home-navbar__auth-link${
-                  isActiveRoute(currentPath, "#/login") ? " is-active" : ""
-                }`}
-                href="#/login"
-              >
-                Login
-              </a>
-            </div>
+            <NavbarAccountControl />
           </div>
 
           <button
@@ -846,6 +874,7 @@ const NewsroomNavbar = ({ onOpenSidebar }: NewsroomNavbarProps) => {
             aria-expanded={mobileOpen}
             aria-controls="newsroom-home-mobile-menu"
             onClick={() => {
+              onCloseSidebar?.();
               setMobileOpen((current) => {
                 const next = !current;
                 if (!next) setMobileEcosystemOpen(false);
@@ -874,12 +903,12 @@ const NewsroomNavbar = ({ onOpenSidebar }: NewsroomNavbarProps) => {
 
               <a
                 className={`newsroom-home-navbar__mobile-link${
-                  isActiveRoute(currentPath, "#/newsroom") ? " is-active" : ""
+                  isActiveRoute(currentPath, "#/") ? " is-active" : ""
                 }`}
-                href="#/newsroom"
+                href="#/"
                 onClick={closeMobileMenu}
               >
-                Newsroom
+                Home
               </a>
 
               <div className="newsroom-home-navbar__mobile-ecosystem">
@@ -936,14 +965,7 @@ const NewsroomNavbar = ({ onOpenSidebar }: NewsroomNavbarProps) => {
                 Portofolio
               </a>
 
-              <div className="newsroom-home-navbar__mobile-actions">
-                <a href="#/daftar" onClick={closeMobileMenu}>
-                  Daftar
-                </a>
-                <a href="#/login" onClick={closeMobileMenu}>
-                  Login
-                </a>
-              </div>
+              <NavbarAccountControl variant="mobile" onNavigate={closeMobileMenu} />
             </div>
           </div>
         </nav>

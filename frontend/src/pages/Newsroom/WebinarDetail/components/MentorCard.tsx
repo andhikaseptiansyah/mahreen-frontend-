@@ -1,5 +1,5 @@
 import { ExternalLink } from "lucide-react";
-import mentorImage from "../../../../assets/Internship/raka-pratama.jpg";
+import type { WebinarData } from "../../../../data/webinars";
 
 const styles = `
   .webinar-mentor-card {
@@ -80,7 +80,13 @@ const styles = `
   }
 `;
 
-const MentorCard = () => {
+type MentorCardProps = {
+  webinar: WebinarData;
+};
+
+const MentorCard = ({ webinar }: MentorCardProps) => {
+  const { mentor } = webinar;
+
   return (
     <>
       <style>{styles}</style>
@@ -88,23 +94,16 @@ const MentorCard = () => {
       <article className="webinar-mentor-card" data-webinar-reveal>
         <img
           className="webinar-mentor-card__image"
-          src={mentorImage}
-          alt="Ahmad Sulaiman, mentor Digital Marketing Masterclass"
+          src={mentor.image}
+          alt={mentor.imageAlt}
         />
 
         <div>
           <span className="webinar-mentor-card__eyebrow">Your Mentor</span>
-          <h3>Ahmad Sulaiman</h3>
-          <p className="webinar-mentor-card__quote">
-            “Membangun bisnis bukan hanya tentang menjual produk, tapi tentang
-            bagaimana Anda bercerita dan membangun koneksi di dunia digital.”
-          </p>
-          <p className="webinar-mentor-card__bio">
-            Berpengalaman lebih dari 12 tahun sebagai Head of Digital Marketing
-            di berbagai startup Unicorn. Telah membantu lebih dari 50+ brand
-            nasional melakukan transformasi digital dan pertumbuhan terukur.
-          </p>
-          <a className="webinar-mentor-card__link" href="#/newsroom">
+          <h3>{mentor.name}</h3>
+          <p className="webinar-mentor-card__quote">“{mentor.quote}”</p>
+          <p className="webinar-mentor-card__bio">{mentor.bio}</p>
+          <a className="webinar-mentor-card__link" href={mentor.profileHref}>
             View LinkedIn Profile
             <ExternalLink size={14} aria-hidden="true" />
           </a>

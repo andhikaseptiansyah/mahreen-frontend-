@@ -95,7 +95,7 @@ export const saveWebinarSuccess = (
     registrationNumber: createRegistrationNumber(registration, payment),
     paymentId: payment.id,
     paymentMethod: payment.method,
-    totalPaid: payment.breakdown.total,
+    totalPaid: webinar.isFree ? 0 : webinar.price,
     status: "active",
     confirmedAt: new Date().toISOString(),
   };

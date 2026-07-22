@@ -39,6 +39,7 @@ const styles = `
 
   .newsroom-page {
     --newsroom-sidebar-width: 220px;
+    --newsroom-navbar-height: 64px;
     --newsroom-gold: #e5c477;
     --newsroom-gold-light: #f0d58f;
     --newsroom-black: #050505;
@@ -54,6 +55,7 @@ const styles = `
     max-width: 100%;
     min-width: 0;
     min-height: 100dvh;
+    padding-top: 0;
     align-items: flex-start;
     overflow-x: clip;
     color: #f4efe8;
@@ -95,8 +97,9 @@ const styles = `
   .newsroom-main-column {
     position: relative;
     flex: 1 1 0;
-    width: auto;
+    width: calc(100% - var(--newsroom-sidebar-width));
     max-width: calc(100% - var(--newsroom-sidebar-width));
+    margin-left: var(--newsroom-sidebar-width);
     min-width: 0;
     min-height: 100dvh;
     overflow-x: clip;
@@ -169,11 +172,14 @@ const styles = `
   @media (max-width: 1024px) {
     .newsroom-page {
       display: block;
+      padding-top: var(--newsroom-navbar-height);
+      scroll-padding-top: calc(var(--newsroom-navbar-height) + 12px);
     }
 
     .newsroom-main-column {
       width: 100%;
       max-width: 100%;
+      margin-left: 0;
     }
   }
 
@@ -267,43 +273,48 @@ const NewsroomHome = () => {
   }, [activeCategory, searchQuery]);
 
   return (
-    <div className="newsroom-page">
+    <>
       <style>{styles}</style>
 
-      <NewsroomSidebar
-        isOpen={isSidebarOpen}
-        onClose={() => setIsSidebarOpen(false)}
+      <NewsroomNavbar
+        onOpenSidebar={() => setIsSidebarOpen(true)}
+        onCloseSidebar={() => setIsSidebarOpen(false)}
       />
 
-      <div className="newsroom-main-column">
-        <NewsroomNavbar onOpenSidebar={() => setIsSidebarOpen(true)} />
+      <div className="newsroom-page">
+        <NewsroomSidebar
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
+        />
 
-        <main className="newsroom-main">
-          <HeroSection />
-          <FeaturedSection
-            activeCategory={activeCategory}
-            searchQuery={searchQuery}
-            onCategoryChange={setActiveCategory}
-            onSearchChange={setSearchQuery}
-          />
-          <WebinarSection
-            activeCategory={activeCategory}
-            searchQuery={searchQuery}
-          />
-          <EventCalendar />
-          <NewsletterSection />
-          <div data-newsroom-reveal>
-            <CTA />
-          </div>
-          <div data-newsroom-reveal>
-            <ClosingSection />
-          </div>
-          <div data-newsroom-reveal>
-            <Footer />
-          </div>
-        </main>
+        <div className="newsroom-main-column">
+          <main className="newsroom-main">
+            <HeroSection />
+            <FeaturedSection
+              activeCategory={activeCategory}
+              searchQuery={searchQuery}
+              onCategoryChange={setActiveCategory}
+              onSearchChange={setSearchQuery}
+            />
+            <WebinarSection
+              activeCategory={activeCategory}
+              searchQuery={searchQuery}
+            />
+            <EventCalendar />
+            <NewsletterSection />
+            <div data-newsroom-reveal>
+              <CTA />
+            </div>
+            <div data-newsroom-reveal>
+              <ClosingSection />
+            </div>
+            <div data-newsroom-reveal>
+              <Footer />
+            </div>
+          </main>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

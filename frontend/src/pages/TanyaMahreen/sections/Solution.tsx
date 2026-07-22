@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import iconConsultation from "../../../assets/TanyaMahreen/Home/icon-consultation.png";
+import { getHashHref, handleHashRouteClick } from "../../../utils/hashNavigation";
+import { packageCatalog } from "../KonfigurasiPaket/packageCatalog";
 
 const solutionStyles = `
   .solution-section {
@@ -350,11 +352,21 @@ const solutionStyles = `
   .delay-600 { transition-delay: 600ms; }
 `;
 
+
+const formatStartingPrice = (price: number, suffix = "") => {
+  const value = price >= 1_000_000
+    ? `${Number((price / 1_000_000).toFixed(2))}JT`
+    : `${Math.round(price / 1_000)}K`;
+
+  return `MULAI DARI RP${value}${suffix}`;
+};
+
 const solutionsData = [
   {
     id: 1,
     title: "Website Solutions",
-    badge: "MULAI DARI RP750K",
+    route: packageCatalog.website.route,
+    badge: formatStartingPrice(packageCatalog.website.tiers[0].price),
     icon: (
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="12" cy="12" r="10"></circle>
@@ -368,7 +380,8 @@ const solutionsData = [
   {
     id: 2,
     title: "Branding & Creative",
-    badge: "MULAI DARI RP250K",
+    route: packageCatalog.branding.route,
+    badge: formatStartingPrice(packageCatalog.branding.tiers[0].price),
     icon: (
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle>
@@ -384,7 +397,8 @@ const solutionsData = [
   {
     id: 3,
     title: "Social Media Management",
-    badge: "MULAI DARI RP1.5M/MO",
+    route: packageCatalog["social-media"].route,
+    badge: formatStartingPrice(packageCatalog["social-media"].tiers[0].price, "/BLN"),
     icon: (
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="18" cy="5" r="3"></circle>
@@ -400,7 +414,8 @@ const solutionsData = [
   {
     id: 4,
     title: "Digital Marketing",
-    badge: "MULAI DARI RP2.0M",
+    route: packageCatalog["digital-marketing"].route,
+    badge: formatStartingPrice(packageCatalog["digital-marketing"].tiers[0].price),
     icon: (
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M3 3v18h18"></path>
@@ -413,7 +428,8 @@ const solutionsData = [
   {
     id: 5,
     title: "Advertising Campaign",
-    badge: "MULAI DARI RP1.0M",
+    route: packageCatalog.advertising.route,
+    badge: formatStartingPrice(packageCatalog.advertising.tiers[0].price),
     icon: (
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="12" cy="12" r="10"></circle>
@@ -427,7 +443,8 @@ const solutionsData = [
   {
     id: 6,
     title: "Content Production",
-    badge: "MULAI DARI RP500K",
+    route: packageCatalog["content-production"].route,
+    badge: formatStartingPrice(packageCatalog["content-production"].tiers[0].price),
     icon: (
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M19.82 2H4.18C2.97 2 2 2.97 2 4.18v15.64C2 21.03 2.97 22 4.18 22h15.64c1.21 0 2.18-.97 2.18-2.18V4.18C22 2.97 21.03 2 19.82 2z"></path>
@@ -454,7 +471,7 @@ const Solution = () => {
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
-          if (sectionRef.current) observer.unobserve(sectionRef.current);
+          observer.unobserve(entry.target);
         }
       },
       { threshold: 0.1 }
@@ -464,13 +481,11 @@ const Solution = () => {
       observer.observe(sectionRef.current);
     }
 
-    return () => {
-      if (sectionRef.current) observer.unobserve(sectionRef.current);
-    };
+    return () => observer.disconnect();
   }, []);
 
   return (
-    <section className="solution-section" ref={sectionRef}>
+    <section id="solutions" className="solution-section" ref={sectionRef}>
       <style>{solutionStyles}</style>
       
       <div className="solution-container">
@@ -502,7 +517,11 @@ const Solution = () => {
                 ))}
               </ul>
               
-              <a href="#/tanya-mahreen/paket" className="card-button">
+              <a
+                href={getHashHref(solution.route)}
+                className="card-button"
+                onClick={(event) => handleHashRouteClick(event, solution.route)}
+              >
                 Pilih Paket
               </a>
             </div>
@@ -518,7 +537,7 @@ const Solution = () => {
             <div className="banner-content">
               <div className="banner-title-wrapper">
                 <h3 className="banner-title">Business Consultation</h3>
-                <div className="banner-badge">RP300K / SESSION</div>
+                <div className="banner-badge">{formatStartingPrice(packageCatalog.consultation.tiers[0].price, " / SESI")}</div>
               </div>
               
               <p className="banner-subtitle">
@@ -534,8 +553,14 @@ const Solution = () => {
             </div>
           </div>
           
-          <a href="#/tanya-mahreen/konsultasi" className="btn-book-now">
-            Book Now
+          <a
+            href={getHashHref(packageCatalog.consultation.route)}
+            onClick={(event) =>
+              handleHashRouteClick(event, packageCatalog.consultation.route)
+            }
+            className="btn-book-now"
+          >
+            Pilih Paket
           </a>
         </div>
       </div>

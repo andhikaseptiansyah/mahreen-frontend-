@@ -1,7 +1,5 @@
 import { useEffect } from "react";
-import ClosingSection from "../Home/components/ClosingSection";
-import Footer from "../Home/components/Footer";
-import Navbar from "../../../components/Navbar/Navbar";
+import NewsroomLayout from "../layout/NewsroomLayout";
 import HeroSection from "./sections/HeroSection";
 import LearningSection from "./sections/LearningSection";
 import SearchFilterSection from "./sections/SearchFilterSection";
@@ -119,19 +117,16 @@ const WebinarDetail = ({ webinar }: WebinarDetailProps) => {
     <>
       <style>{styles}</style>
 
-      <div className="webinar-detail-page">
-        <Navbar />
-
-        <main className="webinar-detail-page__main">
+      <NewsroomLayout>
+        <div className="webinar-detail-page">
+          <main className="webinar-detail-page__main">
           <HeroSection webinar={webinar} />
           <SearchFilterSection />
           <LearningSection webinar={webinar} />
-          <TimelineSection />
-          <ClosingSection />
-        </main>
-
-        <Footer />
-      </div>
+          <TimelineSection webinar={webinar} />
+          </main>
+        </div>
+      </NewsroomLayout>
     </>
   );
 };

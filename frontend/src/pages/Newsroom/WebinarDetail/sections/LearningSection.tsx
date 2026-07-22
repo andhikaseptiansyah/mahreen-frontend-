@@ -85,15 +85,6 @@ const styles = `
   }
 `;
 
-const topics = [
-  "Fundamental & Ecosystem Digital Marketing",
-  "Targeting & Buyer Persona Profiling",
-  "Organic Content Growth Strategies",
-  "Paid Advertising: FB, IG & Google Ads",
-  "Conversion Rate Optimization (CRO)",
-  "Marketing Analytics & KPI Tracking",
-] as const;
-
 type LearningSectionProps = {
   webinar: WebinarData;
 };
@@ -112,7 +103,7 @@ const LearningSection = ({ webinar }: LearningSectionProps) => {
             </div>
 
             <div className="webinar-learning-grid">
-              {topics.map((topic) => (
+              {webinar.topics.map((topic) => (
                 <article className="webinar-learning-item" data-webinar-reveal key={topic}>
                   <BadgeCheck aria-hidden="true" />
                   <span>{topic}</span>
@@ -120,7 +111,7 @@ const LearningSection = ({ webinar }: LearningSectionProps) => {
               ))}
             </div>
 
-            <MentorCard />
+            <MentorCard webinar={webinar} />
           </div>
 
           <PricingCard webinar={webinar} />

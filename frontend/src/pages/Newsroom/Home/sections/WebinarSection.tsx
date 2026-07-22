@@ -90,7 +90,7 @@ const webinars: readonly WebinarItem[] = [
   {
     id: 2,
     title: "UI/UX Design Masterclass",
-    category: "Artikel & Insight",
+    category: "Event & Webinar",
     label: "Design",
     date: "28 Oct",
     duration: "140 Menit",

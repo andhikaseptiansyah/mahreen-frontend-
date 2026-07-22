@@ -2,7 +2,6 @@ import { ArrowRight, Clock3, UsersRound } from "lucide-react";
 import avatarOne from "../../../../assets/Internship/raka-pratama.jpg";
 import avatarTwo from "../../../../assets/Internship/siti-mahreen.jpg";
 import avatarThree from "../../../../assets/Internship/dimas-andre.jpg";
-import webinarImage from "../../../../assets/Newsroom/webinar-digital.png";
 import { getWebinarRegistrationPath, type WebinarData } from "../../../../data/webinars";
 import { getHashHref, handleHashRouteClick } from "../../../../utils/hashNavigation";
 
@@ -278,8 +277,8 @@ const HeroSection = ({ webinar }: HeroSectionProps) => {
           <div className="webinar-detail-hero__visual">
             <img
               className="webinar-detail-hero__image"
-              src={webinarImage}
-              alt="Dashboard analitik digital marketing"
+              src={webinar.heroImage}
+              alt={webinar.heroImageAlt}
             />
           </div>
         </div>

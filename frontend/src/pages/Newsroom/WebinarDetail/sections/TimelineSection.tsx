@@ -1,4 +1,5 @@
 import { CalendarClock } from "lucide-react";
+import type { WebinarData } from "../../../../data/webinars";
 
 const styles = `
   .webinar-timeline-section {
@@ -109,35 +110,11 @@ const styles = `
   }
 `;
 
-const timelineItems = [
-  {
-    title: "Pendaftaran Dibuka",
-    description: "Periode early bird dengan potongan harga khusus premium member.",
-    date: "15 Mei - 20 Mei 2024",
-  },
-  {
-    title: "Onboarding & Prep Task",
-    description: "Persiapan teknis dan akses ke portal belajar Mahreen.",
-    date: "21 Mei 2024",
-  },
-  {
-    title: "Webinar Masterclass",
-    description: "Sesi live interaktif bersama mentor dan studi kasus nyata.",
-    date: "22 Mei 2024, 19:00 WIB",
-  },
-  {
-    title: "Penyerahan Sertifikat",
-    description: "E-Certificate akan dikirimkan ke dashboard peserta masing-masing.",
-    date: "23 Mei 2024",
-  },
-  {
-    title: "Akses Rekaman",
-    description: "Peserta mendapatkan rekaman penuh untuk dipelajari kembali kapan saja.",
-    date: "Unlimited Access",
-  },
-] as const;
+type TimelineSectionProps = {
+  webinar: WebinarData;
+};
 
-const TimelineSection = () => {
+const TimelineSection = ({ webinar }: TimelineSectionProps) => {
   return (
     <>
       <style>{styles}</style>
@@ -149,7 +126,7 @@ const TimelineSection = () => {
         </div>
 
         <div className="webinar-timeline">
-          {timelineItems.map((item) => (
+          {webinar.timeline.map((item) => (
             <article className="webinar-timeline-item" data-webinar-reveal key={item.title}>
               <div>
                 <h3>{item.title}</h3>

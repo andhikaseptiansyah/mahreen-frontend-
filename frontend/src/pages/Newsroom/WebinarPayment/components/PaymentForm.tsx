@@ -8,21 +8,26 @@ import {
   LoaderCircle,
   LockKeyhole,
   QrCode,
-  WalletCards,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
-import webinarImage from "../../../../assets/Newsroom/webinar-digital.png";
+import bcaLogo from "../../../../assets/Newsroom/payment-banks/bca.svg";
+import bniLogo from "../../../../assets/Newsroom/payment-banks/bni.svg";
+import briLogo from "../../../../assets/Newsroom/payment-banks/bri.svg";
+import mandiriLogo from "../../../../assets/Newsroom/payment-banks/mandiri.svg";
 import {
   formatRupiah,
+  getWebinarPaymentInstructionPath,
   getWebinarRegistrationPath,
-  getWebinarSuccessPath,
   type WebinarData,
 } from "../../../../data/webinars";
 import {
   calculateWebinarPayment,
+  readWebinarBank,
   readWebinarPaymentMethod,
+  saveWebinarBank,
   saveWebinarPayment,
   saveWebinarPaymentMethod,
+  type WebinarBank,
   type WebinarPaymentMethod,
 } from "../../../../services/webinarPaymentStorage";
 import {
@@ -34,7 +39,6 @@ import {
   handleHashRouteClick,
   navigateToHashRoute,
 } from "../../../../utils/hashNavigation";
-import { saveWebinarSuccess } from "../../../../services/webinarSuccessStorage";
 
 const paymentMethods = [
   {
@@ -49,17 +53,22 @@ const paymentMethods = [
     description: "Transfer via BCA, Mandiri, BNI, or BRI",
     icon: Building2,
   },
-  {
-    id: "e-wallet" as const,
-    title: "E-Wallet Direct",
-    description: "Pay directly using your linked wallet app",
-    icon: WalletCards,
-  },
 ] as const;
+
+const bankOptions: ReadonlyArray<{
+  id: WebinarBank;
+  label: string;
+  logo: string;
+}> = [
+  { id: "bca", label: "Bank Central Asia", logo: bcaLogo },
+  { id: "mandiri", label: "Bank Mandiri", logo: mandiriLogo },
+  { id: "bni", label: "Bank Negara Indonesia", logo: bniLogo },
+  { id: "bri", label: "Bank Rakyat Indonesia", logo: briLogo },
+];
 
 const styles = `
   .webinar-payment {
-    width: min(100%, 1040px);
+    width: min(100%, 1160px);
     margin-inline: auto;
   }
 
@@ -80,7 +89,7 @@ const styles = `
     border-radius: 999px;
     color: #d4b568;
     background: rgba(201, 165, 78, 0.08);
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.08em;
   }
@@ -89,7 +98,7 @@ const styles = `
     margin: 16px 0 0;
     color: #f2ede7;
     font-family: "Playfair Display", Georgia, "Times New Roman", serif;
-    font-size: clamp(30px, 4vw, 38px);
+    font-size: clamp(38px, 4.8vw, 50px);
     font-weight: 500;
     line-height: 1.12;
     letter-spacing: -0.035em;
@@ -98,15 +107,15 @@ const styles = `
   .webinar-payment__subtitle {
     margin: 12px auto 0;
     color: rgba(255, 255, 255, 0.62);
-    font-size: 13px;
-    line-height: 1.6;
+    font-size: 16px;
+    line-height: 1.7;
     text-wrap: balance;
   }
 
   .webinar-payment__layout {
     display: grid;
     margin-top: clamp(28px, 4vw, 38px);
-    grid-template-columns: minmax(0, 1.35fr) minmax(330px, 0.85fr);
+    grid-template-columns: minmax(0, 1.45fr) minmax(370px, 0.9fr);
     gap: clamp(28px, 4.5vw, 54px);
     align-items: start;
   }
@@ -123,7 +132,7 @@ const styles = `
     margin: 0;
     color: rgba(255, 255, 255, 0.84);
     font-family: "Playfair Display", Georgia, serif;
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 500;
   }
 
@@ -131,17 +140,17 @@ const styles = `
     max-width: 560px;
     margin: 12px 0 0;
     color: rgba(255, 255, 255, 0.61);
-    font-size: 12px;
-    line-height: 1.65;
+    font-size: 15px;
+    line-height: 1.72;
   }
 
   .webinar-payment__eyebrow {
     display: block;
     margin-top: 25px;
     color: #d4b568;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 700;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
   }
 
@@ -155,9 +164,9 @@ const styles = `
     position: relative;
     display: grid;
     width: 100%;
-    min-height: 72px;
-    padding: 14px 17px;
-    grid-template-columns: 43px minmax(0, 1fr) 22px;
+    min-height: 94px;
+    padding: 19px 21px;
+    grid-template-columns: 52px minmax(0, 1fr) 24px;
     gap: 14px;
     align-items: center;
     border: 1px solid rgba(255, 255, 255, 0.12);
@@ -178,7 +187,6 @@ const styles = `
 
   .webinar-payment-method:nth-child(1) { animation-delay: 280ms; }
   .webinar-payment-method:nth-child(2) { animation-delay: 340ms; }
-  .webinar-payment-method:nth-child(3) { animation-delay: 400ms; }
 
   .webinar-payment-method:hover,
   .webinar-payment-method:focus-visible {
@@ -199,8 +207,8 @@ const styles = `
 
   .webinar-payment-method__icon {
     display: inline-flex;
-    width: 43px;
-    height: 43px;
+    width: 52px;
+    height: 52px;
     align-items: center;
     justify-content: center;
     border-radius: 8px;
@@ -214,29 +222,29 @@ const styles = `
   }
 
   .webinar-payment-method__icon svg {
-    width: 19px;
-    height: 19px;
+    width: 23px;
+    height: 23px;
   }
 
   .webinar-payment-method__title {
     display: block;
     color: rgba(255, 255, 255, 0.88);
-    font-size: 12px;
-    font-weight: 500;
+    font-size: 15px;
+    font-weight: 600;
   }
 
   .webinar-payment-method__description {
     display: block;
     margin-top: 5px;
     color: rgba(255, 255, 255, 0.54);
-    font-size: 10px;
-    line-height: 1.45;
+    font-size: 12px;
+    line-height: 1.55;
   }
 
   .webinar-payment-method__radio {
     display: inline-flex;
-    width: 17px;
-    height: 17px;
+    width: 20px;
+    height: 20px;
     align-items: center;
     justify-content: center;
     border: 1px solid rgba(255, 255, 255, 0.25);
@@ -295,7 +303,7 @@ const styles = `
   }
 
   .webinar-payment-summary {
-    padding: 19px;
+    padding: 24px;
     overflow: hidden;
     border: 1px solid rgba(255, 255, 255, 0.13);
     border-radius: 20px;
@@ -345,7 +353,7 @@ const styles = `
     border-radius: 999px;
     color: #2c210f;
     background: #d4b568;
-    font-size: 7px;
+    font-size: 9px;
     font-weight: 800;
     letter-spacing: 0.03em;
     text-transform: uppercase;
@@ -354,8 +362,8 @@ const styles = `
   .webinar-payment-summary__title {
     margin: 17px 0 0;
     color: rgba(255, 255, 255, 0.82);
-    font-size: 11px;
-    font-weight: 500;
+    font-size: 15px;
+    font-weight: 600;
     line-height: 1.45;
   }
 
@@ -366,7 +374,7 @@ const styles = `
     align-items: center;
     flex-wrap: wrap;
     color: rgba(255, 255, 255, 0.51);
-    font-size: 9px;
+    font-size: 11px;
   }
 
   .webinar-payment-summary__schedule span {
@@ -398,13 +406,13 @@ const styles = `
     align-items: center;
     justify-content: space-between;
     color: rgba(255, 255, 255, 0.57);
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .webinar-payment-summary__row strong {
     color: rgba(255, 255, 255, 0.78);
-    font-size: 10px;
-    font-weight: 500;
+    font-size: 12px;
+    font-weight: 600;
     white-space: nowrap;
   }
 
@@ -415,8 +423,8 @@ const styles = `
   .webinar-payment-summary__total-label {
     display: block;
     color: rgba(255, 255, 255, 0.72);
-    font-size: 10px;
-    letter-spacing: 0.24em;
+    font-size: 11px;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
   }
 
@@ -424,8 +432,8 @@ const styles = `
     margin: 8px 0 0;
     color: #f0ebe4;
     font-family: "Playfair Display", Georgia, serif;
-    font-size: 17px;
-    font-weight: 500;
+    font-size: 25px;
+    font-weight: 600;
   }
 
   .webinar-payment-summary__submit {
@@ -442,7 +450,7 @@ const styles = `
     color: #2e210e;
     background: linear-gradient(100deg, #cda95f 0%, #ddbd73 54%, #caa75e 100%);
     box-shadow: 0 14px 32px rgba(201, 165, 79, 0.14);
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 800;
     cursor: pointer;
     transition:
@@ -477,8 +485,8 @@ const styles = `
   .webinar-payment-summary__policy {
     margin: 13px auto 0;
     color: rgba(255, 255, 255, 0.32);
-    font-size: 8px;
-    line-height: 1.55;
+    font-size: 9.5px;
+    line-height: 1.6;
     text-align: center;
   }
 
@@ -551,20 +559,82 @@ const styles = `
 
   .webinar-payment-help__copy strong {
     color: rgba(255, 255, 255, 0.8);
-    font-size: 10px;
-    font-weight: 500;
+    font-size: 12px;
+    font-weight: 600;
   }
 
   .webinar-payment-help__copy span {
     margin-top: 3px;
     color: rgba(255, 255, 255, 0.45);
-    font-size: 8px;
+    font-size: 10px;
   }
 
   .webinar-payment-help__link {
     color: #d4b568;
-    font-size: 8px;
+    font-size: 10px;
     white-space: nowrap;
+  }
+
+  .webinar-payment-bank-selector {
+    margin-top: 16px;
+    padding: 18px;
+    border: 1px solid rgba(212, 181, 104, 0.22);
+    border-radius: 12px;
+    background: rgba(212, 181, 104, 0.045);
+    animation: webinarPaymentNotice 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .webinar-payment-bank-selector__label {
+    display: block;
+    margin-bottom: 12px;
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .webinar-payment-bank-selector__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .webinar-payment-bank-option {
+    display: flex;
+    min-height: 72px;
+    padding: 10px;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 11px;
+    background: rgba(255, 255, 255, 0.025);
+    cursor: pointer;
+    transition:
+      border-color 180ms ease,
+      background 180ms ease,
+      box-shadow 180ms ease,
+      transform 180ms ease;
+  }
+
+  .webinar-payment-bank-option:hover,
+  .webinar-payment-bank-option:focus-visible,
+  .webinar-payment-bank-option.is-selected {
+    outline: none;
+    border-color: #d4b568;
+    background: rgba(212, 181, 104, 0.09);
+    box-shadow: 0 0 22px rgba(212, 181, 104, 0.12);
+    transform: translateY(-2px);
+  }
+
+  .webinar-payment-bank-option__logo {
+    display: block;
+    width: 100%;
+    max-width: 118px;
+    height: 42px;
+    object-fit: contain;
+    border-radius: 8px;
   }
 
   @keyframes webinarPaymentEnter {
@@ -628,6 +698,10 @@ const styles = `
       padding: 15px;
       border-radius: 16px;
     }
+
+    .webinar-payment-bank-selector__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -651,6 +725,9 @@ const PaymentForm = ({ webinar }: PaymentFormProps) => {
   const [selectedMethod, setSelectedMethod] = useState<WebinarPaymentMethod>(() =>
     readWebinarPaymentMethod(webinar.slug),
   );
+  const [selectedBank, setSelectedBank] = useState<WebinarBank>(() =>
+    readWebinarBank(webinar.slug),
+  );
   const [registration] = useState<StoredWebinarRegistration | null>(() =>
     readWebinarRegistration(webinar.slug),
   );
@@ -658,11 +735,14 @@ const PaymentForm = ({ webinar }: PaymentFormProps) => {
   const redirectTimerRef = useRef<number | null>(null);
   const breakdown = useMemo(() => calculateWebinarPayment(webinar), [webinar]);
   const registrationPath = getWebinarRegistrationPath(webinar.slug);
-  const successPath = getWebinarSuccessPath(webinar.slug);
 
   useEffect(() => {
     saveWebinarPaymentMethod(webinar.slug, selectedMethod);
   }, [selectedMethod, webinar.slug]);
+
+  useEffect(() => {
+    saveWebinarBank(webinar.slug, selectedBank);
+  }, [selectedBank, webinar.slug]);
 
   useEffect(() => {
     return () => {
@@ -683,12 +763,23 @@ const PaymentForm = ({ webinar }: PaymentFormProps) => {
     if (!registration || isCompleting) return;
 
     setIsCompleting(true);
-    const payment = saveWebinarPayment(webinar, selectedMethod, registration);
-    saveWebinarSuccess(webinar, registration, payment);
+    saveWebinarPayment(
+      webinar,
+      selectedMethod,
+      registration,
+      selectedMethod === "bank-transfer" ? selectedBank : null,
+    );
+
+    const paidMethod =
+      selectedMethod === "free-registration" ? "qris" : selectedMethod;
+    const instructionPath = getWebinarPaymentInstructionPath(
+      webinar.slug,
+      paidMethod,
+    );
 
     redirectTimerRef.current = window.setTimeout(() => {
-      navigateToHashRoute(successPath);
-    }, 520);
+      navigateToHashRoute(instructionPath);
+    }, 420);
   };
 
   return (
@@ -746,6 +837,41 @@ const PaymentForm = ({ webinar }: PaymentFormProps) => {
               })}
             </div>
 
+            {selectedMethod === "bank-transfer" && (
+              <section
+                className="webinar-payment-bank-selector"
+                aria-label="Pilih bank tujuan"
+              >
+                <span className="webinar-payment-bank-selector__label">
+                  Pilih Bank Tujuan
+                </span>
+                <div className="webinar-payment-bank-selector__grid">
+                  {bankOptions.map((bank) => {
+                    const isSelected = selectedBank === bank.id;
+
+                    return (
+                      <button
+                        className={`webinar-payment-bank-option${
+                          isSelected ? " is-selected" : ""
+                        }`}
+                        key={bank.id}
+                        type="button"
+                        aria-pressed={isSelected}
+                        title={bank.label}
+                        onClick={() => setSelectedBank(bank.id)}
+                      >
+                        <img
+                          className="webinar-payment-bank-option__logo"
+                          src={bank.logo}
+                          alt={bank.label}
+                        />
+                      </button>
+                    );
+                  })}
+                </div>
+              </section>
+            )}
+
             <p className="webinar-payment__secure">
               <LockKeyhole aria-hidden="true" />
               <span>SSL Encrypted Secure Transaction</span>
@@ -770,8 +896,8 @@ const PaymentForm = ({ webinar }: PaymentFormProps) => {
               <div className="webinar-payment-summary__visual">
                 <img
                   className="webinar-payment-summary__image"
-                  src={webinarImage}
-                  alt="Digital marketing webinar workspace"
+                  src={webinar.heroImage}
+                  alt={webinar.heroImageAlt}
                 />
                 <span className="webinar-payment-summary__badge">{webinar.category}</span>
               </div>
@@ -793,17 +919,23 @@ const PaymentForm = ({ webinar }: PaymentFormProps) => {
 
               <div className="webinar-payment-summary__rows">
                 <div className="webinar-payment-summary__row">
-                  <span>Registration Fee</span>
+                  <span>Harga Webinar</span>
                   <strong>{formatRupiah(breakdown.registrationFee)}</strong>
                 </div>
-                <div className="webinar-payment-summary__row">
-                  <span>Platform Fee</span>
-                  <strong>{formatRupiah(breakdown.platformFee)}</strong>
-                </div>
-                <div className="webinar-payment-summary__row is-discount">
-                  <span>Discount</span>
-                  <strong>- {formatRupiah(breakdown.discount)}</strong>
-                </div>
+
+                {breakdown.platformFee > 0 && (
+                  <div className="webinar-payment-summary__row">
+                    <span>Platform Fee</span>
+                    <strong>{formatRupiah(breakdown.platformFee)}</strong>
+                  </div>
+                )}
+
+                {breakdown.discount > 0 && (
+                  <div className="webinar-payment-summary__row is-discount">
+                    <span>Discount</span>
+                    <strong>- {formatRupiah(breakdown.discount)}</strong>
+                  </div>
+                )}
               </div>
 
               <hr className="webinar-payment-summary__divider" />
@@ -822,18 +954,18 @@ const PaymentForm = ({ webinar }: PaymentFormProps) => {
                 {isCompleting ? (
                   <>
                     <LoaderCircle className="webinar-payment-summary__spinner" aria-hidden="true" />
-                    Processing Payment
+                    Preparing Payment
                   </>
                 ) : (
                   <>
-                    Complete Payment
+                    Continue Payment
                     <Check aria-hidden="true" />
                   </>
                 )}
               </button>
 
               <p className="webinar-payment-summary__policy">
-                By clicking &quot;Complete Payment&quot; you agree to Mahreen Learning&apos;s{" "}
+                By clicking &quot;Continue Payment&quot; you agree to Mahreen Learning&apos;s{" "}
                 <a href="#/syarat-ketentuan">Terms of Service</a> and Refund Policy.
               </p>
 

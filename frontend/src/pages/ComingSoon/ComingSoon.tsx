@@ -109,7 +109,7 @@ const ComingSoon = ({ eyebrow, title, description }: ComingSoonProps) => {
             </a>
             <a
               className="coming-soon-page__button coming-soon-page__button--secondary"
-              href="#/?section=contact"
+              href="#/contact"
             >
               Hubungi Mahreen
             </a>

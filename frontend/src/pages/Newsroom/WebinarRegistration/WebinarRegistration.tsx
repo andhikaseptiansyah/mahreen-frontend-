@@ -1,7 +1,5 @@
 import { useEffect } from "react";
-import Navbar from "../../../components/Navbar/Navbar";
-import ClosingSection from "../Home/components/ClosingSection";
-import Footer from "../Home/components/Footer";
+import NewsroomLayout from "../layout/NewsroomLayout";
 import RegistrationForm from "./components/RegistrationForm";
 import type { WebinarData } from "../../../data/webinars";
 
@@ -94,10 +92,9 @@ const WebinarRegistration = ({ webinar }: WebinarRegistrationProps) => {
     <>
       <style>{styles}</style>
 
-      <div className="webinar-registration-page">
-        <Navbar />
-
-        <main className="webinar-registration-page__main">
+      <NewsroomLayout>
+        <div className="webinar-registration-page">
+          <main className="webinar-registration-page__main">
           <section
             className="webinar-registration-page__form-section"
             aria-label="Webinar registration"
@@ -107,11 +104,9 @@ const WebinarRegistration = ({ webinar }: WebinarRegistrationProps) => {
             </div>
           </section>
 
-          <ClosingSection />
-        </main>
-
-        <Footer />
-      </div>
+          </main>
+        </div>
+      </NewsroomLayout>
     </>
   );
 };

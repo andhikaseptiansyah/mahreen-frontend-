@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import iconStudio from "../../assets/Navbar/icon-peduli.png";
+import NavbarAccountControl from "./NavbarAccountControl";
 
 type NavigationItem = {
   label: string;
@@ -417,7 +418,7 @@ const navbarStyles = `
     }
   }
 
-  @media (max-width: 920px) {
+  @media (max-width: 1024px) {
     :root {
       --navbar-height: 74px;
     }
@@ -966,7 +967,7 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth > 920) {
+      if (window.innerWidth > 1024) {
         setMobileOpen(false);
         setMobileEcosystemOpen(false);
       }
@@ -1021,17 +1022,17 @@ const Navbar = () => {
       <style data-component="navbar">{navbarStyles}</style>
 
       <header className={`site-header${isScrolled ? " is-scrolled" : ""}`}>
-        <nav className="navbar" aria-label="Navigasi utama Mahreen Studio">
+        <nav className="navbar" aria-label="Navigasi utama Peduli Mahreen">
           <a
             className="navbar__brand"
-            href="#/"
-            aria-label="Mahreen Studio Beranda"
+            href="#/peduli-mahreen"
+            aria-label="Kembali ke Home Peduli Mahreen"
             onClick={closeMobileMenu}
           >
             <img
               className="navbar__brand-logo"
               src={iconStudio}
-              alt="Mahreen Studio"
+              alt="Peduli Mahreen"
               width="290"
               height="74"
               decoding="async"
@@ -1117,33 +1118,8 @@ const Navbar = () => {
               Tentang
             </a>
           </div>
-
           <div className="navbar__right" aria-label="Aksi akun">
-            <a
-              className={`navbar__auth-link${
-                isActiveRoute(currentPath, "#/daftar") ? " is-active" : ""
-              }`}
-              href="#/daftar"
-              aria-current={
-                isActiveRoute(currentPath, "#/daftar") ? "page" : undefined
-              }
-            >
-              Daftar
-            </a>
-            <span className="navbar__separator" aria-hidden="true">
-              |
-            </span>
-            <a
-              className={`navbar__auth-link${
-                isActiveRoute(currentPath, "#/login") ? " is-active" : ""
-              }`}
-              href="#/login"
-              aria-current={
-                isActiveRoute(currentPath, "#/login") ? "page" : undefined
-              }
-            >
-              Login
-            </a>
+            <NavbarAccountControl />
           </div>
 
           <button
@@ -1299,24 +1275,7 @@ const Navbar = () => {
               >
                 Newsroom
               </a>
-
-              <div className="navbar__mobile-actions">
-                <a
-                  className="navbar__mobile-register"
-                  href="#/daftar"
-                  onClick={closeMobileMenu}
-                >
-                  Daftar
-                </a>
-
-                <a
-                  className="navbar__mobile-login"
-                  href="#/login"
-                  onClick={closeMobileMenu}
-                >
-                  Login
-                </a>
-              </div>
+              <NavbarAccountControl variant="mobile" onNavigate={closeMobileMenu} />
             </div>
           </div>
         </nav>

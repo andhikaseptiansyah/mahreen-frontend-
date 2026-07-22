@@ -213,11 +213,11 @@ const JejakLangkah = () => {
         </p>
 
         <div className="jejak-langkah__actions" data-lite-reveal style={{ transitionDelay: "180ms" }}>
-          <a href="#kontribusi" className="jejak-langkah__button jejak-langkah__button--primary">
+          <a href="#/peduli-mahreen/donasi" className="jejak-langkah__button jejak-langkah__button--primary">
             Ikut Berkontribusi
           </a>
 
-          <a href="#hubungi-kami" className="jejak-langkah__button jejak-langkah__button--secondary">
+          <a href="#/contact?pillar=peduli" className="jejak-langkah__button jejak-langkah__button--secondary">
             Hubungi Kami
           </a>
         </div>

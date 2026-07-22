@@ -1,4 +1,4 @@
-import { useEffect, type MouseEvent } from "react";
+import { useEffect } from "react";
 import Navbar from "../../components/Navbar/Peduli-MahreenNavbar";
 import ClosingSection from "../../components/Cloasing-section/cloasing-section";
 import Footer from "../../components/Footer/Footer";
@@ -536,15 +536,6 @@ const CheckIcon = () => (
 );
 
 const PeduliMahreen = () => {
-  const scrollToSection = (event: MouseEvent<HTMLAnchorElement>, targetId: string) => {
-    event.preventDefault();
-
-    document.getElementById(targetId)?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  };
-
   return (
     <>
       <PeduliMahreenSEO />
@@ -572,8 +563,7 @@ const PeduliMahreen = () => {
 
               <a
                 className="peduli-hero__button"
-                href="#kontribusi"
-                onClick={(event) => scrollToSection(event, "kontribusi")}
+                href="#/peduli-mahreen/donasi"
               >
                 Ikut Berkontribusi
                 <svg viewBox="0 0 18 18" fill="none" aria-hidden="true">

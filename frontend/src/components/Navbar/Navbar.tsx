@@ -1,10 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import mahreenLogo from "../../assets/Navbar/mahreen-logo.png";
+import NavbarAccountControl from "./NavbarAccountControl";
+import { useAuth } from "../../hooks/useAuth";
 
 type NavigationItem = {
   label: string;
   href: string;
 };
+
+type NavbarProps = Readonly<{
+  homeHref?: string;
+  homeLabel?: string;
+}>;
 
 const ecosystemItems: readonly NavigationItem[] = [
   { label: "Mahreen Studio", href: "#/mahreen-studio" },
@@ -69,7 +76,7 @@ const navbarStyles = `
   body,
   #root {
     width: 100% !important;
-    max-width: none !important;
+    max-width: 100% !important;
     min-width: 0 !important;
     min-height: 100% !important;
     margin: 0 !important;
@@ -102,7 +109,7 @@ const navbarStyles = `
   .ekosistem,
   footer {
     width: 100% !important;
-    max-width: none !important;
+    max-width: 100% !important;
     min-width: 0 !important;
   }
 
@@ -110,7 +117,7 @@ const navbarStyles = `
     position: fixed;
     inset: 0 0 auto 0;
     width: 100% !important;
-    max-width: none !important;
+    max-width: 100% !important;
     height: var(--navbar-height);
     transform: none !important;
     background: var(--navbar-bg);
@@ -124,18 +131,15 @@ const navbarStyles = `
   }
 
   .site-header.is-scrolled {
-    background: rgba(0, 0, 0, 0.84);
-    border-bottom-color: rgba(216, 184, 106, 0.34);
-    backdrop-filter: blur(18px);
-    box-shadow:
-      0 12px 36px rgba(0, 0, 0, 0.38),
-      0 0 22px rgba(216, 184, 106, 0.1);
+    background: rgba(0, 0, 0, 0.96);
+    border-bottom-color: rgba(216, 184, 106, 0.28);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.34);
   }
 
   .navbar {
     position: relative;
     width: 100% !important;
-    max-width: none !important;
+    max-width: 100% !important;
     min-width: 0 !important;
     height: var(--navbar-height);
     margin: 0;
@@ -171,12 +175,12 @@ const navbarStyles = `
 
   .navbar__left {
     justify-content: flex-start;
-    gap: 52px;
+    gap: 34px;
   }
 
   .navbar__right {
     justify-content: flex-end;
-    gap: 46px;
+    gap: 26px;
   }
 
   .navbar__link,
@@ -410,8 +414,8 @@ const navbarStyles = `
 
   .navbar__logo {
     display: block;
-    width: 330px;
-    height: 70px;
+    width: 225px;
+    height: 62px;
     object-fit: contain;
   }
 
@@ -435,26 +439,38 @@ const navbarStyles = `
     display: none;
   }
 
+  body.mahreen-authenticated .navbar__right {
+    gap: 0;
+  }
+
+  body.mahreen-authenticated .navbar__right > .navbar__link {
+    display: none;
+  }
+
   @media (max-width: 1200px) {
     .navbar {
       padding: 0 22px;
     }
 
     .navbar__left {
-      gap: 34px;
+      gap: 24px;
     }
 
     .navbar__right {
-      gap: 30px;
+      gap: 18px;
+    }
+
+    .navbar__auth {
+      gap: 13px;
     }
 
     .navbar__logo {
-      width: 280px;
-      height: 64px;
+      width: 180px;
+      height: 56px;
     }
   }
 
-  @media (max-width: 920px) {
+  @media (max-width: 1024px) {
     :root {
       --navbar-height: 74px;
     }
@@ -468,27 +484,35 @@ const navbarStyles = `
     .navbar {
       position: relative;
       z-index: 1002;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
+      display: flex;
       width: 100%;
       height: var(--navbar-height);
       padding: 0 18px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
     }
 
-    .navbar__center,
+    /* Desktop navigation must disappear completely on tablet/mobile. */
+    .navbar__left,
     .navbar__right {
-      display: none;
+      display: none !important;
     }
 
     .navbar__logo-link {
       position: relative;
       z-index: 1003;
-      justify-self: start;
+      display: inline-flex;
+      flex: 0 1 auto;
+      min-width: 0;
+      margin-right: auto;
+      justify-content: flex-start;
     }
 
     .navbar__logo {
-      width: 270px;
-      height: 66px;
+      width: clamp(170px, 30vw, 235px);
+      max-width: calc(100vw - 92px);
+      height: 58px;
       object-fit: contain;
       object-position: left center;
     }
@@ -496,9 +520,8 @@ const navbarStyles = `
     .navbar__menu-button {
       position: relative;
       z-index: 1005;
-      grid-column: 2;
-      justify-self: end;
       display: flex;
+      flex: 0 0 38px;
       flex-direction: column;
       align-items: flex-end;
       justify-content: center;
@@ -575,6 +598,7 @@ const navbarStyles = `
       flex-direction: column;
       align-items: center;
       width: 100%;
+      max-width: 100%;
       height: calc(100dvh - var(--navbar-height));
       padding:
         clamp(40px, 6vh, 64px)
@@ -942,11 +966,12 @@ const navbarStyles = `
   }
 `;
 
-const Navbar = () => {
+const Navbar = ({ homeHref = "#/", homeLabel = "Home" }: NavbarProps) => {
   const [ecosystemOpen, setEcosystemOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileEcosystemOpen, setMobileEcosystemOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const { isAuthenticated } = useAuth();
   const [currentPath, setCurrentPath] = useState(() => getCurrentRoute());
 
   const ecosystemRef = useRef<HTMLDivElement>(null);
@@ -1003,7 +1028,7 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth > 920) {
+      if (window.innerWidth > 1024) {
         setMobileOpen(false);
         setMobileEcosystemOpen(false);
       }
@@ -1060,6 +1085,20 @@ const Navbar = () => {
       <header className={`site-header${isScrolled ? " is-scrolled" : ""}`}>
         <nav className="navbar" aria-label="Navigasi utama Mahreen Indonesia">
           <div className="navbar__left">
+            {isAuthenticated && (
+              <a
+                className={`navbar__link${
+                  isActiveRoute(currentPath, homeHref) ? " is-active" : ""
+                }`}
+                href={homeHref}
+                aria-current={
+                  isActiveRoute(currentPath, homeHref) ? "page" : undefined
+                }
+              >
+                {homeLabel}
+              </a>
+            )}
+
             <a
               className={`navbar__link${
                 isActiveRoute(currentPath, "#/newsroom") ? " is-active" : ""
@@ -1129,8 +1168,8 @@ const Navbar = () => {
 
           <a
             className="navbar__logo-link"
-            href="#/"
-            aria-label="Mahreen Indonesia Beranda"
+            href={homeHref}
+            aria-label={`Kembali ke ${homeLabel}`}
             onClick={closeMobileMenu}
           >
             <img
@@ -1168,33 +1207,19 @@ const Navbar = () => {
               Tentang
             </a>
 
-            <div className="navbar__auth" aria-label="Aksi akun">
-              <a
-                className={`navbar__auth-link${
-                  isActiveRoute(currentPath, "#/daftar") ? " is-active" : ""
-                }`}
-                href="#/daftar"
-                aria-current={
-                  isActiveRoute(currentPath, "#/daftar") ? "page" : undefined
-                }
-              >
-                Daftar
-              </a>
-              <span className="navbar__separator" aria-hidden="true">
-                |
-              </span>
-              <a
-                className={`navbar__auth-link${
-                  isActiveRoute(currentPath, "#/login") ? " is-active" : ""
-                }`}
-                href="#/login"
-                aria-current={
-                  isActiveRoute(currentPath, "#/login") ? "page" : undefined
-                }
-              >
-                Login
-              </a>
-            </div>
+            <a
+              className={`navbar__link${
+                isActiveRoute(currentPath, "#/contact") ? " is-active" : ""
+              }`}
+              href="#/contact"
+              aria-current={
+                isActiveRoute(currentPath, "#/contact") ? "page" : undefined
+              }
+            >
+              Hubungi Kami
+            </a>
+
+            <NavbarAccountControl />
           </div>
 
           <button
@@ -1225,18 +1250,20 @@ const Navbar = () => {
             className={`navbar__mobile-menu${mobileOpen ? " is-open" : ""}`}
           >
             <div className="navbar__mobile-navigation">
-              <a
-                className={`navbar__mobile-link${
-                  isActiveRoute(currentPath, "#/") ? " is-active" : ""
-                }`}
-                href="#/"
-                aria-current={
-                  isActiveRoute(currentPath, "#/") ? "page" : undefined
-                }
-                onClick={closeMobileMenu}
-              >
-                Home
-              </a>
+              {isAuthenticated && (
+                <a
+                  className={`navbar__mobile-link${
+                    isActiveRoute(currentPath, homeHref) ? " is-active" : ""
+                  }`}
+                  href={homeHref}
+                  aria-current={
+                    isActiveRoute(currentPath, homeHref) ? "page" : undefined
+                  }
+                  onClick={closeMobileMenu}
+                >
+                  {homeLabel}
+                </a>
+              )}
 
               <a
                 className={`navbar__mobile-link${
@@ -1351,23 +1378,24 @@ const Navbar = () => {
                 Newsroom
               </a>
 
-              <div className="navbar__mobile-actions">
-                <a
-                  className="navbar__mobile-register"
-                  href="#/daftar"
-                  onClick={closeMobileMenu}
-                >
-                  Daftar
-                </a>
+              <a
+                className={`navbar__mobile-link${
+                  isActiveRoute(currentPath, "#/contact")
+                    ? " is-active"
+                    : ""
+                }`}
+                href="#/contact"
+                aria-current={
+                  isActiveRoute(currentPath, "#/contact")
+                    ? "page"
+                    : undefined
+                }
+                onClick={closeMobileMenu}
+              >
+                Hubungi Kami
+              </a>
 
-                <a
-                  className="navbar__mobile-login"
-                  href="#/login"
-                  onClick={closeMobileMenu}
-                >
-                  Login
-                </a>
-              </div>
+              <NavbarAccountControl variant="mobile" onNavigate={closeMobileMenu} />
             </div>
           </div>
         </nav>

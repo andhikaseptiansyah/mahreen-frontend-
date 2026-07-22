@@ -8,15 +8,18 @@ import {
 } from "react";
 import {
   getWebinarPaymentPath,
+  getWebinarSuccessPath,
   type WebinarData,
 } from "../../../../data/webinars";
 import {
   readWebinarRegistrationDraft,
-  saveWebinarRegistration,
   saveWebinarRegistrationDraft,
   type WebinarRegistrationFormData,
 } from "../../../../services/webinarRegistrationStorage";
+import { saveWebinarPayment } from "../../../../services/webinarPaymentStorage";
+import { saveWebinarSuccess } from "../../../../services/webinarSuccessStorage";
 import { navigateToHashRoute } from "../../../../utils/hashNavigation";
+import { webinarService } from "../../../../services/webinar/webinarService";
 
 type FieldErrors = Partial<Record<keyof WebinarRegistrationFormData, string>>;
 
@@ -304,13 +307,18 @@ const styles = `
     animation: webinarRegistrationShimmer 4.8s ease-in-out 1.5s infinite;
   }
 
-  .webinar-registration-form__submit:hover,
-  .webinar-registration-form__submit:focus-visible {
+  .webinar-registration-form__submit:hover:not(:disabled),
+  .webinar-registration-form__submit:focus-visible:not(:disabled) {
     filter: brightness(1.06);
     box-shadow:
       0 18px 44px rgba(214, 180, 103, 0.28),
       0 0 0 4px rgba(214, 180, 103, 0.08);
     transform: translateY(-2px);
+  }
+
+  .webinar-registration-form__submit:disabled {
+    cursor: wait;
+    opacity: 0.66;
   }
 
   .webinar-registration-form__submit:active {
@@ -443,6 +451,8 @@ const RegistrationForm = ({ webinar }: RegistrationFormProps) => {
     readWebinarRegistrationDraft(webinar.slug),
   );
   const [errors, setErrors] = useState<FieldErrors>({});
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const hasDraft = useMemo(
     () => Object.values(formData).some((value) => value.trim().length > 0),
@@ -470,8 +480,9 @@ const RegistrationForm = ({ webinar }: RegistrationFormProps) => {
     }
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (submitting) return;
 
     const nextErrors = validateForm(formData);
     setErrors(nextErrors);
@@ -485,8 +496,34 @@ const RegistrationForm = ({ webinar }: RegistrationFormProps) => {
       return;
     }
 
-    saveWebinarRegistration(webinar, formData);
-    navigateToHashRoute(getWebinarPaymentPath(webinar.slug));
+    setSubmitting(true);
+    setSubmitError("");
+
+    try {
+      const registration = await webinarService.register(webinar, formData);
+
+      if (webinar.isFree) {
+        const confirmation = saveWebinarPayment(
+          webinar,
+          "free-registration",
+          registration,
+        );
+
+        saveWebinarSuccess(webinar, registration, confirmation);
+        navigateToHashRoute(getWebinarSuccessPath(webinar.slug));
+        return;
+      }
+
+      navigateToHashRoute(getWebinarPaymentPath(webinar.slug));
+    } catch (caughtError) {
+      setSubmitError(
+        caughtError instanceof Error
+          ? caughtError.message
+          : "Registration could not be submitted.",
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -498,7 +535,9 @@ const RegistrationForm = ({ webinar }: RegistrationFormProps) => {
         aria-labelledby="webinar-registration-title"
       >
         <header className="webinar-registration-card__header">
-          <span className="webinar-registration-card__step">Step 1 of 3</span>
+          <span className="webinar-registration-card__step">
+            {webinar.isFree ? "Free Registration" : "Step 1 of 3"}
+          </span>
           <h1
             className="webinar-registration-card__title"
             id="webinar-registration-title"
@@ -732,9 +771,22 @@ const RegistrationForm = ({ webinar }: RegistrationFormProps) => {
             </div>
           </div>
 
-          <button className="webinar-registration-form__submit" type="submit">
-            <span>Proceed to Payment</span>
-            <ArrowRight aria-hidden="true" />
+          {submitError && (
+            <div className="webinar-registration-form__notice" role="alert">
+              <CircleAlert aria-hidden="true" />
+              <span>{submitError}</span>
+            </div>
+          )}
+
+          <button className="webinar-registration-form__submit" type="submit" disabled={submitting}>
+            <span>
+              {submitting
+                ? "Processing..."
+                : webinar.isFree
+                  ? "Daftar Gratis"
+                  : "Proceed to Payment"}
+            </span>
+            {!submitting && <ArrowRight aria-hidden="true" />}
           </button>
 
           {hasDraft && (

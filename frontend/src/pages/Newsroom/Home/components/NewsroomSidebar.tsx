@@ -1,7 +1,5 @@
 import {
   CalendarDays,
-  CircleHelp,
-  Settings,
   Tag,
   TrendingUp,
   X,
@@ -9,17 +7,19 @@ import {
 
 const styles = `
   .newsroom-sidebar {
-    position: sticky;
+    position: fixed;
     top: 0;
-    z-index: 20;
+    bottom: 0;
+    left: 0;
+    z-index: 1120;
     flex: 0 0 var(--newsroom-sidebar-width);
     width: var(--newsroom-sidebar-width);
     max-width: var(--newsroom-sidebar-width);
     min-width: var(--newsroom-sidebar-width);
-    height: 100dvh;
+    height: auto;
     min-height: 0;
-    align-self: flex-start;
     overflow: hidden;
+    overscroll-behavior: none;
     color: #ddd5cb;
     background: var(--newsroom-brown);
     border-right: 1px solid rgba(255, 255, 255, 0.04);
@@ -31,14 +31,20 @@ const styles = `
     width: 100%;
     height: 100%;
     min-height: 0;
-    padding: 0 0 22px;
+    padding: 0 0 18px;
     flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+    scrollbar-width: none;
   }
 
   .newsroom-sidebar__brand {
     display: flex;
-    min-height: 88px;
-    padding: 23px 18px 18px;
+    min-height: 82px;
+    padding: 20px 18px 16px;
     align-items: flex-start;
     justify-content: space-between;
     border-bottom: 1px solid rgba(255, 255, 255, 0.04);
@@ -87,7 +93,7 @@ const styles = `
     display: flex;
     width: 100%;
     min-width: 0;
-    min-height: 46px;
+    min-height: 48px;
     padding: 0 17px;
     gap: 11px;
     align-items: center;
@@ -164,23 +170,32 @@ const styles = `
   @media (max-width: 1024px) {
     .newsroom-sidebar {
       position: fixed;
-      inset: 0 auto 0 0;
-      z-index: 1300;
+      inset: var(--newsroom-navbar-height, 64px) auto 0 0;
+      z-index: 1420;
       display: block;
       width: min(280px, 86vw);
       max-width: min(280px, 86vw);
       min-width: 0;
-      height: 100dvh;
-      overflow-x: hidden;
-      overflow-y: auto;
-      overscroll-behavior: contain;
+      height: calc(100dvh - var(--newsroom-navbar-height, 64px));
+      overflow: hidden;
+      overscroll-behavior: none;
       transform: translate3d(-101%, 0, 0);
       transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     .newsroom-sidebar__panel {
-      height: auto;
-      min-height: 100%;
+      height: 100%;
+      min-height: 0;
+      padding-bottom: max(18px, env(safe-area-inset-bottom));
+    }
+
+    .newsroom-sidebar__brand {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      flex: 0 0 auto;
+      background: var(--newsroom-brown);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
     }
 
     .newsroom-sidebar.is-open {
@@ -193,20 +208,23 @@ const styles = `
 
     .newsroom-sidebar__backdrop {
       position: fixed;
-      inset: 0;
-      z-index: 1250;
+      inset: var(--newsroom-navbar-height, 64px) 0 0;
+      z-index: 1400;
       display: block;
       border: 0;
       opacity: 0;
       visibility: hidden;
       background: rgba(0, 0, 0, 0.68);
       cursor: pointer;
+      pointer-events: none;
+      touch-action: none;
       transition: opacity 180ms ease, visibility 180ms ease;
     }
 
     .newsroom-sidebar__backdrop.is-open {
       opacity: 1;
       visibility: visible;
+      pointer-events: auto;
     }
   }
 `;
@@ -290,15 +308,6 @@ const NewsroomSidebar = ({ isOpen, onClose }: NewsroomSidebarProps) => {
               Partner With Us
             </a>
 
-            <a className="newsroom-sidebar__utility" href="#/login">
-              <Settings size={18} aria-hidden="true" />
-              <span>Settings</span>
-            </a>
-
-            <a className="newsroom-sidebar__utility" href="#/tanya-mahreen">
-              <CircleHelp size={18} aria-hidden="true" />
-              <span>Support</span>
-            </a>
           </div>
         </div>
       </aside>

@@ -68,6 +68,15 @@ const styles = `
     text-decoration: line-through;
   }
 
+  .webinar-price-card__original.is-free {
+    color: #d9b868;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
   .webinar-price-card__button {
     display: inline-flex;
     width: 100%;
@@ -91,7 +100,9 @@ const styles = `
   .webinar-price-card__button:hover,
   .webinar-price-card__button:focus-visible {
     background: #e9ca7d;
-    box-shadow: 0 18px 42px rgba(217, 184, 104, 0.18);
+    box-shadow:
+      0 0 22px rgba(217, 184, 104, 0.3),
+      0 18px 42px rgba(217, 184, 104, 0.18);
     transform: translateY(-2px);
   }
 
@@ -151,13 +162,13 @@ const styles = `
   }
 `;
 
-const benefits = [
-  { icon: BadgeCheck, label: "E-Certificate Resmi" },
-  { icon: Video, label: "Recording & Modul" },
-  { icon: UsersRound, label: "Private Community Access" },
-  { icon: FolderCheck, label: "Premium Dashboard Access" },
-  { icon: BookOpenCheck, label: "Practical Workbook" },
-  { icon: LibraryBig, label: "Resource Library" },
+const benefitIcons = [
+  BadgeCheck,
+  Video,
+  UsersRound,
+  FolderCheck,
+  BookOpenCheck,
+  LibraryBig,
 ] as const;
 
 type PricingCardProps = {
@@ -176,9 +187,17 @@ const PricingCard = ({ webinar }: PricingCardProps) => {
           <span className="webinar-price-card__eyebrow">Investasi Ilmu</span>
 
           <div className="webinar-price-card__price-row">
-            <p className="webinar-price-card__price">{formatRupiah(webinar.price)}</p>
-            <span className="webinar-price-card__original">
-              {formatRupiah(webinar.originalPrice)}
+            <p className="webinar-price-card__price">
+              {webinar.isFree ? "Rp. 0,-" : formatRupiah(webinar.price)}
+            </p>
+            <span
+              className={`webinar-price-card__original${
+                webinar.isFree ? " is-free" : ""
+              }`}
+            >
+              {webinar.isFree
+                ? "Free Access"
+                : formatRupiah(webinar.originalPrice)}
             </span>
           </div>
 
@@ -187,30 +206,31 @@ const PricingCard = ({ webinar }: PricingCardProps) => {
             href={getHashHref(registrationPath)}
             onClick={(event) => handleHashRouteClick(event, registrationPath)}
           >
-            Daftar Sekarang
+            {webinar.isFree ? "Daftar Gratis" : "Daftar Sekarang"}
           </a>
 
           <ul className="webinar-price-card__benefits">
-            {benefits.map(({ icon: Icon, label }) => (
-              <li className="webinar-price-card__benefit" key={label}>
-                <Icon aria-hidden="true" />
-                <span>{label}</span>
-              </li>
-            ))}
+            {webinar.benefits.map((label, index) => {
+              const Icon = benefitIcons[index % benefitIcons.length];
+
+              return (
+                <li className="webinar-price-card__benefit" key={label}>
+                  <Icon aria-hidden="true" />
+                  <span>{label}</span>
+                </li>
+              );
+            })}
           </ul>
         </section>
 
         <section className="webinar-bundle-card" data-webinar-reveal>
-          <h3>Promo Bundling</h3>
-          <p>
-            Dapatkan akses ke 5 webinar marketing lainnya dengan diskon hingga
-            60%.
-          </p>
+          <h3>{webinar.bundleTitle}</h3>
+          <p>{webinar.bundleDescription}</p>
           <a
             href={getHashHref(registrationPath)}
             onClick={(event) => handleHashRouteClick(event, registrationPath)}
           >
-            Pelajari Bundling
+            Pelajari Selengkapnya
           </a>
         </section>
       </aside>

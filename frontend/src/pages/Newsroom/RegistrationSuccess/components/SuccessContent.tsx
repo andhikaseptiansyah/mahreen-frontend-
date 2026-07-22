@@ -12,7 +12,6 @@ import {
   X,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import webinarImage from "../../../../assets/Newsroom/webinar-digital.png";
 import {
   formatRupiah,
   getWebinarDetailPath,
@@ -815,8 +814,9 @@ const SuccessContent = ({ webinar }: SuccessContentProps) => {
           </span>
           <h1 id="webinar-success-empty-title">Tiket Belum Tersedia</h1>
           <p>
-            Halaman ini membutuhkan data pendaftaran dan simulasi pembayaran yang tersimpan
-            di browser. Selesaikan Step 1 dan Step 2 terlebih dahulu.
+            {webinar.isFree
+              ? "Tiket gratis akan tersedia setelah Anda melengkapi dan mengirim formulir pendaftaran."
+              : "Halaman ini membutuhkan data pendaftaran dan simulasi pembayaran yang tersimpan di browser. Selesaikan Step 1 dan Step 2 terlebih dahulu."}
           </p>
           <div className="webinar-success-empty__actions">
             <a
@@ -824,16 +824,18 @@ const SuccessContent = ({ webinar }: SuccessContentProps) => {
               href={getHashHref(registrationPath)}
               onClick={(event) => handleHashRouteClick(event, registrationPath)}
             >
-              Mulai dari Step 1
+              {webinar.isFree ? "Isi Data Pendaftaran" : "Mulai dari Step 1"}
               <ArrowRight aria-hidden="true" />
             </a>
-            <a
-              className="webinar-success__action"
-              href={getHashHref(paymentPath)}
-              onClick={(event) => handleHashRouteClick(event, paymentPath)}
-            >
-              Buka Step 2
-            </a>
+            {!webinar.isFree && (
+              <a
+                className="webinar-success__action"
+                href={getHashHref(paymentPath)}
+                onClick={(event) => handleHashRouteClick(event, paymentPath)}
+              >
+                Buka Step 2
+              </a>
+            )}
           </div>
         </section>
       </>
@@ -910,8 +912,8 @@ const SuccessContent = ({ webinar }: SuccessContentProps) => {
           <div className="webinar-success-ticket__visual" aria-label="Digital access code">
             <img
               className="webinar-success-ticket__image"
-              src={webinarImage}
-              alt="Webinar access preview"
+              src={webinar.heroImage}
+              alt={webinar.heroImageAlt}
             />
             <span className="webinar-success-ticket__qr" aria-hidden="true">
               {qrPattern.map((filled, index) => (
@@ -932,7 +934,7 @@ const SuccessContent = ({ webinar }: SuccessContentProps) => {
             </span>
             <span className="webinar-success-ticket__member-copy">
               <strong>{success.participantName}</strong>
-              <span>VIP Member</span>
+              <span>{webinar.isFree ? "Free Member" : "VIP Member"}</span>
             </span>
             <span className="webinar-success-ticket__verified" title="Verified registration">
               <ShieldCheck aria-hidden="true" />
@@ -1016,12 +1018,12 @@ const SuccessContent = ({ webinar }: SuccessContentProps) => {
                 <strong>{success.scheduleDate}, {success.scheduleTime}</strong>
               </div>
               <div className="webinar-dashboard-modal__item">
-                <span>Payment Method</span>
+                <span>{webinar.isFree ? "Registration Type" : "Payment Method"}</span>
                 <strong>{getWebinarPaymentMethodLabel(success.paymentMethod)}</strong>
               </div>
               <div className="webinar-dashboard-modal__item">
-                <span>Total Paid</span>
-                <strong>{formatRupiah(success.totalPaid)}</strong>
+                <span>{webinar.isFree ? "Access Fee" : "Total Paid"}</span>
+                <strong>{webinar.isFree ? "Gratis" : formatRupiah(success.totalPaid)}</strong>
               </div>
               <div className="webinar-dashboard-modal__item">
                 <span>Email</span>

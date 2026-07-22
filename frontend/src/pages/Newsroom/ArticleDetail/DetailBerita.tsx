@@ -4,9 +4,7 @@ import webinarAi from "../../../assets/Newsroom/webinar-ai.png";
 import webinarDigital from "../../../assets/Newsroom/webinar-digital.png";
 import webinarUiux from "../../../assets/Newsroom/webinar-uiux.png";
 import authorAvatar from "../../../assets/Internship/dimas-andre.jpg";
-import ClosingSection from "../Home/components/ClosingSection";
-import Footer from "../Home/components/Footer";
-import NewsroomContentNavbar from "../components/NewsroomContentNavbar";
+import NewsroomLayout from "../layout/NewsroomLayout";
 import BeritaTerkait from "./components/BeritaTerkait";
 import Informasi from "./components/Informasi";
 import IsiBerita from "./components/IsiBerita";
@@ -18,6 +16,7 @@ const styles = `
     width: 100%;
     min-width: 0;
     min-height: 100dvh;
+    padding-top: var(--navbar-height, 74px);
     overflow-x: clip;
     color: #f4efe8;
     background: #000;
@@ -374,9 +373,11 @@ const DetailBerita = ({ slug = "ekspansi-hub-kreatif-mahreen-di-jawa-barat" }: D
   }, [slug]);
 
   return (
-    <div className="newsroom-detail-page">
+    <>
       <style>{styles}</style>
-      <NewsroomContentNavbar />
+
+      <NewsroomLayout>
+        <div className="newsroom-detail-page">
 
       <header className="newsroom-detail-hero">
         <img
@@ -433,9 +434,9 @@ const DetailBerita = ({ slug = "ekspansi-hub-kreatif-mahreen-di-jawa-barat" }: D
         </div>
       </main>
 
-      <ClosingSection />
-      <Footer />
-    </div>
+        </div>
+      </NewsroomLayout>
+    </>
   );
 };
 

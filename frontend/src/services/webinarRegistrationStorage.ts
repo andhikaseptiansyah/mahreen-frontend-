@@ -19,7 +19,7 @@ export type StoredWebinarRegistration = WebinarRegistrationFormData & {
   webinarTitle: string;
   webinarCategory: string;
   webinarPrice: number;
-  status: "pending-payment";
+  status: "pending-payment" | "confirmed";
   createdAt: string;
 };
 
@@ -115,6 +115,30 @@ export const readWebinarRegistration = (webinarSlug: string) => {
   );
 };
 
+
+export const storeWebinarRegistration = (
+  registration: StoredWebinarRegistration,
+): StoredWebinarRegistration => {
+  if (isBrowser()) {
+    try {
+      const serializedRegistration = JSON.stringify(registration);
+      window.localStorage.setItem(
+        getRegistrationKey(registration.webinarSlug),
+        serializedRegistration,
+      );
+      window.localStorage.setItem(
+        WEBINAR_REGISTRATION_KEY,
+        serializedRegistration,
+      );
+      window.localStorage.removeItem(getDraftKey(registration.webinarSlug));
+    } catch {
+      // The flow remains usable when browser storage is unavailable.
+    }
+  }
+
+  return registration;
+};
+
 export const saveWebinarRegistration = (
   webinar: WebinarData,
   data: WebinarRegistrationFormData,
@@ -126,27 +150,9 @@ export const saveWebinarRegistration = (
     webinarTitle: webinar.title,
     webinarCategory: webinar.category,
     webinarPrice: webinar.price,
-    status: "pending-payment",
+    status: webinar.isFree ? "confirmed" : "pending-payment",
     createdAt: new Date().toISOString(),
   };
 
-  if (isBrowser()) {
-    try {
-      const serializedRegistration = JSON.stringify(registration);
-
-      window.localStorage.setItem(
-        getRegistrationKey(webinar.slug),
-        serializedRegistration,
-      );
-      window.localStorage.setItem(
-        WEBINAR_REGISTRATION_KEY,
-        serializedRegistration,
-      );
-      window.localStorage.removeItem(getDraftKey(webinar.slug));
-    } catch {
-      // The simulated submission still succeeds in memory.
-    }
-  }
-
-  return registration;
+  return storeWebinarRegistration(registration);
 };

@@ -1,8 +1,6 @@
 import { useEffect } from "react";
-import Navbar from "../../../components/Navbar/Navbar";
+import NewsroomLayout from "../layout/NewsroomLayout";
 import type { WebinarData } from "../../../data/webinars";
-import ClosingSection from "../Home/components/ClosingSection";
-import Footer from "../Home/components/Footer";
 import SuccessContent from "./components/SuccessContent";
 
 const styles = `
@@ -78,10 +76,9 @@ const RegistrationSuccess = ({ webinar }: RegistrationSuccessProps) => {
     <>
       <style>{styles}</style>
 
-      <div className="webinar-success-page">
-        <Navbar />
-
-        <main className="webinar-success-page__main">
+      <NewsroomLayout>
+        <div className="webinar-success-page">
+          <main className="webinar-success-page__main">
           <section
             className="webinar-success-page__section"
             aria-label="Webinar registration success"
@@ -89,11 +86,9 @@ const RegistrationSuccess = ({ webinar }: RegistrationSuccessProps) => {
             <SuccessContent webinar={webinar} key={webinar.slug} />
           </section>
 
-          <ClosingSection />
-        </main>
-
-        <Footer />
-      </div>
+          </main>
+        </div>
+      </NewsroomLayout>
     </>
   );
 };

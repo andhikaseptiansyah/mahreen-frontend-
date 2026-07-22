@@ -179,14 +179,14 @@ const CTA = () => {
           <div className="section-final-cta__actions">
             <a
               className="section-final-cta__button section-final-cta__button--primary"
-              href="#/tanya-mahreen"
-              aria-label="Mulai kolaborasi melalui Tanya Mahreen"
+              href="#/contact?pillar=business"
+              aria-label="Mulai kolaborasi dengan Mahreen Indonesia"
             >
               MULAI KOLABORASI
             </a>
             <a
               className="section-final-cta__button section-final-cta__button--secondary"
-              href="#/?section=contact"
+              href="#/contact"
               aria-label="Lihat informasi kontak Mahreen Indonesia"
             >
               HUBUNGI KAMI

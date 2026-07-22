@@ -1,161 +1,172 @@
-type TierId = "professional" | "business" | "enterprise";
+import { Check, X } from "lucide-react";
 
-type FeatureRow = {
-  label: string;
-  professional: string | boolean;
-  business: string | boolean;
-  enterprise: string | boolean;
-};
+import type {
+  ComparisonValue,
+  PackageComparisonRow,
+  TierId,
+} from "../packageTypes";
 
-const features: FeatureRow[] = [
-  {
-    label: "Mobile Responsiveness",
-    professional: true,
-    business: true,
-    enterprise: true,
-  },
-  {
-    label: "Visual Design Style",
-    professional: "Standard",
-    business: "Custom Luxury",
-    enterprise: "Bespoke Artisan",
-  },
-  {
-    label: "Content Writing",
-    professional: false,
-    business: "Up to 3 Pages",
-    enterprise: true,
-  },
-  {
-    label: "Dynamic Components",
-    professional: false,
-    business: true,
-    enterprise: true,
-  },
-  {
-    label: "Custom Code Access",
-    professional: false,
-    business: false,
-    enterprise: true,
-  },
-];
+const tierColumns: TierId[] = ["professional", "business", "enterprise"];
 
 const featureComparisonStyles = `
-  .feature-comparison {
-    margin-top: 56px;
-    background: #0f0f0f;
-    border: 1px solid #1e1e1e;
-    padding: 32px 28px;
+  .kp-comparison {
+    overflow: hidden;
+    padding: 40px 41px 34px;
+    border: 1px solid var(--kp-border);
+    background: linear-gradient(180deg, #121212 0%, #101010 100%);
   }
 
-  .feature-comparison__title {
+  .kp-comparison__title {
+    margin: 0 0 39px;
+    color: #eee9e0;
     font-family: "Playfair Display", Georgia, serif;
-    font-size: 22px;
+    font-size: 27px;
     font-weight: 500;
-    color: #ffffff;
-    margin: 0 0 28px;
   }
 
-  .feature-comparison__table {
+  .kp-comparison__scroll {
+    overflow-x: auto;
+  }
+
+  .kp-comparison__table {
     width: 100%;
+    min-width: 760px;
     border-collapse: collapse;
+    table-layout: fixed;
   }
 
-  .feature-comparison__table th {
+  .kp-comparison__table th {
+    padding: 0 20px 21px;
+    color: #625f5b;
     font-family: "DM Mono", monospace;
     font-size: 9px;
     font-weight: 500;
-    letter-spacing: 1.2px;
+    letter-spacing: .17em;
+    text-align: center;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.4);
-    text-align: center;
-    padding: 0 16px 20px;
   }
 
-  .feature-comparison__table th:first-child {
+  .kp-comparison__table th:first-child {
+    width: 30%;
+    padding-left: 0;
     text-align: left;
-    color: rgba(255,255,255,0.4);
   }
 
-  .feature-comparison__table td {
-    font-family: "Inter", sans-serif;
-    font-size: 13px;
-    color: rgba(255,255,255,0.7);
-    padding: 16px;
-    border-top: 1px solid #1e1e1e;
+  .kp-comparison__table th.is-selected {
+    color: var(--kp-gold);
+  }
+
+  .kp-comparison__table td {
+    height: 67px;
+    padding: 17px 20px;
+    border-top: 1px solid #292929;
+    color: #88847e;
+    font-size: 11px;
+    font-weight: 300;
     text-align: center;
-    vertical-align: middle;
   }
 
-  .feature-comparison__table td:first-child {
+  .kp-comparison__table td:first-child {
+    padding-left: 0;
+    color: #aaa59f;
     text-align: left;
-    color: rgba(255,255,255,0.85);
   }
 
-  .feature-comparison__check {
-    color: #d6a35c;
-    font-size: 16px;
+  .kp-comparison__table td.is-selected {
+    background: linear-gradient(90deg, transparent, rgba(201,169,121,.025), transparent);
+    color: #b7b0a7;
   }
 
-  .feature-comparison__cross {
-    color: rgba(255,255,255,0.2);
-    font-size: 16px;
+  .kp-comparison__icon {
+    width: 15px;
+    height: 15px;
+    stroke-width: 1.5;
   }
 
-  .feature-comparison__table tr.is-highlighted td {
-    background: rgba(214,163,92,0.04);
+  .kp-comparison__icon.is-check {
+    color: var(--kp-gold);
   }
 
-  @media (max-width: 600px) {
-    .feature-comparison {
-      padding: 24px 16px;
-      overflow-x: auto;
+  .kp-comparison__icon.is-cross {
+    color: #454545;
+  }
+
+  @media (max-width: 640px) {
+    .kp-comparison {
+      padding: 30px 22px 25px;
     }
 
-    .feature-comparison__table {
-      min-width: 480px;
+    .kp-comparison__title {
+      margin-bottom: 28px;
+      font-size: 24px;
     }
   }
 `;
 
-const renderCell = (val: string | boolean) => {
-  if (val === true) return <span className="feature-comparison__check">✓</span>;
-  if (val === false) return <span className="feature-comparison__cross">✕</span>;
-  return <span>{val}</span>;
+const renderCell = (value: ComparisonValue) => {
+  if (value === true) {
+    return <Check className="kp-comparison__icon is-check" aria-label="Tersedia" />;
+  }
+
+  if (value === false) {
+    return <X className="kp-comparison__icon is-cross" aria-label="Tidak tersedia" />;
+  }
+
+  return value;
 };
 
-const FeatureComparison = ({ selectedTier }: { selectedTier: TierId }) => {
-  return (
-    <div className="feature-comparison">
-      <style data-component="feature-comparison">{featureComparisonStyles}</style>
+type FeatureComparisonProps = {
+  selectedTier: TierId;
+  rows: PackageComparisonRow[];
+  title?: string;
+};
 
-      <h3 className="feature-comparison__title">Feature Comparison</h3>
+const FeatureComparison = ({
+  selectedTier,
+  rows,
+  title = "Feature Comparison",
+}: FeatureComparisonProps) => (
+  <section className="kp-comparison" aria-labelledby="feature-comparison-title">
+    <style data-component="feature-comparison">{featureComparisonStyles}</style>
 
-      <table className="feature-comparison__table">
+    <h2 id="feature-comparison-title" className="kp-comparison__title">
+      {title}
+    </h2>
+
+    <div className="kp-comparison__scroll">
+      <table className="kp-comparison__table">
         <thead>
           <tr>
             <th>Features</th>
-            <th>Professional</th>
-            <th>Business</th>
-            <th>Enterprise</th>
+            <th className={selectedTier === "professional" ? "is-selected" : ""}>
+              Professional
+            </th>
+            <th className={selectedTier === "business" ? "is-selected" : ""}>
+              Business
+            </th>
+            <th className={selectedTier === "enterprise" ? "is-selected" : ""}>
+              Enterprise
+            </th>
           </tr>
         </thead>
         <tbody>
-          {features.map((row) => (
-            <tr
-              key={row.label}
-              className={selectedTier === "business" ? "is-highlighted" : ""}
-            >
+          {rows.map((row) => (
+            <tr key={row.label}>
               <td>{row.label}</td>
-              <td>{renderCell(row.professional)}</td>
-              <td>{renderCell(row.business)}</td>
-              <td>{renderCell(row.enterprise)}</td>
+              {tierColumns.map((column) => (
+                <td
+                  key={column}
+                  className={selectedTier === column ? "is-selected" : ""}
+                >
+                  {renderCell(row[column])}
+                </td>
+              ))}
             </tr>
           ))}
         </tbody>
       </table>
     </div>
-  );
-};
+  </section>
+);
 
 export default FeatureComparison;

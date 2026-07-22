@@ -181,16 +181,14 @@ const InnerCircle = () => {
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
-          if (sectionRef.current) observer.unobserve(sectionRef.current);
+          observer.unobserve(entry.target);
         }
       },
       { threshold: 0.2 } // Animasi ter-trigger saat 20% area terlihat
     );
     
     if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => {
-      if (sectionRef.current) observer.unobserve(sectionRef.current);
-    };
+    return () => observer.disconnect();
   }, []);
 
   const handleSubmit = () => {

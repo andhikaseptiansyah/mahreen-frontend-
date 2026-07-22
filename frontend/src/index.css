@@ -45,6 +45,9 @@ html {
   scroll-behavior: smooth;
   overflow-y: auto;
   scrollbar-width: none;
+  scrollbar-color: transparent transparent;
+  color-scheme: dark;
+  background: #000000;
 }
 
 body {
@@ -55,10 +58,14 @@ body {
 }
 
 html::-webkit-scrollbar,
-body::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-  display: none;
+body::-webkit-scrollbar,
+#root::-webkit-scrollbar,
+.app-shell::-webkit-scrollbar,
+.app-route::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+  background: transparent !important;
 }
 
 #root,
@@ -195,5 +202,93 @@ code {
   .home-hero {
     background-size: cover !important;
     background-position: center top !important;
+  }
+}
+
+
+/* Global mobile navbar hardening */
+@media (max-width: 1024px) {
+  body.mobile-nav-open {
+    overflow: hidden !important;
+    touch-action: none;
+  }
+
+  .site-header {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .site-header .navbar {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    grid-template-columns: minmax(0, 1fr) 44px !important;
+    padding-inline: clamp(14px, 3.5vw, 22px) !important;
+    gap: 10px !important;
+  }
+
+  .site-header .navbar__logo-link,
+  .site-header .navbar__brand {
+    min-width: 0 !important;
+    max-width: calc(100vw - 86px) !important;
+    justify-self: start !important;
+    overflow: hidden !important;
+  }
+
+  .site-header .navbar__logo,
+  .site-header .navbar__brand-logo {
+    width: min(250px, 66vw) !important;
+    max-width: 100% !important;
+    height: 60px !important;
+    object-fit: contain !important;
+    object-position: left center !important;
+  }
+
+  .site-header .navbar__menu-button {
+    grid-column: 2 !important;
+    justify-self: end !important;
+    flex: 0 0 auto !important;
+  }
+
+  .site-header .navbar__mobile-menu {
+    inset-inline: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow-x: hidden !important;
+  }
+}
+
+@media (max-width: 520px) {
+  .site-header .navbar {
+    grid-template-columns: minmax(0, 1fr) 40px !important;
+    padding-inline: 13px !important;
+  }
+
+  .site-header .navbar__logo,
+  .site-header .navbar__brand-logo {
+    width: min(220px, 64vw) !important;
+    height: 56px !important;
+  }
+
+  .site-header .navbar__mobile-navigation {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .site-header .navbar__mobile-link,
+  .site-header .navbar__mobile-ecosystem-button {
+    width: min(100%, 300px) !important;
+    max-width: 100% !important;
+    font-size: clamp(20px, 6vw, 26px) !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .site-header .navbar__logo,
+  .site-header .navbar__brand-logo {
+    width: min(196px, 62vw) !important;
+    height: 52px !important;
   }
 }

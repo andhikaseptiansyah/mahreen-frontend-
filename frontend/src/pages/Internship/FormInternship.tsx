@@ -1,6 +1,8 @@
+import { useState, type FormEvent } from "react";
 import InternshipNavbar from "../../components/Navbar/InternshipNavbar";
 import ClosingSection from "../../components/Cloasing-section/cloasing-section";
 import Footer from "../../components/Footer/Footer";
+import { internshipService } from "../../services/internship/internshipService";
 
 const formInternshipStyles = `
   @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap");
@@ -275,11 +277,30 @@ const formInternshipStyles = `
     transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
   }
 
-  .internship-submit-button:hover,
-  .internship-submit-button:focus-visible {
+  .internship-submit-button:hover:not(:disabled),
+  .internship-submit-button:focus-visible:not(:disabled) {
     transform: translateY(-3px);
     filter: brightness(1.06);
     box-shadow: 0 16px 34px rgba(229, 196, 131, 0.22);
+  }
+
+  .internship-submit-button:disabled {
+    cursor: wait;
+    opacity: 0.68;
+  }
+
+  .internship-submit-status {
+    max-width: 620px;
+    margin: 18px auto 0;
+    color: #e5c483;
+    font-family: "Inter", Arial, sans-serif;
+    font-size: 12px;
+    line-height: 1.6;
+    text-align: center;
+  }
+
+  .internship-submit-status.is-error {
+    color: #ef9a9a;
   }
 
   .internship-submit-note {
@@ -363,6 +384,65 @@ const formInternshipStyles = `
 `;
 
 const FormInternship = () => {
+  const [submitting, setSubmitting] = useState(false);
+  const [statusMessage, setStatusMessage] = useState("");
+  const [hasError, setHasError] = useState(false);
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (submitting) return;
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const cv = formData.get("cv");
+    const portfolio = formData.get("portfolio");
+    const motivationLetter = formData.get("motivationLetter");
+
+    if (!(cv instanceof File) || cv.size === 0) {
+      setHasError(true);
+      setStatusMessage("Curriculum Vitae wajib dilampirkan.");
+      return;
+    }
+    if (!(motivationLetter instanceof File) || motivationLetter.size === 0) {
+      setHasError(true);
+      setStatusMessage("Motivation Letter wajib dilampirkan.");
+      return;
+    }
+
+    setSubmitting(true);
+    setHasError(false);
+    setStatusMessage("");
+
+    try {
+      const result = await internshipService.submit({
+        fullName: String(formData.get("fullName") ?? "").trim(),
+        email: String(formData.get("email") ?? "").trim(),
+        whatsapp: String(formData.get("whatsapp") ?? "").trim(),
+        linkedin: String(formData.get("linkedin") ?? "").trim(),
+        university: String(formData.get("university") ?? "").trim(),
+        major: String(formData.get("major") ?? "").trim(),
+        semester: String(formData.get("semester") ?? "").trim(),
+        cv,
+        portfolio:
+          portfolio instanceof File && portfolio.size > 0
+            ? portfolio
+            : undefined,
+        motivationLetter,
+      });
+      setStatusMessage(`Pendaftaran berhasil diterima. ID: ${result.applicationId}`);
+      form.reset();
+    } catch (caughtError) {
+      setHasError(true);
+      setStatusMessage(
+        caughtError instanceof Error
+          ? caughtError.message
+          : "Pendaftaran tidak dapat dikirim.",
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <div className="internship-form-page">
       <style data-component="form-internship">{formInternshipStyles}</style>
@@ -383,7 +463,7 @@ const FormInternship = () => {
             className="internship-registration-card"
             aria-labelledby="internship-registration-title"
           >
-            <form className="internship-registration-form">
+            <form className="internship-registration-form" onSubmit={handleSubmit}>
               <div className="internship-form-group">
                 <h2
                   className="internship-form-section-title"
@@ -398,6 +478,7 @@ const FormInternship = () => {
                     className="internship-input"
                     type="text"
                     name="fullName"
+                    required
                     placeholder="Your full name"
                   />
                 </label>
@@ -408,6 +489,7 @@ const FormInternship = () => {
                     className="internship-input"
                     type="email"
                     name="email"
+                    required
                     placeholder="email@university.ac.id"
                   />
                 </label>
@@ -418,6 +500,7 @@ const FormInternship = () => {
                     className="internship-input"
                     type="tel"
                     name="whatsapp"
+                    required
                     placeholder="+62 8xx xxxx xxxx"
                   />
                 </label>
@@ -446,6 +529,7 @@ const FormInternship = () => {
                     className="internship-input"
                     type="text"
                     name="university"
+                    required
                     placeholder="Current university"
                   />
                 </label>
@@ -457,6 +541,7 @@ const FormInternship = () => {
                       className="internship-input"
                       type="text"
                       name="major"
+                    required
                       placeholder="Major"
                     />
                   </label>
@@ -467,6 +552,7 @@ const FormInternship = () => {
                       className="internship-input internship-input--dark"
                       type="text"
                       name="semester"
+                    required
                       placeholder="Contoh: Semester 1"
                     />
                   </label>
@@ -483,7 +569,7 @@ const FormInternship = () => {
                       Curriculum Vitae (PDF)
                     </span>
                     <span className="internship-upload-action">+</span>
-                    <input type="file" name="cv" accept=".pdf" />
+                    <input type="file" name="cv" accept=".pdf" required />
                   </label>
 
                   <label className="internship-upload">
@@ -505,15 +591,20 @@ const FormInternship = () => {
                       Motivation Letter
                     </span>
                     <span className="internship-upload-action">+</span>
-                    <input type="file" name="motivationLetter" accept=".pdf" />
+                    <input type="file" name="motivationLetter" accept=".pdf" required />
                   </label>
                 </div>
               </div>
 
               <div className="internship-submit-area">
-                <button className="internship-submit-button" type="submit">
-                  Submit Registration
+                <button className="internship-submit-button" type="submit" disabled={submitting}>
+                  {submitting ? "Submitting..." : "Submit Registration"}
                 </button>
+                {statusMessage && (
+                  <p className={`internship-submit-status${hasError ? " is-error" : ""}`} role={hasError ? "alert" : "status"}>
+                    {statusMessage}
+                  </p>
+                )}
                 <p className="internship-submit-note">
                   By clicking submit, you agree to our Terms of Professional
                   Engagement.
