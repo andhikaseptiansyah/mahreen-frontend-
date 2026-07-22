@@ -1207,18 +1207,6 @@ const Navbar = ({ homeHref = "#/", homeLabel = "Home" }: NavbarProps) => {
               Tentang
             </a>
 
-            <a
-              className={`navbar__link${
-                isActiveRoute(currentPath, "#/contact") ? " is-active" : ""
-              }`}
-              href="#/contact"
-              aria-current={
-                isActiveRoute(currentPath, "#/contact") ? "page" : undefined
-              }
-            >
-              Hubungi Kami
-            </a>
-
             <NavbarAccountControl />
           </div>
 
@@ -1376,23 +1364,6 @@ const Navbar = ({ homeHref = "#/", homeLabel = "Home" }: NavbarProps) => {
                 onClick={closeMobileMenu}
               >
                 Newsroom
-              </a>
-
-              <a
-                className={`navbar__mobile-link${
-                  isActiveRoute(currentPath, "#/contact")
-                    ? " is-active"
-                    : ""
-                }`}
-                href="#/contact"
-                aria-current={
-                  isActiveRoute(currentPath, "#/contact")
-                    ? "page"
-                    : undefined
-                }
-                onClick={closeMobileMenu}
-              >
-                Hubungi Kami
               </a>
 
               <NavbarAccountControl variant="mobile" onNavigate={closeMobileMenu} />
