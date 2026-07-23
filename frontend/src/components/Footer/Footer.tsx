@@ -545,7 +545,7 @@ const Footer = () => {
             <a className="footer__bottom-link" href="#/kebijakan-privasi">
               Kebijakan Privasi
             </a>
-            <a className="footer__bottom-link" href="#/help-center">
+            <a className="footer__bottom-link" href="#/pusat-bantuan">
               Help Center
             </a>
             <a className="footer__bottom-link" href="#/syarat-ketentuan">
