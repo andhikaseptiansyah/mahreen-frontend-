@@ -55,6 +55,9 @@ import RingkasanPendaftaran from "../pages/Daftar/RingkasanPendaftaran";
 import Login from "../pages/Login/Login";
 import DashboardClient from "../pages/DashboardClient/DashboardClient";
 import Contact from "../pages/Contact/Contact";
+import HelpCenter from "../pages/HelpCenter/HelpCenter";
+import KebijakanPrivasi from "../pages/KebijakanPrivasi/KebijakanPrivasi";
+import SyaratKetentuan from "../pages/SyaratKetentuan/SyaratKetentuan";
 import ComingSoon from "../pages/ComingSoon/ComingSoon";
 import { getWebinarBySlug } from "../data/webinars";
 import { packageCatalog } from "../pages/TanyaMahreen/KonfigurasiPaket/packageCatalog";
@@ -201,20 +204,9 @@ const staticRoutes: Readonly<Record<string, RouteRenderer>> = {
       description="Fitur pemulihan akun akan tersedia setelah layanan autentikasi terhubung dengan backend."
     />
   ),
-  "/kebijakan-privasi": () => (
-    <ComingSoon
-      eyebrow="Legal"
-      title="Kebijakan Privasi sedang disiapkan"
-      description="Dokumen kebijakan privasi Mahreen Indonesia sedang dalam proses finalisasi."
-    />
-  ),
-  "/syarat-ketentuan": () => (
-    <ComingSoon
-      eyebrow="Legal"
-      title="Syarat dan Ketentuan sedang disiapkan"
-      description="Dokumen syarat dan ketentuan penggunaan platform sedang dalam proses finalisasi."
-    />
-  ),
+  "/kebijakan-privasi": () => <KebijakanPrivasi />,
+  "/pusat-bantuan": () => <HelpCenter />,
+  "/syarat-ketentuan": () => <SyaratKetentuan />,
   "/dokumen/haki": () => (
     <ComingSoon
       eyebrow="Dokumen Legal"
@@ -227,6 +219,13 @@ const staticRoutes: Readonly<Record<string, RouteRenderer>> = {
       eyebrow="Dokumen Legal"
       title="Keputusan Menteri sedang disiapkan"
       description="Salinan keputusan Menteri Hukum akan tersedia setelah berkas publik selesai diverifikasi."
+    />
+  ),
+  "/verifikasi": () => (
+    <ComingSoon
+      eyebrow="Layanan"
+      title="Verifikasi Dokumen"
+      description="Fitur untuk memeriksa keaslian sertifikat dan dokumen resmi akan segera tersedia."
     />
   ),
 };

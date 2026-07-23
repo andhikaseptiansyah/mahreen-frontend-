@@ -173,6 +173,7 @@ const Login = ({
                 <div>
                   <a href="#/syarat-ketentuan">Syarat &amp; Ketentuan</a>
                   <a href="#/kebijakan-privasi">Privasi</a>
+                  <a href="#/pusat-bantuan">Pusat Bantuan</a>
                 </div>
               </footer>
             </div>
