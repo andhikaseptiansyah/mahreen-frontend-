@@ -12,6 +12,9 @@ import Creative_process from './sections/Creative_process';
 import Experience from './sections/Experience';
 import ClosingSection from '../../../components/Cloasing-section/cloasing-section';
 import Footer from '../../../components/Footer/Footer';
+import { useAuth } from "../../../hooks/useAuth";
+import { getLoginRedirectRoute } from "../../../services/auth/authNavigation";
+import { navigateToHashRoute } from "../../../utils/hashNavigation";
 
 type StudioProductInfo = {
     slug: string;
@@ -483,10 +486,16 @@ const Detail_Produk: React.FC = () => {
         setActionMessage(`${productInfo.title} ditambahkan ke keranjang.`);
     };
 
+    const { isAuthenticated } = useAuth();
+
     const handleBuyNow = () => {
         saveProductToCart();
-        const returnPath = `/mahreen-studio/product/${productInfo.slug}`;
-        window.location.hash = `#/login?redirect=${encodeURIComponent(returnPath)}&intent=checkout`;
+        const targetPath = "/mahreen-studio/order-summary";
+        if (!isAuthenticated) {
+            navigateToHashRoute(getLoginRedirectRoute(targetPath));
+        } else {
+            navigateToHashRoute(targetPath);
+        }
     };
 
     return (

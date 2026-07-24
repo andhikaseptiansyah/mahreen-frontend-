@@ -1,12 +1,15 @@
 import { useEffect, useState, type ReactNode } from "react";
 import ProtectedRoute from "../components/Auth/ProtectedRoute";
-
 import Home from "../pages/Home/Home";
 import Tentang from "../pages/Tentang/Tentang";
 import Portofolio from "../pages/Portofolio/Portofolio";
 import Studio from "../pages/Mahreen-Studio/Studio";
 import LatestCollections from "../pages/Mahreen-Studio/LatestCollection/LatestCollection";
 import DetailProduk from "../pages/Mahreen-Studio/ProdukDetail/Produk_Detail";
+import OrderSummary from "../pages/Mahreen-Studio/OrderSummary/OrderSummary";
+import PaymentPage from "../pages/Mahreen-Studio/Payment/Payment";
+import ReviewPage from "../pages/Mahreen-Studio/Review/Review";
+import LacakPesananPage from "../pages/Mahreen-Studio/LacakPesanan/LacakPesanan";
 import TanyaMahreen from "../pages/TanyaMahreen/TanyaMahreen";
 import Konsultasi from "../pages/TanyaMahreen/Konsultasi/FreeKonsultasi/Konsultasi";
 import CekData from "../pages/TanyaMahreen/Konsultasi/CekData/CekData";
@@ -70,6 +73,12 @@ const protectedRoutePrefixes = [
   "/akun",
   "/peduli-mahreen/donasi",
   "/tanya-mahreen/pembayaran",
+  "/mahreen-studio/order-summary",
+  "/mahreen-studio/checkout",
+  "/mahreen-studio/payment",
+  "/mahreen-studio/review",
+  "/mahreen-studio/lacak-pesanan",
+  "/mahreen-studio/tracking",
 ] as const;
 
 const requiresAuthentication = (path: string) =>
@@ -147,6 +156,14 @@ const staticRoutes: Readonly<Record<string, RouteRenderer>> = {
   "/hubungi-kami": () => <Contact />,
   "/mahreen-studio": () => <Studio />,
   "/mahreen-studio/latest-collection": () => <LatestCollections />,
+  "/mahreen-studio/order-summary": () => <OrderSummary />,
+  "/mahreen-studio/checkout": () => <OrderSummary />,
+  "/mahreen-studio/payment": () => <PaymentPage />,
+  "/mahreen-studio/checkout/payment": () => <PaymentPage />,
+  "/mahreen-studio/review": () => <ReviewPage />,
+  "/mahreen-studio/checkout/review": () => <ReviewPage />,
+  "/mahreen-studio/lacak-pesanan": () => <LacakPesananPage />,
+  "/mahreen-studio/tracking": () => <LacakPesananPage />,
   "/tanya-mahreen": () => <TanyaMahreen />,
   "/tanya-mahreen/konsultasi": () => <Konsultasi />,
   "/tanya-mahreen/konsultasi/cek-data": () => <CekData />,
