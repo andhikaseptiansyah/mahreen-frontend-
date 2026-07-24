@@ -521,15 +521,39 @@ const packageStyles = `
   }
 
   @media (max-width: 1080px) {
+    .kp-shell {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .kp-header {
+      order: 1;
+    }
+
     .kp-main-grid {
-      width: min(100%, 760px);
-      grid-template-columns: 1fr;
+      display: contents;
+    }
+
+    .kp-tier-grid {
+      order: 2;
+      width: 100%;
+      margin-top: 48px;
+    }
+
+    .kp-section-space:nth-of-type(1) {
+      order: 3;
+    }
+
+    .kp-section-space:nth-of-type(2) {
+      order: 4;
     }
 
     .kp-summary {
+      order: 5;
       position: static;
-      width: min(100%, 480px);
-      margin-left: auto;
+      width: min(100%, 680px);
+      margin: 56px auto 0 auto;
+      border-radius: 16px;
     }
 
     .kp-summary__total-price {
